@@ -1,0 +1,39 @@
+{
+  "author": {
+    "name": "Thomas Radloff",
+    "email": "bostontrader@gmail.com",
+    "url": "https://github.com/bostontrader"
+  },
+  "bugs": {
+    "url": "https://github.com/bostontrader/polo-catbox/issues"
+  },
+  "dependencies": {
+    "colors": "^1.1.2",
+    "config": "^1.26.2",
+    "restify": "^6.0.1"
+  },
+  "devDependencies": {},
+  "description": "A simulated Poloniex server. Developers need a sandbox to develop with.",
+  "homepage": "https://github.com/bostontrader/polo-catbox#readme",
+  "keywords": [
+    "bookkeeping",
+    "bitcoin",
+    "clamcoin",
+    "cryptocoin",
+    "de-dollarization",
+    "ethereum",
+    "litecoin",
+    "poloniex"
+  ],
+  "license": "MIT",
+  "name": "polo-catbox",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bostontrader/polo-catbox.git"
+  },
+  "scripts": {
+    "test": "node startIntegrationTest",
+    "start": "node startServer.js"
+  },
+  "version": "0.1.0"
+}
