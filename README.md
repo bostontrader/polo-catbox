@@ -37,5 +37,7 @@ npm start
 
 # Tipjar
 BTC: 1NyKNEAiF5VfSivXi9C9sXbsThpYjz1RUE
+
 LTC: LQiT8imDmeQgErJsohA5DJhXYF2rMkcku8
+
 CLAM: xQs7jvwin9SPy3oBjQyrYTNCZp62pp1qzU
