@@ -11,7 +11,7 @@ When writing software to use the Poloniex API we can either use a live set of ke
 
 # Getting Started
 
-Node 8.5 is a prerequisite.
+Node 8.4 is a prerequisite.
 
 ```
 git clone http://github.com/bostontrader/polo-catbox
