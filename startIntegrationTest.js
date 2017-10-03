@@ -1,6 +1,7 @@
-const colors  = require('colors/safe')
-const config  = require('config')
-const request = require('request')
+const colors    = require('colors/safe')
+const config    = require('config')
+const deepEqual = require('deep-equal')
+const request   = require('request')
 
 const Poloniex = require('./polo-adapter')
 
@@ -29,7 +30,8 @@ const startIntegrationTest = async () => {
     })
 
     .then(result => {
-      console.log('returnDepositsWithdrawals=',result)
+      if(!deepEqual(result, config.get('testData.returnDepositsWithdrawals')))
+        throw new Error('returnDepositsWithdrawals failed its test')
       console.log(colors.green('All tests passed'))
       process.exit()
     })

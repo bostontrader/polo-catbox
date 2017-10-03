@@ -13,6 +13,7 @@
     "restify": "^6.0.1"
   },
   "devDependencies": {
+    "deep-equal": "^1.0.1",
     "request": "^2.83.0"
   },
   "description": "A simulated Poloniex server. Developers need a sandbox to develop with.",

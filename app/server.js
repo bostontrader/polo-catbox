@@ -25,7 +25,7 @@ module.exports = server = {
         const actualSig = crypto.createHmac('sha512', config.get('keys.secret')).update(paramString).digest('hex')
 
         if (expectedSig === actualSig) {
-          res.json({deposits: [], withdrawals:[]})
+          res.json(config.get('testData.returnDepositsWithdrawals'))
           next()
         } else {
           throw new Error('Expected sig:' + expectedSig + ' does not equal the actual sig:' + actualSig)

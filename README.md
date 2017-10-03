@@ -27,12 +27,14 @@ $ npm start
 
 **polo-catbox** uses [restify](https://github.com/restify/node-restify) to provide the server.  It uses [config](https://github.com/lorenwest/node-config) to manage run-time configuration.  Both of these are very malleable but their care and feeding is outside the scope of this document.  If you need fancy features in either of these departments, please consult the relevant documentation.
 
+Among other obvious things, the configuration also contains "test data."  This is the data that the **polo-catbox** will be initially populated with and it is what the testing will compare to results from the server.
+
 When the server is started it will by default tell you that it's "listening at http://[::]:3003"  This means that HTTP requests to http://localhost:3003 or http://127.0.0.1:3003 should work.  You should also be able to access this sever over the network, given the IP of the machine it is running on.  The port is configurable.
 
 ```npm test``` will start the server and run a test.  The test sends real Polo API queries to the **polo-catbox** server and expects plausible results.  The test gets the URL and port for the **polo-catbox** server from the configuration.  This app can also be configured so that the test uses a real API Key and secret and sends HTTP requests to the real Polo server.  Please see the configuration section for more info about that.
 
 
-# API Key and Secret.
+# API Key and Secret
 
 When using the real Polo server, the API calls must have an API Key in the header to identify the caller.  The API parameters are url encoded, in the body, and are used to compute an HMAC signature, which is sent in the header.  All of this is sent in plain-text over HTTPS.  HTTPS keeps the transmission private and the HMAC signature verifies that only the particular user could have created the message.  I guess that the Polo server can use the API Key to find the secret for that user, compute an HMAC signature of the incoming parameters, and compare to the signature of the incoming request.
 
@@ -53,7 +55,7 @@ There are four things to consider in these URLs:
 
 * port
 
-* resource - tradingApi or public.  This is an application constant and not configurable.
+* resource - tradingApi or public.  These are application constants and are not configurable.
 
 ## WARNING
 
@@ -86,6 +88,11 @@ Testing will also need an API Key and a secret:
 You know better than to use your real API Key and secret here, especially anything that's going to get committed to SCM.
 
 
+# Testing
+
+As mentioned earlier, ```npm test``` will start a test of the **polo-catbox**.  The configuration contains "test data" that the server will use and the test will use to compare to the results.
+
+
 # Dependencies
 
 * colors - Sometimes I want to print console messages in different colors.
@@ -95,6 +102,8 @@ You know better than to use your real API Key and secret here, especially anythi
 * restify - The server.
 
 # devDependencies
+
+* deep-equal - A convenience for testing.
 
 * request - Testing needs a client to make HTTP requests.
 
