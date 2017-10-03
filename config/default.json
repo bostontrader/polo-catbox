@@ -1,5 +1,16 @@
 {
-  "configName": "default",
-  "poloPrivateAPIURL": "localhost:3003",
-  "port": 3003
+  "listeningPort": 3003,
+  "catBoxSecret": "Can be anything but should match catBoxSecret.",
+
+  "url": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 3003
+  },
+
+  "keys": {
+    "apiKey": "any random string is fine",
+    "secret": "Can be anything but should match catBoxSecret."
+  }
+
 }

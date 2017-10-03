@@ -1,20 +1,20 @@
-const n = ports = (() => {
-  /*'use strict';
+module.exports = (function() {
+  //'use strict';
 
   // Module dependencies
-  var crypto  = require('crypto'),
-    request = require('request');
+  const crypto  = require('crypto')
+  const request = require('request')
   // nonce   = require('nonce')();
 
-  // Constants*/
-  //var version         = '0.0.8'
-    /*PUBLIC_API_URL  = 'https://PoloAdapter.com/public',
-    PRIVATE_API_URL = 'https://PoloAdapter.com/tradingApi',
-    USER_AGENT      = 'PoloAdapter.js ' + version;
+  // Constants
+  var version         = '0.0.8',
+    PUBLIC_API_URL  = 'https://poloniex.com/public',
+    //PRIVATE_API_URL = 'https://poloniex.com/tradingApi',
+    USER_AGENT      = 'poloniex.js ' + version;
   //USER_AGENT    = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0'
 
   // Helper methods
-  function joinCurrencies(currencyA, currencyB) {
+  /*function joinCurrencies(currencyA, currencyB) {
     // If only one arg, then return the first
     if (typeof currencyB !== 'string')
       return currencyA;
@@ -22,18 +22,18 @@ const n = ports = (() => {
     return currencyA + '_' + currencyB;
   }*/
 
-  function PoloAdapter(apiKey, privateKey, privateAPIURL) {
+  // Constructor
+  function Poloniex(key, secret, base_nonce, privateAPI_URL) {
 
     // Generate headers signed by this user's key and secret.
     // The secret is encapsulated and never exposed
-    /*this.base_nonce = base_nonce || 0
+    this.base_nonce = base_nonce || 0
+    this.privateAPI_URL = privateAPI_URL
     this._getPrivateHeaders = function(parameters) {
       var paramString, signature;
-      console.log('PoloAdapter.33',key)
-      console.log('PoloAdapter.33',secret)
 
       if (!key || !secret)
-        throw 'PoloAdapter: Error. API key and secret required';
+        throw 'Poloniex: Error. API key and secret required';
 
       // Convert to `arg1=foo&arg2=bar`
       paramString = Object.keys(parameters).map(function(param) {
@@ -46,20 +46,20 @@ const n = ports = (() => {
         Key: key,
         Sign: signature
       };
-    };*/
+    };
   }
 
   // Currently, this fails with `Error: CERT_UNTRUSTED`
-  // PoloAdapter.STRICT_SSL can be set to `false` to avoid this. Use with caution.
+  // Poloniex.STRICT_SSL can be set to `false` to avoid this. Use with caution.
   // Will be removed in future, once this is resolved.
-  /*PoloAdapter.STRICT_SSL = true;
+  Poloniex.STRICT_SSL = true;
 
   // Customisable user agent string
-  PoloAdapter.USER_AGENT = USER_AGENT;
+  Poloniex.USER_AGENT = USER_AGENT;
 
   // Prototype
-  PoloAdapter.prototype = {
-    constructor: PoloAdapter,
+  Poloniex.prototype = {
+    constructor: Poloniex,
 
     // Make an API request
     _request: function(options, callback) {
@@ -67,9 +67,8 @@ const n = ports = (() => {
         options.headers = {};
 
       options.json = true;
-      options.headers['User-Agent'] = PoloAdapter.USER_AGENT;
-      options.strictSSL = PoloAdapter.STRICT_SSL;
-
+      options.headers['User-Agent'] = Poloniex.USER_AGENT;
+      options.strictSSL = Poloniex.STRICT_SSL;
       request(options, function(err, response, body) {
         // Empty response
         if (!err && (typeof body === 'undefined' || body === null))
@@ -114,10 +113,10 @@ const n = ports = (() => {
       parameters || (parameters = {});
       parameters.command = command;
       parameters.nonce = this.base_nonce + Date.now() * 1000;
-      console.log(118, parameters.nonce)
       options = {
         method: 'POST',
-        url: PRIVATE_API_URL,
+        //url: PRIVATE_API_URL,
+        url: this.privateAPI_URL,
         form: parameters,
         headers: this._getPrivateHeaders(parameters)
       };
@@ -144,7 +143,7 @@ const n = ports = (() => {
     /////
     // PUBLIC METHODS
 
-    returnTicker: function(callback) {
+    /*returnTicker: function(callback) {
       return this._public('returnTicker', callback);
     },
 
@@ -177,12 +176,12 @@ const n = ports = (() => {
 
     returnLoanOrders: function(currency, callback) {
       return this._public('returnLoanOrders', {currency: currency}, callback);
-    },
+    },*/
 
     /////
     // PRIVATE METHODS
 
-    returnBalances: function(callback) {
+    /*returnBalances: function(callback) {
       return this._private('returnBalances', {}, callback);
     },
 
@@ -196,13 +195,13 @@ const n = ports = (() => {
 
     generateNewAddress: function(currency, callback) {
       return this._private('returnDepositsWithdrawals', {currency: currency}, callback);
-    },
+    },*/
 
     returnDepositsWithdrawals: function(start, end, callback) {
       return this._private('returnDepositsWithdrawals', {start: start, end: end}, callback);
-    },
+    }
 
-    returnOpenOrders: function(currencyA, currencyB, callback) {
+    /*returnOpenOrders: function(currencyA, currencyB, callback) {
       var parameters = {
         currencyPair: joinCurrencies(currencyA, currencyB)
       };
@@ -314,20 +313,20 @@ const n = ports = (() => {
       };
 
       return this._private('marginBuy', parameters, callback);
-    },
+    },*/
 
-    marginSell: function(currencyA, currencyB, rate, amount, lendingRate, callback) {
-      var parameters = {
-        currencyPair: joinCurrencies(currencyA, currencyB),
-        rate: rate,
-        amount: amount,
-        lendingRate: lendingRate ? lendingRate : null
-      };
+    //marginSell: function(currencyA, currencyB, rate, amount, lendingRate, callback) {
+      //var parameters = {
+        //currencyPair: joinCurrencies(currencyA, currencyB),
+        //rate: rate,
+        //amount: amount,
+        //lendingRate: lendingRate ? lendingRate : null
+      //};
 
-      return this._private('marginSell', parameters, callback);
-    },
+      //return this._private('marginSell', parameters, callback);
+    //},
 
-    getMarginPosition: function(currencyA, currencyB, callback) {
+    /*getMarginPosition: function(currencyA, currencyB, callback) {
       var parameters = {
         currencyPair: joinCurrencies(currencyA, currencyB)
       };
@@ -361,40 +360,40 @@ const n = ports = (() => {
       };
 
       return this._private('cancelLoanOffer', parameters, callback);
-    },
+    },*/
 
-    returnOpenLoanOffers: function(callback) {
-      return this._private('returnOpenLoanOffers', {}, callback);
-    },
+    //returnOpenLoanOffers: function(callback) {
+      //return this._private('returnOpenLoanOffers', {}, callback);
+    //},
 
-    returnActiveLoans: function(callback) {
-      return this._private('returnActiveLoans', {}, callback);
-    },
+    //returnActiveLoans: function(callback) {
+      //return this._private('returnActiveLoans', {}, callback);
+    //},
 
-    returnLendingHistory: function(start, end, limit, callback) {
-      var parameters = {
-        start: start,
-        end: end,
-        limit: limit
-      };
+    //returnLendingHistory: function(start, end, limit, callback) {
+      //var parameters = {
+        //start: start,
+        //end: end,
+        //limit: limit
+      //};
 
-      return this._private('returnLendingHistory', parameters, callback);
-    },
+      //return this._private('returnLendingHistory', parameters, callback);
+    //},
 
-    toggleAutoRenew: function(orderNumber, callback) {
-      return this._private('toggleAutoRenew', {orderNumber: orderNumber}, callback);
-    }
+    //toggleAutoRenew: function(orderNumber, callback) {
+      //return this._private('toggleAutoRenew', {orderNumber: orderNumber}, callback);
+    //}
 
-  };
+  }
 
   // Backwards Compatibility
-  PoloAdapter.prototype.getTicker = PoloAdapter.prototype.returnTicker;
-  PoloAdapter.prototype.get24hVolume = PoloAdapter.prototype.return24hVolume;
-  PoloAdapter.prototype.getOrderBook = PoloAdapter.prototype.returnOrderBook;
-  PoloAdapter.prototype.getTradeHistory = PoloAdapter.prototype.returnChartData;
-  PoloAdapter.prototype.myBalances = PoloAdapter.prototype.returnBalances;
-  PoloAdapter.prototype.myOpenOrders = PoloAdapter.prototype.returnOpenOrders;
-  PoloAdapter.prototype.myTradeHistory = PoloAdapter.prototype.returnTradeHistory;
+  //Poloniex.prototype.getTicker = Poloniex.prototype.returnTicker;
+  //Poloniex.prototype.get24hVolume = Poloniex.prototype.return24hVolume;
+  //Poloniex.prototype.getOrderBook = Poloniex.prototype.returnOrderBook;
+  //Poloniex.prototype.getTradeHistory = Poloniex.prototype.returnChartData;
+  //Poloniex.prototype.myBalances = Poloniex.prototype.returnBalances;
+  //Poloniex.prototype.myOpenOrders = Poloniex.prototype.returnOpenOrders;
+  //Poloniex.prototype.myTradeHistory = Poloniex.prototype.returnTradeHistory;
 
-  return PoloAdapter;*/
+  return Poloniex
 })()

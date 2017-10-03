@@ -12,18 +12,22 @@
     "config": "^1.26.2",
     "restify": "^6.0.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "request": "^2.83.0"
+  },
   "description": "A simulated Poloniex server. Developers need a sandbox to develop with.",
   "homepage": "https://github.com/bostontrader/polo-catbox#readme",
   "keywords": [
     "bookkeeping",
     "bitcoin",
+    "catbox",
     "clamcoin",
     "cryptocoin",
     "de-dollarization",
     "ethereum",
     "litecoin",
-    "poloniex"
+    "poloniex",
+    "sandbox"
   ],
   "license": "MIT",
   "name": "polo-catbox",
