@@ -25,7 +25,18 @@ module.exports = server = {
         const actualSig = crypto.createHmac('sha512', config.get('keys.secret')).update(paramString).digest('hex')
 
         if (expectedSig === actualSig) {
-          res.json(config.get('testData.returnDepositsWithdrawals'))
+          // The request is good.  How shall we reply?
+          switch(req.body.command) {
+            case 'returnDepositsWithdrawals':
+              res.json(config.get('testData.returnDepositsWithdrawals'))
+              break
+            case 'returnOpenOrders':
+              if(req.body.currencyPair === 'all')
+                res.json(config.get('testData.returnOpenOrders_AllMarkets'))
+              else
+                res.json(config.get('testData.returnOpenOrders_SingleMarket'))
+              break
+          }
           next()
         } else {
           throw new Error('Expected sig:' + expectedSig + ' does not equal the actual sig:' + actualSig)

@@ -104,15 +104,9 @@ module.exports = (function() {
 
     // Make a private API request
     _private: async function(command, parameters) {
-      //var options;
-
-      //if (typeof parameters === 'function') {
-        //callback = parameters;
-        //parameters = {};
-      //}
 
       //parameters || (parameters = {});
-      //parameters.command = command;
+      parameters.command = command;
       //parameters.nonce = this.base_nonce + Date.now() * 1000;
       const options = {
         method: 'POST',
@@ -200,7 +194,11 @@ module.exports = (function() {
     },*/
 
     returnDepositsWithdrawals: async function (start, end) {
-      return await this._private('returnDepositsWithdrawals', {start: start, end: end})
+      return await this._private('returnDepositsWithdrawals', {start, end})
+    },
+
+    returnOpenOrders: async function (currencyPair) {
+      return await this._private('returnOpenOrders', {currencyPair})
     }
 
     /*returnOpenOrders: function(currencyA, currencyB, callback) {
