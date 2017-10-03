@@ -1,9 +1,9 @@
 module.exports = (function() {
-  //'use strict';
 
   // Module dependencies
   const crypto  = require('crypto')
   const request = require('request')
+  const rp      = require('request-promise-native')
   // nonce   = require('nonce')();
 
   // Constants
@@ -62,26 +62,27 @@ module.exports = (function() {
     constructor: Poloniex,
 
     // Make an API request
-    _request: function(options, callback) {
-      if (!('headers' in options))
-        options.headers = {};
+    _request: async options => {
+      //if (!('headers' in options))
+        //options.headers = {};
 
-      options.json = true;
-      options.headers['User-Agent'] = Poloniex.USER_AGENT;
-      options.strictSSL = Poloniex.STRICT_SSL;
-      request(options, function(err, response, body) {
+      //options.json = true;
+      //options.headers['User-Agent'] = Poloniex.USER_AGENT;
+      //options.strictSSL = Poloniex.STRICT_SSL;
+      //request(options, function(err, response, body) {
         // Empty response
-        if (!err && (typeof body === 'undefined' || body === null))
-          err = 'Empty response';
+        //if (!err && (typeof body === 'undefined' || body === null))
+          //err = 'Empty response';
 
-        callback(err, body);
-      });
+        //callback(err, body);
+      //});
 
-      return this;
+      return JSON.parse(await rp(options))
+      //return this;
     },
 
     // Make a public API request
-    _public: function(command, parameters, callback) {
+    /*_public: function(command, parameters, callback) {
       var options;
 
       if (typeof parameters === 'function') {
@@ -99,45 +100,46 @@ module.exports = (function() {
 
       options.qs.command = command;
       return this._request(options, callback);
-    },
+    },*/
 
     // Make a private API request
-    _private: function(command, parameters, callback, retry = true) {
-      var options;
+    _private: async function(command, parameters) {
+      //var options;
 
-      if (typeof parameters === 'function') {
-        callback = parameters;
-        parameters = {};
-      }
+      //if (typeof parameters === 'function') {
+        //callback = parameters;
+        //parameters = {};
+      //}
 
-      parameters || (parameters = {});
-      parameters.command = command;
-      parameters.nonce = this.base_nonce + Date.now() * 1000;
-      options = {
+      //parameters || (parameters = {});
+      //parameters.command = command;
+      //parameters.nonce = this.base_nonce + Date.now() * 1000;
+      const options = {
         method: 'POST',
-        //url: PRIVATE_API_URL,
         url: this.privateAPI_URL,
         form: parameters,
         headers: this._getPrivateHeaders(parameters)
-      };
-      var self = this
-      this._request(options, function(err, body) {
-        if(err || body.error) {
-          console.log(err || body.error)
+      }
+      //var self = this
+      return await this._request(options)
+
+      //this._request(options, function(err, body) {
+        //if(err || body.error) {
+          //console.log(err || body.error)
           // if(body.error.match(/^Nonce must be greater than ([0-9]+)\. You provided ([0-9]+)\./)) {
           //   self._private(command, parameters, callback, false)
           // } else {
           //   self._private(command, parameters, callback, false)
           // }
-          if(retry) {
-            setTimeout(function() {
-              self._private(command, parameters, callback, false)
-            }, 500)
-          }
-        } else {
-          callback(err, body)
-        }
-      });
+          //if(retry) {
+            //setTimeout(function() {
+              //self._private(command, parameters, callback, false)
+            //}, 500)
+          //}
+        //} else {
+          //callback(err, body)
+        //}
+      //});
     },
 
     /////
@@ -197,8 +199,8 @@ module.exports = (function() {
       return this._private('returnDepositsWithdrawals', {currency: currency}, callback);
     },*/
 
-    returnDepositsWithdrawals: function(start, end, callback) {
-      return this._private('returnDepositsWithdrawals', {start: start, end: end}, callback);
+    returnDepositsWithdrawals: async function (start, end) {
+      return await this._private('returnDepositsWithdrawals', {start: start, end: end})
     }
 
     /*returnOpenOrders: function(currencyA, currencyB, callback) {

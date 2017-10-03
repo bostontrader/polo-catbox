@@ -107,6 +107,7 @@ As mentioned earlier, ```npm test``` will start a test of the **polo-catbox**.  
 
 * request - Testing needs a client to make HTTP requests.
 
+* request-promise-native - A wrapper for request which uses Native ES2015 promises instead of callbacks.
 
 # Tipjar
 BTC: 1NyKNEAiF5VfSivXi9C9sXbsThpYjz1RUE

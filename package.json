@@ -14,7 +14,8 @@
   },
   "devDependencies": {
     "deep-equal": "^1.0.1",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5"
   },
   "description": "A simulated Poloniex server. Developers need a sandbox to develop with.",
   "homepage": "https://github.com/bostontrader/polo-catbox#readme",
@@ -40,5 +41,5 @@
     "test": "node startIntegrationTest",
     "start": "node startServer.js"
   },
-  "version": "0.1.0"
+  "version": "0.1.1"
 }
