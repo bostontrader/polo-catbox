@@ -8,10 +8,9 @@ module.exports = (function() {
 
   // Constants
   var version         = '0.0.8',
-    PUBLIC_API_URL  = 'https://poloniex.com/public',
+    //PUBLIC_API_URL  = 'https://poloniex.com/public',
     //PRIVATE_API_URL = 'https://poloniex.com/tradingApi',
     USER_AGENT      = 'poloniex.js ' + version;
-  //USER_AGENT    = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0'
 
   // Helper methods
   /*function joinCurrencies(currencyA, currencyB) {
@@ -23,11 +22,12 @@ module.exports = (function() {
   }*/
 
   // Constructor
-  function Poloniex(key, secret, base_nonce, privateAPI_URL) {
+  function Poloniex(key, secret, base_nonce, publicAPI_URL, privateAPI_URL) {
 
     // Generate headers signed by this user's key and secret.
     // The secret is encapsulated and never exposed
     this.base_nonce = base_nonce || 0
+    this.publicAPI_URL  = publicAPI_URL
     this.privateAPI_URL = privateAPI_URL
     this._getPrivateHeaders = function(parameters) {
       var paramString, signature;
@@ -82,25 +82,23 @@ module.exports = (function() {
     },
 
     // Make a public API request
-    /*_public: function(command, parameters, callback) {
-      var options;
+    _public: async function(command, parameters = {}) {
 
-      if (typeof parameters === 'function') {
-        callback = parameters;
-        parameters = {};
+      //parameters || (parameters = {});
+      parameters.command = command
+      const options = {
+        method: 'GET',
+        //url: PUBLIC_API_URL,
+        url: this.publicAPI_URL,
+
+        qs: parameters
       }
 
-      parameters || (parameters = {});
-      parameters.command = command;
-      options = {
-        method: 'GET',
-        url: PUBLIC_API_URL,
-        qs: parameters
-      };
+      //options.qs.command = command;
+      //return this._request(options, callback);
+      return await this._request(options)
 
-      options.qs.command = command;
-      return this._request(options, callback);
-    },*/
+    },
 
     // Make a private API request
     _private: async function(command, parameters) {
@@ -138,7 +136,9 @@ module.exports = (function() {
 
     /////
     // PUBLIC METHODS
-
+    returnTicker: async function () {
+      return await this._public('returnTicker')
+    },
     /*returnTicker: function(callback) {
       return this._public('returnTicker', callback);
     },

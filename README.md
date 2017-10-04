@@ -23,7 +23,7 @@ $ npm start
 
 # Basic Concepts
 
-```npm start``` will start an HTTP server that does its best to mimic the Poloniex server.  Because **polo-catbox** is new and under development, it presently only partially mimics the **returnDepositsWithdrawals** API endpoint.
+```npm start``` will start an HTTP server that does its best to mimic the Poloniex server.  Because **polo-catbox** is new and under development, it presently only partially mimics a handful of the API endpoints.
 
 **polo-catbox** uses [restify](https://github.com/restify/node-restify) to provide the server.  It uses [config](https://github.com/lorenwest/node-config) to manage run-time configuration.  Both of these are very malleable but their care and feeding is outside the scope of this document.  If you need fancy features in either of these departments, please consult the relevant documentation.
 

@@ -6,6 +6,9 @@ const listeningPort = config.get('listeningPort')
 
 const restifyCore = restify.createServer()
 
+// The public API params are in the URL query.  We need queryParser to get them.
+restifyCore.use(restify.plugins.queryParser())
+
 // The private API params are x-www-form-urlencoded.  We need bodyParser to get them.
 restifyCore.use(restify.plugins.bodyParser())
 
@@ -14,6 +17,17 @@ module.exports = server = {
   start: async () => {
     return new Promise( (resolve, reject) => {
 
+      // This is the route for the public API.  No signature gyrations here.
+      restifyCore.get('/' + 'public', (req, res, next) => {
+        switch(req.query.command) {
+          case 'returnTicker':
+            res.json(config.get('testData.returnTicker'))
+            break
+        }
+        next()
+      })
+
+      // This is the route for the private API
       restifyCore.post('/' + 'tradingApi', (req, res, next) => {
 
         // Morph the urlencoded body of the request into a string suitable for subsequent HMAC signature
