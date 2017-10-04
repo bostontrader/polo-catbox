@@ -25,22 +25,26 @@ $ npm start
 
 ```npm start``` will start an HTTP server that does its best to mimic the Poloniex server.  Because **polo-catbox** is new and under development, it presently only partially mimics a handful of the API endpoints.
 
-**polo-catbox** uses [restify](https://github.com/restify/node-restify) to provide the server.  It uses [config](https://github.com/lorenwest/node-config) to manage run-time configuration.  Both of these are very malleable but their care and feeding is outside the scope of this document.  If you need fancy features in either of these departments, please consult the relevant documentation.
+**polo-catbox** uses [restify](https://github.com/restify/node-restify) to implement the server.  It uses [config](https://github.com/lorenwest/node-config) to manage run-time configuration.  Both of these are very malleable but their care and feeding is outside the scope of this document.  If you need fancy features in either of these departments, please consult the relevant documentation.
 
 Among other obvious things, the configuration also contains "test data."  This is the data that the **polo-catbox** will be initially populated with and it is what the testing will compare to results from the server.
 
 When the server is started it will by default tell you that it's "listening at http://[::]:3003"  This means that HTTP requests to http://localhost:3003 or http://127.0.0.1:3003 should work.  You should also be able to access this sever over the network, given the IP of the machine it is running on.  The port is configurable.
 
-```npm test``` will start the server and run a test.  The test sends real Polo API queries to the **polo-catbox** server and expects plausible results.  The test gets the URL and port for the **polo-catbox** server from the configuration.  This app can also be configured so that the test uses a real API Key and secret and sends HTTP requests to the real Polo server.  Please see the configuration section for more info about that.
+```npm test``` will start the server and run a test.  The test sends real Polo API queries to the **polo-catbox** server and expects plausible results.  The test gets the URL and port for the **polo-catbox** server from the configuration.
 
 
 # API Key and Secret
 
-When using the real Polo server, the API calls must have an API Key in the header to identify the caller.  The API parameters are url encoded, in the body, and are used to compute an HMAC signature, which is sent in the header.  All of this is sent in plain-text over HTTPS.  HTTPS keeps the transmission private and the HMAC signature verifies that only the particular user could have created the message.  I guess that the Polo server can use the API Key to find the secret for that user, compute an HMAC signature of the incoming parameters, and compare to the signature of the incoming request.
+The HTTP requests to the server come in two flavors.  There are the "public" API and "private" API endpoints.  This is important because they are handled quite differently.
 
-When using the **polo-catbox** server, the API Key and secret can be any arbitrary values.  (But probably not crazy things like null or undefined)
+The public API requests are delivered via GET and no auth 'n' auth is used.  Any anonymous fool can call these and get the public results.
 
-In either case the API Key and secret are part of the configuration.
+The private API requests are delivered via POST and there _are_ auth 'n' auth hoops to jump to do this.  We use an API Key and a "secret" for this purpose.
+
+When using the real Polo server, the private API requests must have an API Key in the header to identify the caller.  The API parameters are url encoded, in the body, and are used to compute an HMAC signature, which is also sent in the header.  All of this is sent in plain-text over HTTPS.  HTTPS keeps the transmission private and the HMAC signature verifies that only the particular user could have created the message.  I guess that the Polo server can use the API Key to find the secret for that user, compute an HMAC signature of the incoming parameters, and compare to the signature of the incoming request.
+
+When using the **polo-catbox** server, the API Key and secret can be any arbitrary, but configured, values.  (But probably not crazy things like null or undefined).  The server has a secret that it is expecting and the HTTP requests will be formed with a separate secret.  These two secrets should be configured to be the same.
 
 
 # The API URL
@@ -67,7 +71,7 @@ By default **polo-catbox** uses the configuration in /config/default.json. The f
 
 * listeningPort Which port shall the **polo-catbox** listen on?
 
-* catBoxSecret - What secret will the **polo-catbox** use to validate requests?
+* catBoxSecret - What secret will the **polo-catbox** use to validate private API requests?
 
 Testing will need a URL of the API endpoint.  Configure that here.
 
@@ -92,6 +96,18 @@ You know better than to use your real API Key and secret here, especially anythi
 
 As mentioned earlier, ```npm test``` will start a test of the **polo-catbox**.  The configuration contains "test data" that the server will use and the test will use to compare to the results.
 
+
+# Testing the Real Polo Server
+
+It's tempting to configure this app to send the queries to the real Polo server, but I discourage you from doing so.  Although you _can_ do it and it will seemingly _work_ there are a number of hazards to be wary of.  Such as:
+
+* Any test that will change the state of real data, such as to place or cancel orders, may have unpleasant real-world side-effects.  Don't do this at home.
+
+* Any test is going to need real credentials somewhere.  Are you going to hardwire them into code or put them into the configuration?  If so, be careful that you don't let this into your SCM system.  Are you going to only have these values on the command line?  If so, keep an eye on .bash_history and others of similar ilk.
+
+* If you're not careful to ensure that the requests are sent via HTTPS you might get HTTP instead.  If so, your API Key is exposed.  Although your determined opponent does not have your secret (by this faux pas) he's one step closer to getting in.
+
+* How many other ways are there for this to go wrong?  I don't know and contemplating, and fortifying against, the myraid of ways this topic could have an unhappy ending, is a distraction from this project and further affiant sayeth nought.
 
 # Dependencies
 
