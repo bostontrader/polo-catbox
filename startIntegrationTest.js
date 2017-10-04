@@ -13,11 +13,10 @@ const startIntegrationTest = async () => {
   try {
 
     const u = config.get('url')
-    const urlPublic  = u.protocol + "://" + u.host + ":" + u.port + "/public"
-    const urlPrivate = u.protocol + "://" + u.host + ":" + u.port + "/tradingApi"
+    const baseURL = u.protocol + "://" + u.host + (u.port ? ":" + u.port : '')
 
     const keys = config.get('keys')
-    const poloAdapter = new Poloniex(keys.apiKey, keys.secret, 0, urlPublic, urlPrivate)
+    const poloAdapter = new Poloniex(keys.apiKey, keys.secret, 0, baseURL)
     let result
 
     await server.start()

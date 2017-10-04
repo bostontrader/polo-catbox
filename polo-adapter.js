@@ -8,8 +8,6 @@ module.exports = (function() {
 
   // Constants
   var version         = '0.0.8',
-    //PUBLIC_API_URL  = 'https://poloniex.com/public',
-    //PRIVATE_API_URL = 'https://poloniex.com/tradingApi',
     USER_AGENT      = 'poloniex.js ' + version;
 
   // Helper methods
@@ -22,13 +20,12 @@ module.exports = (function() {
   }*/
 
   // Constructor
-  function Poloniex(key, secret, base_nonce, publicAPI_URL, privateAPI_URL) {
+  function Poloniex(key, secret, base_nonce, baseURL) {
 
     // Generate headers signed by this user's key and secret.
     // The secret is encapsulated and never exposed
     this.base_nonce = base_nonce || 0
-    this.publicAPI_URL  = publicAPI_URL
-    this.privateAPI_URL = privateAPI_URL
+    this.baseURL = baseURL
     this._getPrivateHeaders = function(parameters) {
       var paramString, signature;
 
@@ -88,9 +85,7 @@ module.exports = (function() {
       parameters.command = command
       const options = {
         method: 'GET',
-        //url: PUBLIC_API_URL,
-        url: this.publicAPI_URL,
-
+        url: this.baseURL + "/public",
         qs: parameters
       }
 
@@ -108,7 +103,7 @@ module.exports = (function() {
       //parameters.nonce = this.base_nonce + Date.now() * 1000;
       const options = {
         method: 'POST',
-        url: this.privateAPI_URL,
+        url: this.baseURL + "/tradingApi",
         form: parameters,
         headers: this._getPrivateHeaders(parameters)
       }
