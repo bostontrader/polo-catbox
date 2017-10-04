@@ -3,7 +3,7 @@ const config    = require('config')
 const deepEqual = require('deep-equal')
 const request   = require('request')
 
-const Poloniex = require('./polo-adapter')
+const PoloAdapter = require('./polo-adapter')
 
 const server = require('./app/server')
 
@@ -16,7 +16,7 @@ const startIntegrationTest = async () => {
     const baseURL = u.protocol + "://" + u.host + (u.port ? ":" + u.port : '')
 
     const keys = config.get('keys')
-    const poloAdapter = new Poloniex(keys.apiKey, keys.secret, 0, baseURL)
+    const poloAdapter = new PoloAdapter(keys.apiKey, keys.secret, 0, baseURL)
     let result
 
     await server.start()

@@ -20,7 +20,7 @@ module.exports = (function() {
   }*/
 
   // Constructor
-  function Poloniex(key, secret, base_nonce, baseURL) {
+  function PoloAdapter(key, secret, base_nonce, baseURL) {
 
     // Generate headers signed by this user's key and secret.
     // The secret is encapsulated and never exposed
@@ -30,7 +30,7 @@ module.exports = (function() {
       var paramString, signature;
 
       if (!key || !secret)
-        throw 'Poloniex: Error. API key and secret required';
+        throw 'PoloAdapter: Error. API key and secret required';
 
       // Convert to `arg1=foo&arg2=bar`
       paramString = Object.keys(parameters).map(function(param) {
@@ -47,16 +47,16 @@ module.exports = (function() {
   }
 
   // Currently, this fails with `Error: CERT_UNTRUSTED`
-  // Poloniex.STRICT_SSL can be set to `false` to avoid this. Use with caution.
+  // PoloAdapter.STRICT_SSL can be set to `false` to avoid this. Use with caution.
   // Will be removed in future, once this is resolved.
-  Poloniex.STRICT_SSL = true;
+  PoloAdapter.STRICT_SSL = true;
 
   // Customisable user agent string
-  Poloniex.USER_AGENT = USER_AGENT;
+  PoloAdapter.USER_AGENT = USER_AGENT;
 
   // Prototype
-  Poloniex.prototype = {
-    constructor: Poloniex,
+  PoloAdapter.prototype = {
+    constructor: PoloAdapter,
 
     // Make an API request
     _request: async options => {
@@ -64,8 +64,8 @@ module.exports = (function() {
         //options.headers = {};
 
       //options.json = true;
-      //options.headers['User-Agent'] = Poloniex.USER_AGENT;
-      //options.strictSSL = Poloniex.STRICT_SSL;
+      //options.headers['User-Agent'] = PoloAdapter.USER_AGENT;
+      //options.strictSSL = PoloAdapter.STRICT_SSL;
       //request(options, function(err, response, body) {
         // Empty response
         //if (!err && (typeof body === 'undefined' || body === null))
@@ -382,13 +382,13 @@ module.exports = (function() {
   }
 
   // Backwards Compatibility
-  //Poloniex.prototype.getTicker = Poloniex.prototype.returnTicker;
-  //Poloniex.prototype.get24hVolume = Poloniex.prototype.return24hVolume;
-  //Poloniex.prototype.getOrderBook = Poloniex.prototype.returnOrderBook;
-  //Poloniex.prototype.getTradeHistory = Poloniex.prototype.returnChartData;
-  //Poloniex.prototype.myBalances = Poloniex.prototype.returnBalances;
-  //Poloniex.prototype.myOpenOrders = Poloniex.prototype.returnOpenOrders;
-  //Poloniex.prototype.myTradeHistory = Poloniex.prototype.returnTradeHistory;
+  //PoloAdapter.prototype.getTicker = PoloAdapter.prototype.returnTicker;
+  //PoloAdapter.prototype.get24hVolume = PoloAdapter.prototype.return24hVolume;
+  //PoloAdapter.prototype.getOrderBook = PoloAdapter.prototype.returnOrderBook;
+  //PoloAdapter.prototype.getTradeHistory = PoloAdapter.prototype.returnChartData;
+  //PoloAdapter.prototype.myBalances = PoloAdapter.prototype.returnBalances;
+  //PoloAdapter.prototype.myOpenOrders = PoloAdapter.prototype.returnOpenOrders;
+  //PoloAdapter.prototype.myTradeHistory = PoloAdapter.prototype.returnTradeHistory;
 
-  return Poloniex
+  return PoloAdapter
 })()
