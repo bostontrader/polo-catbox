@@ -10,15 +10,6 @@ module.exports = (function() {
   var version         = '0.0.8',
     USER_AGENT      = 'poloniex.js ' + version;
 
-  // Helper methods
-  /*function joinCurrencies(currencyA, currencyB) {
-    // If only one arg, then return the first
-    if (typeof currencyB !== 'string')
-      return currencyA;
-
-    return currencyA + '_' + currencyB;
-  }*/
-
   // Constructor
   function PoloAdapter(key, secret, base_nonce, baseURL) {
 
@@ -380,15 +371,6 @@ module.exports = (function() {
     //}
 
   }
-
-  // Backwards Compatibility
-  //PoloAdapter.prototype.getTicker = PoloAdapter.prototype.returnTicker;
-  //PoloAdapter.prototype.get24hVolume = PoloAdapter.prototype.return24hVolume;
-  //PoloAdapter.prototype.getOrderBook = PoloAdapter.prototype.returnOrderBook;
-  //PoloAdapter.prototype.getTradeHistory = PoloAdapter.prototype.returnChartData;
-  //PoloAdapter.prototype.myBalances = PoloAdapter.prototype.returnBalances;
-  //PoloAdapter.prototype.myOpenOrders = PoloAdapter.prototype.returnOpenOrders;
-  //PoloAdapter.prototype.myTradeHistory = PoloAdapter.prototype.returnTradeHistory;
 
   return PoloAdapter
 })()
