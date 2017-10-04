@@ -23,6 +23,12 @@
         "baseVolume":"0.45347489","quoteVolume":"9094"}
     },
 
+    "return24Volume":{
+      "BTC_LTC":{"BTC":"2.23248854","LTC":"87.10381314"},
+      "BTC_NXT":{"BTC":"0.981616","NXT":"14145"},
+      "totalBTC":"81.89657704","totalLTC":"78.52083806"
+    },
+
     // Private API
 
     "returnDepositsWithdrawals": {

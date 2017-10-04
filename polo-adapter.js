@@ -122,17 +122,10 @@ module.exports = (function() {
 
     /////
     // PUBLIC METHODS
-    returnTicker: async function () {
-      return await this._public('returnTicker')
-    },
-    /*returnTicker: function(callback) {
-      return this._public('returnTicker', callback);
-    },
+    returnTicker: async function () {return await this._public('returnTicker')},
+    return24Volume: async function () {return await this._public('return24Volume')},
 
-    return24hVolume: function(callback) {
-      return this._public('return24hVolume', callback);
-    },
-
+    /*
     returnOrderBook: function(currencyA, currencyB, callback) {
       var parameters = {
         currencyPair: joinCurrencies(currencyA, currencyB)

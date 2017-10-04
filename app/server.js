@@ -20,9 +20,8 @@ module.exports = server = {
       // This is the route for the public API.  No signature gyrations here.
       restifyCore.get('/' + 'public', (req, res, next) => {
         switch(req.query.command) {
-          case 'returnTicker':
-            res.json(config.get('testData.returnTicker'))
-            break
+          case 'returnTicker':   res.json(config.get('testData.returnTicker'));   break
+          case 'return24Volume': res.json(config.get('testData.return24Volume')); break
         }
         next()
       })

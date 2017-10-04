@@ -9,7 +9,6 @@ const server = require('./app/server')
 
 const startIntegrationTest = async () => {
 
-
   try {
 
     const u = config.get('url')
@@ -22,11 +21,18 @@ const startIntegrationTest = async () => {
     await server.start()
 
     // Test the public API endpoints
+
+    // There are no input parameters for this endpoint.  EZ.
     console.log('testing returnTicker')
     result = await poloAdapter.returnTicker(0,  Date.now())
     if(!deepEqual(result, config.get('testData.returnTicker')))
       throw new Error('returnTicker failed its test')
 
+    // There are no input parameters for this endpoint.  EZ.
+    console.log('testing return24Volume')
+    result = await poloAdapter.return24Volume(0,  Date.now())
+    if(!deepEqual(result, config.get('testData.return24Volume')))
+      throw new Error('return24Volume failed its test')
 
     // Test the private API endpoints
     console.log('testing returnDepositsWithdrawals')
