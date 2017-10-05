@@ -1,6 +1,5 @@
 {
   "listeningPort": 3003,
-  "catBoxSecret": "Can be anything but should match catBoxSecret.",
 
   "url": {
     "protocol": "http",
@@ -8,9 +7,9 @@
     "port": 3003
   },
 
-  "keys": {
-    "apiKey": "any random string is fine",
-    "secret": "Can be anything but should match catBoxSecret."
+  "credentials": {
+    "thing1": {"secret":"any random string is fine, A"},
+    "thing2": {"secret":"any random string is fine, B"}
   },
 
   "testData": {
@@ -28,6 +27,13 @@
       "BTC_NXT":{"BTC":"0.981616","NXT":"14145"},
       "totalBTC":"81.89657704","totalLTC":"78.52083806"
     },
+
+
+
+
+
+
+
 
     // Private API
 

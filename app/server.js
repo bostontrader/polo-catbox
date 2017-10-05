@@ -35,7 +35,8 @@ module.exports = server = {
         }).join('&')
 
         const expectedSig = req.headers.sign
-        const actualSig = crypto.createHmac('sha512', config.get('keys.secret')).update(paramString).digest('hex')
+        const key = req.headers.key
+        const actualSig = crypto.createHmac('sha512', config.get('credentials')[key].secret).update(paramString).digest('hex')
 
         if (expectedSig === actualSig) {
           // The request is good.  How shall we reply?

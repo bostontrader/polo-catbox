@@ -14,8 +14,8 @@ const startIntegrationTest = async () => {
     const u = config.get('url')
     const baseURL = u.protocol + "://" + u.host + (u.port ? ":" + u.port : '')
 
-    const keys = config.get('keys')
-    const poloAdapter = new PoloAdapter(keys.apiKey, keys.secret, 0, baseURL)
+    const keys = config.get('credentials')
+    const poloAdapter = new PoloAdapter('thing1', config.get('credentials').thing1.secret, 0, baseURL)
     let result
 
     await server.start()
@@ -33,6 +33,8 @@ const startIntegrationTest = async () => {
     result = await poloAdapter.return24Volume(0,  Date.now())
     if(!deepEqual(result, config.get('testData.return24Volume')))
       throw new Error('return24Volume failed its test')
+
+
 
     // Test the private API endpoints
     console.log('testing returnDepositsWithdrawals')

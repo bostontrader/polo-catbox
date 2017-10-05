@@ -96,7 +96,9 @@ You _can_ send these queries via HTTP to the real Polo server and it will _work_
 
 By default **polo-catbox** uses the configuration in /config/default.json. The following values are useful if set:
 
-* listeningPort Which port shall the **polo-catbox** listen on?
+* listeningPort - Which port shall the **polo-catbox** listen on?
+
+* credentials - Each key within is an API Key that has its associated secret
 
 Testing will need a URL of the API endpoint.  Configure that here.
 
