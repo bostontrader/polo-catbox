@@ -20,8 +20,10 @@ module.exports = server = {
       // This is the route for the public API.  No signature gyrations here.
       restifyCore.get('/' + 'public', (req, res, next) => {
         switch(req.query.command) {
-          case 'returnTicker':   res.json(config.get('testData.returnTicker'));   break
-          case 'return24Volume': res.json(config.get('testData.return24Volume')); break
+          case 'returnTicker':     res.json(config.get('testData.returnTicker'));     break
+          case 'return24Volume':   res.json(config.get('testData.return24Volume'));   break
+          case 'returnCurrencies': res.json(config.get('testData.currencies')); break
+
         }
         next()
       })
@@ -36,7 +38,7 @@ module.exports = server = {
 
         const expectedSig = req.headers.sign
         const key = req.headers.key
-        const actualSig = crypto.createHmac('sha512', config.get('credentials')[key].secret).update(paramString).digest('hex')
+        const actualSig = crypto.createHmac('sha512', config.get('testData.credentials')[key].secret).update(paramString).digest('hex')
 
         if (expectedSig === actualSig) {
           // The request is good.  How shall we reply?

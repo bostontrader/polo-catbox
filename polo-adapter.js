@@ -143,13 +143,11 @@ module.exports = (function() {
       };
 
       return this._public('returnChartData', parameters, callback);
-    },
+    },*/
 
-    returnCurrencies: function(callback) {
-      return this._public('returnCurrencies', callback);
-    },
+    returnCurrencies: async function () {return await this._public('returnCurrencies')},
 
-    returnLoanOrders: function(currency, callback) {
+    /*returnLoanOrders: function(currency, callback) {
       return this._public('returnLoanOrders', {currency: currency}, callback);
     },*/
 
