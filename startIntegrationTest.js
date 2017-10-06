@@ -7,6 +7,7 @@ const PoloAdapter = require('./polo-adapter')
 
 const server = require('./app/server')
 
+
 // These are the seven known public API endpoints.
 //returnTicker
 //return24Volume
@@ -25,7 +26,7 @@ const returnCurrenciesTest = require('./test/returnCurrencies.test')
 //returnOpenOrders
 //returnTradeHistory
 //returnOrderTrades
-//buy
+const buyTest = require('./test/buy.test')
 //sell
 //cancelOrder
 //moveOrder
@@ -71,11 +72,6 @@ const startIntegrationTest = async () => {
     if(!deepEqual(result, config.get('testData.return24Volume')))
       throw new Error('return24Volume failed its test')
 
-    // There are no input parameters for this endpoint.  EZ.
-    //console.log('testing returnCurrencies')
-    //result = await poloAdapter.returnCurrencies()
-    //if(!deepEqual(result, config.get('testData.currencies')))
-      //throw new Error('returnCurrencies failed its test')
     await returnCurrenciesTest(poloAdapter)
 
     // Test the private API endpoints
@@ -93,6 +89,8 @@ const startIntegrationTest = async () => {
     result = await poloAdapter.returnOpenOrders('all')
     if(!deepEqual(result, config.get('testData.returnOpenOrders_AllMarkets')))
       throw new Error('returnOpenOrders_AllMarkets failed its test')
+
+    await buyTest(poloAdapter)
 
     console.log(colors.green('All tests passed'))
     process.exit()

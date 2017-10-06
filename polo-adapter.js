@@ -92,6 +92,8 @@ module.exports = (function() {
       //parameters || (parameters = {});
       parameters.command = command;
       //parameters.nonce = this.base_nonce + Date.now() * 1000;
+      parameters.nonce = Date.now() * 1000;
+
       const options = {
         method: 'POST',
         url: this.baseURL + "/tradingApi",
@@ -176,15 +178,9 @@ module.exports = (function() {
 
     returnOpenOrders: async function (currencyPair) {
       return await this._private('returnOpenOrders', {currencyPair})
-    }
-
-    /*returnOpenOrders: function(currencyA, currencyB, callback) {
-      var parameters = {
-        currencyPair: joinCurrencies(currencyA, currencyB)
-      };
-
-      return this._private('returnOpenOrders', parameters, callback);
     },
+
+    /*
 
     returnTradeHistory: function(currencyA, currencyB, callback) {
       var parameters = {
@@ -200,19 +196,11 @@ module.exports = (function() {
       };
 
       return this._private('returnOrderTrades', parameters, callback);
-    },
+    },*/
 
-    buy: function(currencyA, currencyB, rate, amount, callback) {
-      var parameters = {
-        currencyPair: joinCurrencies(currencyA, currencyB),
-        rate: rate,
-        amount: amount
-      };
+    buy: async function (parameters) {return await this._private('buy', parameters)},
 
-      return this._private('buy', parameters, callback);
-    },
-
-    sell: function(currencyA, currencyB, rate, amount, callback) {
+    /*sell: function(currencyA, currencyB, rate, amount, callback) {
       var parameters = {
         currencyPair: joinCurrencies(currencyA, currencyB),
         rate: rate,
