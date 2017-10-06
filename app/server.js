@@ -2,8 +2,6 @@ const config  = require('config')
 const crypto  = require('crypto')
 const restify = require('restify')
 
-const poloConstants = require('./poloConstants')
-
 const listeningPort = config.get('listeningPort')
 
 const restifyCore = restify.createServer()
@@ -25,7 +23,6 @@ module.exports = server = {
           case 'returnTicker':     res.json(config.get('testData.returnTicker'));     break
           case 'return24Volume':   res.json(config.get('testData.return24Volume'));   break
           case 'returnCurrencies': res.json(config.get('testData.currencies')); break
-
         }
         next()
       })
@@ -55,18 +52,7 @@ module.exports = server = {
                 res.json(config.get('testData.returnOpenOrders_SingleMarket'))
               break
             case 'buy':
-              const currencyPair = ('currencyPair' in req.body) ? req.body.currencyPair : undefined
-              const rate         = ('rate'         in req.body) ? req.body.rate : 0
-              const amount       = ('amount'       in req.body) ? req.body.amount : 0
-              const fillOrKill   = ('fillOrKill' in req.body) ? req.body.fillOrKill : undefined
-              const immediateOrCancel = ('immediateOrCancel' in req.body) ? req.body.immediateOrCancel : undefined
-              const postOnly     = ('postOnly' in req.body) ? req.body.postOnly : undefined
-
-              const total = rate * amount
-              if (total < 0.0001)
-                res.json({"error":poloConstants['TOTAL_MUST_BE_AT_LEAST_0.0001']})
-              else
-                res.json('BUY results')
+              res.json(require('./cmd/buy')(req))
               break
           }
           next()

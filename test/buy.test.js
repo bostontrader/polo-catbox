@@ -4,14 +4,24 @@ const poloConstants = require('../app/poloConstants')
 
 module.exports = async (poloAdapter) => {
 
-  // 1. Buy with no parameters. Expect an error message.
+  let actual
+  let expected
+
+  // 1. No parameters. Expect an error message.
   console.log('testing buy with no parameters')
-  const result = await poloAdapter.buy({})
-  return new Promise((resolve, reject) => {
-    if(deepEqual(result, {"error":poloConstants['TOTAL_MUST_BE_AT_LEAST_0.0001']}))
-      resolve(true)
-    else {
-      reject('buy failed its test')
-    }
-  })
+  actual   = await poloAdapter.buy({})
+  expected = {"error":poloConstants.TOTAL_MUST_BE_AT_LEAST_0_0001}
+  if(!deepEqual(actual, expected))
+    return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
+
+  // 2. Non-numeric rate.  Expect an error message.
+  console.log('testing buy with a non-numeric rate')
+  actual   = await poloAdapter.buy({rate:'a'})
+  expected = {"error":poloConstants.INVALID_RATE_PARAMETER}
+  if(!deepEqual(actual, expected))
+    return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
+
+
+
+  return Promise.resolve(true)
 }
