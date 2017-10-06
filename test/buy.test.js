@@ -28,5 +28,12 @@ module.exports = async (poloAdapter) => {
   if(!deepEqual(actual, expected))
     return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
 
+  // 4. Missing currency pair.
+  console.log('testing buy with a missing currency pair')
+  actual   = await poloAdapter.buy({rate:0.002,amount:0.05})
+  expected = {"error":poloConstants.REQUIRED_PARAMETER_MISSING}
+  if(!deepEqual(actual, expected))
+    return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
+
   return Promise.resolve(true)
 }

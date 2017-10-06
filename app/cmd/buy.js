@@ -19,6 +19,9 @@ module.exports = (req) => {
   if (total < 0.0001)
     return {"error":poloConstants.TOTAL_MUST_BE_AT_LEAST_0_0001}
 
+  if (!currencyPair)
+    return {"error":poloConstants.REQUIRED_PARAMETER_MISSING}
+
   return 'BUY results'
 
 }
