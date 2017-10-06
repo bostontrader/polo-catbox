@@ -21,7 +21,12 @@ module.exports = async (poloAdapter) => {
   if(!deepEqual(actual, expected))
     return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
 
-
+  // 3. Non-numeric amount.  Expect an error message.
+  console.log('testing buy with a non-numeric amount')
+  actual   = await poloAdapter.buy({amount:'a'})
+  expected = {"error":poloConstants.INVALID_AMOUNT_PARAMETER}
+  if(!deepEqual(actual, expected))
+    return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
 
   return Promise.resolve(true)
 }
