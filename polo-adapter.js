@@ -202,7 +202,7 @@ module.exports = (function() {
     sell: async function (parameters) {return await this._private('sell', parameters)},
 
     /*
-
+e a
 
     cancelOrder: function(currencyA, currencyB, orderNumber, callback) {
       var parameters = {

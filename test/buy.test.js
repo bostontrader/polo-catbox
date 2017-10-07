@@ -25,6 +25,7 @@ module.exports = async (poloAdapter) => {
   await theTest({currencyPair:'BTC_CLAM', rate:0.002,amount:0.05}, 'testing buy with a variation of invalid currency pair', poloConstants.INVALID_CURRENCY_PAIR_PARAMETER)
 
   await theTest({currencyPair:'BTC_LTC', rate:1.0, amount:5000}, 'testing buy with not enough money to buy', poloConstants.NOT_ENOUGH + " BTC.")
+  await theTest({currencyPair:'BTC_LTC', rate:1.0, amount:100, immediateOrCancel:1, postOnly:1}, 'testing buy with too many flags', poloConstants.NO_MORE_THAN_ONE)
 
   return Promise.resolve(true)
 }
