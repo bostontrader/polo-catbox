@@ -17,6 +17,9 @@ module.exports = (req) => {
   if (isNaN(parseFloat(amount)))
     return {"error":poloConstants.INVALID_AMOUNT_PARAMETER}
 
+  if (rate   < 0) return {"error":poloConstants.INVALID_RATE_PARAMETER}
+  if (amount < 0) return {"error":poloConstants.INVALID_AMOUNT_PARAMETER}
+
   const total = rate * amount
   if (total < 0.0001)
     return {"error":poloConstants.TOTAL_MUST_BE_AT_LEAST_0_0001}
