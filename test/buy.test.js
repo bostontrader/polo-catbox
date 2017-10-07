@@ -7,33 +7,23 @@ module.exports = async (poloAdapter) => {
   let actual
   let expected
 
-  // 1. No parameters. Expect an error message.
-  console.log('testing buy with no parameters')
-  actual   = await poloAdapter.buy({})
-  expected = {"error":poloConstants.TOTAL_MUST_BE_AT_LEAST_0_0001}
-  if(!deepEqual(actual, expected))
-    return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
+  const theTest = async (parameters, announcement, expectedError) => {
+    console.log(announcement)
+    actual   = await poloAdapter.buy(parameters)
+    expected = {"error":expectedError}
+    if(!deepEqual(actual, expected))
+      return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
+  }
 
-  // 2. Non-numeric rate.  Expect an error message.
-  console.log('testing buy with a non-numeric rate')
-  actual   = await poloAdapter.buy({rate:'a'})
-  expected = {"error":poloConstants.INVALID_RATE_PARAMETER}
-  if(!deepEqual(actual, expected))
-    return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
+  await theTest({}, 'testing buy with no parameters', poloConstants.TOTAL_MUST_BE_AT_LEAST_0_0001)
+  await theTest({rate:'a'}, 'testing buy with a non-numeric rate', poloConstants.INVALID_RATE_PARAMETER)
+  await theTest({amount:'a'}, 'testing buy with a non-numeric amount', poloConstants.INVALID_AMOUNT_PARAMETER)
+  await theTest({rate:0.002,amount:0.05}, 'testing buy with a missing currencyPair', poloConstants.REQUIRED_PARAMETER_MISSING)
 
-  // 3. Non-numeric amount.  Expect an error message.
-  console.log('testing buy with a non-numeric amount')
-  actual   = await poloAdapter.buy({amount:'a'})
-  expected = {"error":poloConstants.INVALID_AMOUNT_PARAMETER}
-  if(!deepEqual(actual, expected))
-    return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
-
-  // 4. Missing currency pair.
-  console.log('testing buy with a missing currency pair')
-  actual   = await poloAdapter.buy({rate:0.002,amount:0.05})
-  expected = {"error":poloConstants.REQUIRED_PARAMETER_MISSING}
-  if(!deepEqual(actual, expected))
-    return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
+  // Invalid currency pair. Any variation that's not in our collection of markets.
+  await theTest({currencyPair:'a', rate:0.002,amount:0.05}, 'testing buy with a variation of invalid currency pair', poloConstants.INVALID_CURRENCY_PAIR_PARAMETER)
+  await theTest({currencyPair:'BTC_ltc', rate:0.002,amount:0.05}, 'testing buy with a variation of invalid currency pair', poloConstants.INVALID_CURRENCY_PAIR_PARAMETER)
+  await theTest({currencyPair:'BTC_CLAM', rate:0.002,amount:0.05}, 'testing buy with a variation of invalid currency pair', poloConstants.INVALID_CURRENCY_PAIR_PARAMETER)
 
   return Promise.resolve(true)
 }

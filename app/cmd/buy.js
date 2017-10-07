@@ -1,3 +1,5 @@
+const config = require('config')
+
 const poloConstants = require('../poloConstants')
 
 module.exports = (req) => {
@@ -21,6 +23,9 @@ module.exports = (req) => {
 
   if (!currencyPair)
     return {"error":poloConstants.REQUIRED_PARAMETER_MISSING}
+
+  if (!(currencyPair in config.testData.markets))
+    return {"error":poloConstants.INVALID_CURRENCY_PAIR_PARAMETER}
 
   return 'BUY results'
 
