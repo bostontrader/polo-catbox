@@ -7,9 +7,9 @@ module.exports = (req) => {
   const currencyPair = ('currencyPair' in req.body) ? req.body.currencyPair : undefined
   const rate         = ('rate'         in req.body) ? req.body.rate : 0
   const amount       = ('amount'       in req.body) ? req.body.amount : 0
-  //const fillOrKill   = ('fillOrKill' in req.body) ? req.body.fillOrKill : undefined
-  //const immediateOrCancel = ('immediateOrCancel' in req.body) ? req.body.immediateOrCancel : undefined
-  //const postOnly     = ('postOnly' in req.body) ? req.body.postOnly : undefined
+  const fillOrKill   = ('fillOrKill' in req.body) ? req.body.fillOrKill : undefined
+  const immediateOrCancel = ('immediateOrCancel' in req.body) ? req.body.immediateOrCancel : undefined
+  const postOnly     = ('postOnly' in req.body) ? req.body.postOnly : undefined
 
   if (isNaN(parseFloat(rate)))   return {"error":poloConstants.INVALID_RATE_PARAMETER}
   if (isNaN(parseFloat(amount))) return {"error":poloConstants.INVALID_AMOUNT_PARAMETER}
@@ -26,10 +26,14 @@ module.exports = (req) => {
 
   // Do we have enough money to make this sale?
   const sellingCurrency = currencyPair.split('_')[1]
-  const balance = (sellingCurrency in config.testData.balances) ? 0 : config.testData.balances[sellingCurrency]
+  const balance = (sellingCurrency in config.testData.balances) ? config.testData.balances[sellingCurrency] : 0
   if (total > balance)
     return {"error":poloConstants.NOT_ENOUGH + " " + sellingCurrency + "."}
   // tweak this to exclude encumbered balances
+
+  // No more than 1 of the following flags can be set at once
+  if (fillOrKill ? 1 : 0 + immediateOrCancel ? 1 : 0 + postOnly ? 1 : 0 > 1)
+    return {"error":poloConstants.NO_MORE_THAN_ONE}
 
   return 'nonsense sell results'
 
