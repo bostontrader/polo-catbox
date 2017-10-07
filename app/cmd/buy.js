@@ -30,6 +30,13 @@ module.exports = (req) => {
   if (!(currencyPair in config.testData.markets))
     return {"error":poloConstants.INVALID_CURRENCY_PAIR_PARAMETER}
 
-  return 'BUY results'
+  // Do we have enough money to make this purchase?
+  const purchasingCurrency = currencyPair.split('_')[0]
+  const balance = (purchasingCurrency in config.testData.balances) ? 0 : config.testData.balances[purchasingCurrency]
+  if (total > balance)
+    return {"error":poloConstants.NOT_ENOUGH + " " + purchasingCurrency + "."}
+  // tweak this to exclude encumbered balances
+
+  return 'nonsense BUY results'
 
 }

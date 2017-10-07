@@ -27,5 +27,8 @@ module.exports = async (poloAdapter) => {
   await theTest({currencyPair:'BTC_ltc', rate:0.002,amount:0.05}, 'testing buy with a variation of invalid currency pair', poloConstants.INVALID_CURRENCY_PAIR_PARAMETER)
   await theTest({currencyPair:'BTC_CLAM', rate:0.002,amount:0.05}, 'testing buy with a variation of invalid currency pair', poloConstants.INVALID_CURRENCY_PAIR_PARAMETER)
 
+  await theTest({currencyPair:'BTC_LTC', rate:1.0, amount:5000}, 'testing buy with not enough money to buy', poloConstants.NOT_ENOUGH + " BTC.")
+
+  //{ error: 'Not enough USDT.' }
   return Promise.resolve(true)
 }

@@ -9,6 +9,10 @@
 
   "testData": {
 
+    "balances": {
+      "BTC":2000
+    },
+
     "credentials": {
       "thing1": {"secret":"any random string is fine, A"},
       "thing2": {"secret":"any random string is fine, B"}
