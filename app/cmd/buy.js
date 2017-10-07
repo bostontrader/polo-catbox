@@ -11,29 +11,22 @@ module.exports = (req) => {
   const immediateOrCancel = ('immediateOrCancel' in req.body) ? req.body.immediateOrCancel : undefined
   const postOnly     = ('postOnly' in req.body) ? req.body.postOnly : undefined
 
-  if (isNaN(parseFloat(rate)))
-    return {"error":poloConstants.INVALID_RATE_PARAMETER}
-
-  if (isNaN(parseFloat(amount)))
-    return {"error":poloConstants.INVALID_AMOUNT_PARAMETER}
+  if (isNaN(parseFloat(rate)))   return {"error":poloConstants.INVALID_RATE_PARAMETER}
+  if (isNaN(parseFloat(amount))) return {"error":poloConstants.INVALID_AMOUNT_PARAMETER}
 
   if (rate   < 0) return {"error":poloConstants.INVALID_RATE_PARAMETER}
   if (amount < 0) return {"error":poloConstants.INVALID_AMOUNT_PARAMETER}
 
   const total = rate * amount
-  if (total < 0.0001)
-    return {"error":poloConstants.TOTAL_MUST_BE_AT_LEAST_0_0001}
+  if (total < 0.0001) return {"error":poloConstants.TOTAL_MUST_BE_AT_LEAST_0_0001}
 
-  if (!currencyPair)
-    return {"error":poloConstants.REQUIRED_PARAMETER_MISSING}
+  if (!currencyPair) return {"error":poloConstants.REQUIRED_PARAMETER_MISSING}
 
-  if (!(currencyPair in config.testData.markets))
-    return {"error":poloConstants.INVALID_CURRENCY_PAIR_PARAMETER}
+  if (!(currencyPair in config.testData.markets)) return {"error":poloConstants.INVALID_CURRENCY_PAIR_PARAMETER}
 
   // Do we have enough money to make this purchase?
   const purchasingCurrency = currencyPair.split('_')[0]
   const balance = (purchasingCurrency in config.testData.balances) ? config.testData.balances[purchasingCurrency] : 0
-
   if (total > balance)
     return {"error":poloConstants.NOT_ENOUGH + " " + purchasingCurrency + "."}
   // tweak this to exclude encumbered balances
