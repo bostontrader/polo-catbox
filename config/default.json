@@ -10,7 +10,8 @@
   "testData": {
 
     "balances": {
-      "BTC":2000
+      "BTC":2000,
+      "LTC":500
     },
 
     "credentials": {

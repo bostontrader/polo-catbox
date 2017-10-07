@@ -51,9 +51,8 @@ module.exports = server = {
               else
                 res.json(config.get('testData.returnOpenOrders_SingleMarket'))
               break
-            case 'buy':
-              res.json(require('./cmd/buy')(req))
-              break
+            case 'buy':  {res.json(require('./cmd/buy')(req));  break}
+            case 'sell': {res.json(require('./cmd/sell')(req)); break}
           }
           next()
         } else {

@@ -198,17 +198,11 @@ module.exports = (function() {
       return this._private('returnOrderTrades', parameters, callback);
     },*/
 
-    buy: async function (parameters) {return await this._private('buy', parameters)},
+    buy:  async function (parameters) {return await this._private('buy', parameters)},
+    sell: async function (parameters) {return await this._private('sell', parameters)},
 
-    /*sell: function(currencyA, currencyB, rate, amount, callback) {
-      var parameters = {
-        currencyPair: joinCurrencies(currencyA, currencyB),
-        rate: rate,
-        amount: amount
-      };
+    /*
 
-      return this._private('sell', parameters, callback);
-    },
 
     cancelOrder: function(currencyA, currencyB, orderNumber, callback) {
       var parameters = {

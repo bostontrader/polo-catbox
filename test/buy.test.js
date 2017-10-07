@@ -4,13 +4,10 @@ const poloConstants = require('../app/poloConstants')
 
 module.exports = async (poloAdapter) => {
 
-  let actual
-  let expected
-
   const theTest = async (parameters, announcement, expectedError) => {
     console.log(announcement)
-    actual   = await poloAdapter.buy(parameters)
-    expected = {"error":expectedError}
+    const actual   = await poloAdapter.buy(parameters)
+    const expected = {"error":expectedError}
     if(!deepEqual(actual, expected))
       return Promise.reject('buy failed its test. Expected:'+JSON.stringify(expected)+' Actual:'+JSON.stringify(actual))
   }
@@ -29,6 +26,5 @@ module.exports = async (poloAdapter) => {
 
   await theTest({currencyPair:'BTC_LTC', rate:1.0, amount:5000}, 'testing buy with not enough money to buy', poloConstants.NOT_ENOUGH + " BTC.")
 
-  //{ error: 'Not enough USDT.' }
   return Promise.resolve(true)
 }

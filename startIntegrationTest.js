@@ -27,7 +27,7 @@ const returnCurrenciesTest = require('./test/returnCurrencies.test')
 //returnTradeHistory
 //returnOrderTrades
 const buyTest = require('./test/buy.test')
-//sell
+const sellTest = require('./test/sell.test')
 //cancelOrder
 //moveOrder
 //withdraw
@@ -91,6 +91,7 @@ const startIntegrationTest = async () => {
       throw new Error('returnOpenOrders_AllMarkets failed its test')
 
     await buyTest(poloAdapter)
+    await sellTest(poloAdapter)
 
     console.log(colors.green('All tests passed'))
     process.exit()
