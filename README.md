@@ -136,6 +136,8 @@ It's tempting to configure this app to send the queries to the real Polo server,
 
 # devDependencies
 
+* deep-diff - A convenience for testing.
+
 * deep-equal - A convenience for testing.
 
 * request - Testing needs a client to make HTTP requests.
