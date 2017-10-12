@@ -1,3 +1,5 @@
+
+
 const poloConstants = require('../poloConstants')
 
 function Engine() {
@@ -7,6 +9,19 @@ function Engine() {
 }
 
 Engine.prototype.buy = function(newOrder) {
+
+  // Sort an array by rate ASC, Dt ASC
+  const sort_RateASC_DtASC = function (a, b) {
+    if (a.rate < b.rate) return -1
+    if (a.rate > b.rate) return 1
+
+    // a.rate must be equal to b.rate. Now sort by dt
+    if (a.dt < b.dt) return -1
+    if (a.dt > b.dt) return 1
+
+    // a.dt must be equal to b.dt.
+    return 0
+  }
 
   if(newOrder.fillOrKill) {
 
@@ -22,17 +37,7 @@ Engine.prototype.buy = function(newOrder) {
     if(availableQuantity >= newOrder.amount) {
       // This order can be filled in its entirety.
       // Now sort the candidate orders in the order of consumption (by ask ASC, dt ASC).
-      let n2 = n1.sort(function (a, b) {
-        if (a.rate < b.rate) return -1
-        if (a.rate > b.rate) return 1
-
-        // a.rate must be equal to b.rate. Now sort by dt
-        if (a.dt < b.dt) return -1
-        if (a.dt > b.dt) return 1
-
-        // a.dt must be equal to b.dt.
-        return 0;
-      })
+      let n2 = n1.sort(sort_RateASC_DtASC)
 
       // 2.1. Now consume these orders in order until the buy order is filled.
       let quanRemaining = newOrder.amount
@@ -101,17 +106,7 @@ Engine.prototype.buy = function(newOrder) {
       .filter(existingOrder => existingOrder.amount > 0)
 
     // 2. Now sort the candidate orders in the order of consumption (by ask ASC, dt ASC).
-    let n2 = n1.sort(function (a, b) {
-      if (a.rate < b.rate) return -1
-      if (a.rate > b.rate) return 1
-
-      // a.rate must be equal to b.rate. Now sort by dt
-      if (a.dt < b.dt) return -1
-      if (a.dt > b.dt) return 1
-
-      // a.dt must be equal to b.dt.
-      return 0;
-    })
+    let n2 = n1.sort(sort_RateASC_DtASC)
 
     // 3. Now consume these orders, in order, until either the buy order is filled or the sell orders are consumed.
     let quanRemaining = newOrder.amount

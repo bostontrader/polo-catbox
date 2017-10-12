@@ -15,7 +15,9 @@
     "save-dev": "^2.0.0"
   },
   "devDependencies": {
+    "ava": "^0.22.0",
     "deep-equal": "^1.0.1",
+    "nyc": "^11.2.1",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5"
   },
@@ -40,7 +42,7 @@
     "url": "https://github.com/bostontrader/polo-catbox.git"
   },
   "scripts": {
-    "test": "node startIntegrationTest",
+    "test": "nyc ava './app/engine/*.test.js'",
     "start": "node startServer.js"
   },
   "version": "0.2.1"
