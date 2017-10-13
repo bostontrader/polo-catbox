@@ -95,9 +95,8 @@ Engine.prototype.buy = function(newOrder) {
       // This order cannot be filled in its entirety. Error.
       return { error: poloConstants.UNABLE_TO_FILL_ORDER_COMPLETELY }
     }
-  }
 
-  else if(newOrder.immediateOrCancel) {
+  } else if(newOrder.immediateOrCancel) {
 
     // 1. First find all candidate sell orders, if any, for the given currencyPair where the ask rate <= the newOrder rate
     const n1 = this.orders2Sell
@@ -112,7 +111,7 @@ Engine.prototype.buy = function(newOrder) {
     let quanRemaining = newOrder.amount
     const newTrades = []
 
-    while(quanRemaining > 0 && n2.length > 0) {
+    while (quanRemaining > 0 && n2.length > 0) {
       const candidateOrder = n2[0]
 
       // can this candidateOrder satisfy the remaining quantity?
@@ -153,7 +152,7 @@ Engine.prototype.buy = function(newOrder) {
 
     }
 
-    return(
+    return (
       {
         orderNumber: '1',
         resultingTrades: newTrades,
@@ -161,7 +160,28 @@ Engine.prototype.buy = function(newOrder) {
       }
     )
 
+  } else if(newOrder.postOnly) {
+
+    // 1. First find all candidate sell orders, if any, for the given currencyPair where the ask rate <= the newOrder rate
+    const n1 = this.orders2Sell
+      .filter(existingOrder => existingOrder.currencyPair === newOrder.currencyPair)
+      .filter(existingOrder => existingOrder.rate <= newOrder.rate)
+      .filter(existingOrder => existingOrder.amount > 0)
+
+    // 2. If there are any such sell orders then this buy order could be partially or fully executed.
+    // We don't want _any_ execution so therefore fail.
+    if(n1.length > 0)
+      return { error: poloConstants.UNABLE_TO_PLACE_POSTONLY_ORDER_AT_THIS_PRICE }
+
+    // This buy order cannot be fulfilled at all at this time.  Therefore accept the order.
+    this.orders2Buy.push(newOrder)
+    return {orderNumber: '1', resultingTrades: [] }
+
+  } else {
+    // Buy anything that can be purchased now, but leave an order to buy for the remainder, if any.
+    // Like immediateOrCancel except we leave the rump order if applicable.
   }
+
 }
 
 Engine.prototype.sell = function(newOrder) {
