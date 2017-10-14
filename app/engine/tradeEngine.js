@@ -5,7 +5,7 @@ const poloConstants = require('../poloConstants')
 function Engine() {
   this.orders2Buy  = []
   this.orders2Sell = []
-  this.trades      = []
+  //this.trades      = []
 }
 
 Engine.prototype.buy = function(newOrder) {
@@ -22,6 +22,9 @@ Engine.prototype.buy = function(newOrder) {
     // a.dt must be equal to b.dt.
     return 0
   }
+
+  // This is an 'ordinary' order if none of the 3 special flags are set.
+  const fOrdinary = !(newOrder.fillOrKill || newOrder.immediateOrCancel || newOrder.postOnly)
 
   if(newOrder.fillOrKill) {
 
@@ -96,7 +99,10 @@ Engine.prototype.buy = function(newOrder) {
       return { error: poloConstants.UNABLE_TO_FILL_ORDER_COMPLETELY }
     }
 
-  } else if(newOrder.immediateOrCancel) {
+  }
+
+  // ordinary and immediateOrCancel orders are handled the exact same way _except_ for a minor difference.
+  else if(newOrder.immediateOrCancel || fOrdinary) {
 
     // 1. First find all candidate sell orders, if any, for the given currencyPair where the ask rate <= the newOrder rate
     const n1 = this.orders2Sell
@@ -149,18 +155,26 @@ Engine.prototype.buy = function(newOrder) {
         candidateOrder.amount = 0
         n2.shift()
       }
-
     }
 
-    return (
-      {
-        orderNumber: '1',
-        resultingTrades: newTrades,
-        amountUnfilled: quanRemaining
-      }
-    )
+    const retVal = {
+      orderNumber: '1',
+      resultingTrades: newTrades
+    }
 
-  } else if(newOrder.postOnly) {
+    if(newOrder.immediateOrCancel)
+      retVal.amountUnfilled = quanRemaining
+
+    if(quanRemaining > 0 && fOrdinary) {
+      // Add a new buy order for the remainder
+      newOrder.amount = quanRemaining
+      this.orders2Buy.push(newOrder)
+    }
+
+    return retVal
+  }
+
+  else if(newOrder.postOnly) {
 
     // 1. First find all candidate sell orders, if any, for the given currencyPair where the ask rate <= the newOrder rate
     const n1 = this.orders2Sell
@@ -176,10 +190,6 @@ Engine.prototype.buy = function(newOrder) {
     // This buy order cannot be fulfilled at all at this time.  Therefore accept the order.
     this.orders2Buy.push(newOrder)
     return {orderNumber: '1', resultingTrades: [] }
-
-  } else {
-    // Buy anything that can be purchased now, but leave an order to buy for the remainder, if any.
-    // Like immediateOrCancel except we leave the rump order if applicable.
   }
 
 }
