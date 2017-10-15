@@ -6,5 +6,6 @@ module.exports = {
   "NOT_ENOUGH":"Not enough",
   "REQUIRED_PARAMETER_MISSING":"Required parameter missing.",
   "TOTAL_MUST_BE_AT_LEAST_0_0001":"Total must be at least 0.0001.",
-  "UNABLE_TO_FILL_ORDER_COMPLETELY":"Unable to fill order completely."
+  "UNABLE_TO_FILL_ORDER_COMPLETELY":"Unable to fill order completely.",
+  "UNABLE_TO_PLACE_POSTONLY_ORDER_AT_THIS_PRICE":"Unable to place post-only order at this price."
 }

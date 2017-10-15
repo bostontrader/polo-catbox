@@ -2,13 +2,12 @@
 This is a test of ordinary buy orders when talking directly to the tradeEngine.
 
 Recall that 'ordinary' means no fillOrKill, immediateOrCancl, or postOnly.  In this case the order should be treated just like immediateOrCancel _except_ that any unfulfilled portion of the order is left on the books as a residual buy order.
-
 */
 const test = require('ava')
 
-const engine        = require('./tradeEngine')
+const engine = require('../tradeEngine')
 
-// The sell orders that we use for testing will be injected into the engine state in a funny order designed to trip over edge cases.  However, this order makes it extremely tedious to observe changes to the orders as this test proceeds.  This function will enable us to easily sort the sell orders, purely as a convenience.
+// The sell orders that we use for testing will be injected into the engine state in a particular order designed to trip over edge cases.  However, this order makes it extremely tedious to observe changes to the orders as this test proceeds.  This function will enable us to easily sort the sell orders, purely as a convenience.
 const sort_CPASC_RateASC_DtASC = function (a, b) {
 
   if (a.currencyPair < b.currencyPair) return -1
@@ -26,7 +25,7 @@ const sort_CPASC_RateASC_DtASC = function (a, b) {
 }
 
 test.serial(t => {
-  // Because the focus of this test is ordinary buy orders, I will start by injecting this carefully crafted collection of sell orders to start with.  The actual sequence of injection should not matter because the engine will filter and sort, but this order is important in order to trigger edge cases of the test.
+  // Start by injecting this carefully crafted collection of sell orders to start with.  The actual sequence of injection should not matter because the engine will filter and sort, but this order is important in order to trigger edge cases of the test.
   // The BTC_ETH is added to muddy the water and should be excluded by the engine.
   engine.sell({apiKey:'others', currencyPair:'BTC_ETH', 'dt': 1008, rate: 0.020, amount: 1.0})
   engine.sell({apiKey:'others', currencyPair:'BTC_LTC', 'dt': 1003, rate: 0.022, amount: 1.0})
@@ -41,7 +40,7 @@ test.serial(t => {
   let actual
   let expected
 
-  // 1. Attempt to buy a price lower than dt 1000's ask price.  Should be no purchase and the buy order should be posted.
+  // 1. Attempt to buy a price lower than dt 1000's ask price.  Should be no purchase and a new buy order should be posted.
   actual = engine.buy({apiKey:'me', currencyPair:'BTC_LTC', 'dt': 2000, rate: 0.019, amount: 1.0})
   expected = { orderNumber: '1', resultingTrades: []}
   t.deepEqual(actual, expected)
