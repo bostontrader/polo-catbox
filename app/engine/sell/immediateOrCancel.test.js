@@ -167,4 +167,8 @@ test.serial(t => {
   ]
   t.deepEqual(actual, expected)
 
+  // 6. After all of this, there should not be any sell orders on the books.
+  actual = engine.orders2Sell.sort(sort_CPASC_RateDESC_DtASC)
+  expected = []
+  t.deepEqual(actual, expected)
 })
