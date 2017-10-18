@@ -28,19 +28,9 @@
       "AEON":{"id":6,"name":"AEON Coin","txFee":"0.01000000","minConf":10,"depositAddress":"WmrzAb4yy6i4otzaTZznsmaeBn8UKoBqS14XdW2DDzXr3DQnwz4o1XPJAJuo7QTqSoD9WVrdEQfn15udzhsJWmNR1jAEETQ2N","disabled":0,"delisted":1,"frozen":0}
     },
 
-    "markets": {
-      "BTC_LTC":"",
-      "BTC_ETH":"",
-      "ETC_CLAM":""
-    },
+    "markets": ["BTC_LTC", "BTC_ETH", "ETC_CLAM"],
 
     // Public API
-    "returnTicker":{
-      "BTC_LTC":{"last":"0.0251","lowestAsk":"0.02589999","highestBid":"0.0251","percentChange":"0.02390438",
-        "baseVolume":"6.16485315","quoteVolume":"245.82513926"},
-      "BTC_NXT":{"last":"0.00005730","lowestAsk":"0.00005710", "highestBid":"0.00004903","percentChange":"0.16701570",
-        "baseVolume":"0.45347489","quoteVolume":"9094"}
-    },
 
     "return24Volume":{
       "BTC_LTC":{"BTC":"2.23248854","LTC":"87.10381314"},

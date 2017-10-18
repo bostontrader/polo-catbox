@@ -1,11 +1,15 @@
 function Engine () {
+  this.brainWipe()
+}
+
+Engine.prototype.brainWipe = function () {
   this.orders2Buy = []
   this.orders2Sell = []
   this.trades = []
 }
 
 Engine.prototype.returnTicker =
-  function () { return require('./returnTicker/returnTicker')(this.orders2Buy, this.orders2Sell, this.trades) }
+  function (markets) { return require('./returnTicker/returnTicker')(markets, this.orders2Buy, this.orders2Sell, this.trades) }
 
 Engine.prototype.buy = function (newOrder) {
   const result = require('./buy/buy')(newOrder, this.orders2Buy, this.orders2Sell)

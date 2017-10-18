@@ -42,13 +42,36 @@ Another issue is that we cannot actually perform all desired operations on the s
 
 Another issue is how carefully should we test API results.  Is an examination of the shape enough or shall we inspect the contents as well?  Should we count the elements in an array?  How do we know how many to expect?  Should we examine the shape of the array elements also?  Should we examine the actual content of each array element?  And in the case where results are aggregates such as sums of many trades, how do we know what the expected values should be?
 
-A final and related issue is where to draw the line with testing.  You obviously want to test your software, but you want to avoid testing Polo's software.  Or do you?  The API docs are rather sparse and have a lot of blind spots in them.  We might want to do some charactarization testing.  If you are sending queries but not able to observe results, perhaps you're tripping over an obscure nuance of Polo's use of the input parameters.
+A final and related issue is where to draw the line with testing.  You obviously want to test your software, but you want to avoid testing Polo's software.  Or do you?  The API docs are rather sparse and have a variety of errors and blind spots in them.  We might want to do some characterization testing.  If you are sending queries but not receiving expected results, perhaps you're tripping over some of these issues.
+
+
+# And even further down the rabbit hole..
+
+The server accepts HTTP requests and creates appropriate replies.  It's not feasible to just use static data to mimic the real server.  So the Catbox has a rudimentary trading engine that can accept buy and sell orders and do trading.  This architecture presents some challenges.
+
+The first problem is to decide where to implement the various elements of functionality.  For example, I think it's obvious that the trading engine ought to be in charge of accumulating trade orders and implementing trades.  But should it also deal with input parameter validation?
+
+A related nettle is the question of testing.  The server and the trade engine are inherently going to have similar interfaces.  But how exactly the same should they be? And how much overlap in functionality and testing should we have/tolerate?
+
+After much wringing of hands and general agonization, I have answered these puzzles as follows:
+
+* The server generally handles parameter checking.  Any requests that pass the server's initial scrutiny get sent to the trade engine.
+
+* The trade engine therefore omits most parameter checking and hopes that the server does its job.
+
+* The trade engine has a fairly elaborate set of tests for the basic functionality, minus parameter checking.
+
+* The server has tests for parameter checking.
+
+* The server has a fairly elaborate set of tests for the basic functionality that essentially mirrors the similar testing for the trade engine.
+
+I think this is generally a good division of labor and provides good test coverage.  One disadvantage is that there is some difficult testing that is duplicated for the HTTP API and the trading engine.  I think it's obvious that the HTTP API ought to have this testing and that it's very desirable for the trading engine to have it also.  However, we can't reasonably factor much of this out, w/o sinking into the pit of incomprehensible abstraction, so we must therefore hold our noses and tolerate this duplication.
 
 # Server Operation
 
 When the server starts it has a minimal state that it gets from the configuration.  Said state includes:
 
-* An API key and secret for two users, Thing1 and Thing2.
+* An API key and secret for two users, 'me' and 'others'.
 
 * A collection of currencies that can be used.
 
@@ -58,7 +81,7 @@ When the server starts it has a minimal state that it gets from the configuratio
 
 These items cannot be added via the API and must be present in order to use the API.  Thus their insertion here.
 
-Your test can further modify the state by submitting any request that modifies the state. When you do this you will need a set of credentials.  You can use Thing1 as the test subject user and  Thing2 as "all the other market participants."  In this way you can setup the market to be as elaborate as you like.  You could even add additional users if you like.
+Your test can further modify the state by submitting any request that modifies the state. When you do this you will need a set of credentials.  You can use 'me' as the test subject user and  'others' as "all the other market participants."  In this way you can setup the market to be as elaborate as you like.  You could even add additional users if you like.
 
 
 # API Key and Secret
@@ -124,7 +147,7 @@ It's tempting to configure this app to send the queries to the real Polo server,
 
 * If you're not careful to ensure that the requests are sent via HTTPS you might get HTTP instead.  If so, your API Key will be exposed.  Although your determined opponent does not have your secret (by this faux pas) he's one step closer to getting in.
 
-* How many other ways are there for this to go wrong?  I don't know and contemplating, and fortifying against, the myraid of ways this topic could have an unhappy ending, is a distraction from this project and thus further affiant sayeth nought.
+* How many other ways are there for this to go wrong?  I don't know and contemplating, and fortifying against, the myriad of ways this topic could have an unhappy ending, is a distraction from this project and thus further affiant sayeth nought.
 
 # Dependencies
 
