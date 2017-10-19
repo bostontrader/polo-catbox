@@ -119,3 +119,51 @@ test.serial(t => {
   }
   t.deepEqual(actual, expected)
 })
+
+// 6. A single trade for a single market.
+test.serial(t => {
+  engine.brainWipe()
+  const currencyPair = config.get('testData.markets')[0]
+  engine.buy({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.015, amount: 2.0})
+  engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.014, amount: 2.0})
+
+  const actual = engine.returnTicker(config.get('testData.markets'))[currencyPair]
+  delete actual.id
+  const expected = {
+    isFrozen: 0,
+    lowestAsk: undefined,
+    highestBid: undefined,
+    last: 0.015,
+    percentChange: undefined,
+    baseVolume: 0.03,
+    quoteVolume: 2,
+    high24hr: 0.015,
+    low24hr: 0.015
+  }
+  t.deepEqual(actual, expected)
+})
+
+// 7. Two trades for a single market.
+test.serial(t => {
+  engine.brainWipe()
+  const currencyPair = config.get('testData.markets')[0]
+  engine.buy({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.015, amount: 2.0})
+  engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.014, amount: 2.0})
+  engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.016, amount: 2.0})
+  engine.buy({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.017, amount: 2.0})
+
+  const actual = engine.returnTicker(config.get('testData.markets'))[currencyPair]
+  delete actual.id
+  const expected = {
+    isFrozen: 0,
+    lowestAsk: undefined,
+    highestBid: undefined,
+    last: 0.016,
+    percentChange: undefined,
+    baseVolume: 0.062,
+    quoteVolume: 4,
+    high24hr: 0.016,
+    low24hr: 0.015
+  }
+  t.deepEqual(actual, expected)
+})

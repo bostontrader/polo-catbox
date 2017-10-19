@@ -16,9 +16,10 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
 
   // This is an 'ordinary' order if none of the 3 special flags are set.
   const fOrdinary = !(newOrder.fillOrKill || newOrder.immediateOrCancel || newOrder.postOnly)
+  const orderCurrencies = newOrder.currencyPair.split('_')
 
   if (newOrder.fillOrKill) {
-    // 1. First find all candidate sell orders, if any, for the given currencyPair where the ask rate <= the newOrder rate
+    // 1. First find all candidate sell orders, if any, for the given currencyPair where the ask rate <= the newOrder bid rate
     const n1 = orders2Sell
       .filter(existingOrder => existingOrder.currencyPair === newOrder.currencyPair)
       .filter(existingOrder => existingOrder.rate <= newOrder.rate)
@@ -50,7 +51,9 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
               rate: candidateOrder.rate,
               total: quanRemaining * candidateOrder.rate,
               tradeID: '1',
-              type: 'buy'
+              type: 'buy',
+              baseCurrency: orderCurrencies[0],
+              quoteCurrency: orderCurrencies[1]
             }
           )
           candidateOrder.amount -= quanRemaining
@@ -65,7 +68,9 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
               rate: candidateOrder.rate,
               total: candidateOrder.amount * candidateOrder.rate,
               tradeID: '1',
-              type: 'buy'
+              type: 'buy',
+              baseCurrency: orderCurrencies[0],
+              quoteCurrency: orderCurrencies[1]
             }
           )
           quanRemaining -= candidateOrder.amount
@@ -112,7 +117,9 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
             rate: candidateOrder.rate,
             total: quanRemaining * candidateOrder.rate,
             tradeID: '1',
-            type: 'buy'
+            type: 'buy',
+            baseCurrency: orderCurrencies[0],
+            quoteCurrency: orderCurrencies[1]
           }
         )
         candidateOrder.amount -= quanRemaining
@@ -128,7 +135,9 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
             rate: candidateOrder.rate,
             total: candidateOrder.amount * candidateOrder.rate,
             tradeID: '1',
-            type: 'buy'
+            type: 'buy',
+            baseCurrency: orderCurrencies[0],
+            quoteCurrency: orderCurrencies[1]
           }
         )
         quanRemaining -= candidateOrder.amount

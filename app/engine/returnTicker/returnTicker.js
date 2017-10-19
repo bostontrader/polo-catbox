@@ -30,6 +30,13 @@ module.exports = (markets, orders2Buy, orders2Sell, trades) => {
       return 0
     }
 
+    // Sort trades with the most recent trade on top
+    const sortDtDesc = function (a, b) {
+      if (a.rate > b.rate) return -1
+      if (a.rate < b.rate) return 1
+      return 0
+    }
+
     // highestBid
     const n1 = orders2Buy
       .filter(existingOrder => existingOrder.currencyPair === market)
@@ -44,12 +51,19 @@ module.exports = (markets, orders2Buy, orders2Sell, trades) => {
       .sort(sortRateAsc)
     if (n2.length > 0) { ticker.lowestAsk = n2[0].rate }
 
-    // iterate over all trades in this market {
-    //   baseVolme += this trade
-    //   quoteVolume += this trade
-    //   if price > high24hr high24hr = price
-    //   if price < low24hr then low24hr = price
-    // }
+    // trades
+    const marketCurrencies = market.split('_')
+    const n3 = trades
+      .filter(trade => trade.baseCurrency === marketCurrencies[0])
+      .filter(trade => trade.quoteCurrency === marketCurrencies[1])
+      .sort(sortDtDesc)
+    if (n3.length > 0) { ticker.last = n3[0].rate }
+    n3.forEach(trade => {
+      ticker.baseVolume = ticker.baseVolume ? ticker.baseVolume += trade.total : trade.total
+      ticker.quoteVolume = ticker.quoteVolume ? ticker.quoteVolume += trade.amount : trade.amount
+      if (!ticker.high24hr || ticker.high24hr < trade.rate) { ticker.high24hr = trade.rate }
+      if (!ticker.low24hr || ticker.low24hr > trade.rate) { ticker.low24hr = trade.rate }
+    })
 
     retVal[market] = ticker
   })

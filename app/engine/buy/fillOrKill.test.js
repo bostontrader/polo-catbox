@@ -25,22 +25,27 @@ const sortCurPairAscRateAscDatetimeAsc = function (a, b) {
 }
 
 test.serial(t => {
+  const baseCurrency = 'BTC'
+  const quoteCurrency = 'LTC'
+  const currencyPair = baseCurrency + '_' + quoteCurrency
+  const date = '2017-10-07 11:55:18'
+
   // Start by injecting this carefully crafted collection of sell orders to start with.  The actual sequence of injection should not matter because the engine will filter and sort, but this order is important in order to trigger edge cases of the test.
   // The BTC_ETH is added to muddy the water and should be excluded by the engine.
   engine.sell({apiKey: 'others', currencyPair: 'BTC_ETH', 'dt': 1008, rate: 0.015, amount: 1.0})
-  engine.sell({apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.022, amount: 1.0})
-  engine.sell({apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 1.0})
-  engine.sell({apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 1.0})
-  engine.sell({apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1009, rate: 0.022, amount: 1.0})
-  engine.sell({apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1002, rate: 0.020, amount: 1.0})
-  engine.sell({apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1000, rate: 0.020, amount: 1.0})
-  engine.sell({apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1001, rate: 0.020, amount: 1.0})
+  engine.sell({apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.022, amount: 1.0})
+  engine.sell({apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 1.0})
+  engine.sell({apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 1.0})
+  engine.sell({apiKey: 'others', currencyPair, 'dt': 1009, rate: 0.022, amount: 1.0})
+  engine.sell({apiKey: 'others', currencyPair, 'dt': 1002, rate: 0.020, amount: 1.0})
+  engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.020, amount: 1.0})
+  engine.sell({apiKey: 'others', currencyPair, 'dt': 1001, rate: 0.020, amount: 1.0})
 
   let actual
   let expected
 
   // 1. Attempt to buy at a price lower than dt 1000's ask price.  Should be no purchase.
-  actual = engine.buy({apiKey: 'me', currencyPair: 'BTC_LTC', 'dt': 2000, rate: 0.019, amount: 1.0, fillOrKill: 1})
+  actual = engine.buy({apiKey: 'me', currencyPair, 'dt': 2000, rate: 0.019, amount: 1.0, fillOrKill: 1})
   expected = {error: poloConstants.UNABLE_TO_FILL_ORDER_COMPLETELY}
   t.deepEqual(actual, expected)
 
@@ -54,23 +59,23 @@ test.serial(t => {
   actual = engine.orders2Sell.sort(sortCurPairAscRateAscDatetimeAsc)
   expected = [
     {apiKey: 'others', currencyPair: 'BTC_ETH', 'dt': 1008, rate: 0.015, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1000, rate: 0.020, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1001, rate: 0.020, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1002, rate: 0.020, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.022, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1009, rate: 0.022, amount: 1.0}
+    {apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.020, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1001, rate: 0.020, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1002, rate: 0.020, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.022, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1009, rate: 0.022, amount: 1.0}
   ]
   t.deepEqual(actual, expected)
 
-  // 2. buy consumes all of dt 1000 and 3/4 of dt 1001. Two sell orders at the same price, earliest order first.
-  actual = engine.buy({apiKey: 'me', currencyPair: 'BTC_LTC', 'dt': 2000, rate: 0.023, amount: 1.75, fillOrKill: 1})
+  // 2. buy is completely fulfilled and consumes all of dt 1000 and 3/4 of dt 1001. Two sell orders at the same price, earliest order first.
+  actual = engine.buy({apiKey: 'me', currencyPair, 'dt': 2000, rate: 0.023, amount: 1.75, fillOrKill: 1})
   expected = {
     orderNumber: '1',
     resultingTrades: [
-      {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-      {amount: 0.75, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.015, tradeID: '1', type: 'buy'}
+      {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+      {amount: 0.75, date, rate: 0.02, total: 0.015, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency}
     ]
   }
   t.deepEqual(actual, expected)
@@ -78,8 +83,8 @@ test.serial(t => {
   // 2.1 Verify trades
   actual = engine.trades
   expected = [
-    {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-    {amount: 0.75, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.015, tradeID: '1', type: 'buy'}
+    {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.75, date, rate: 0.02, total: 0.015, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency}
   ]
   t.deepEqual(actual, expected)
 
@@ -90,23 +95,23 @@ test.serial(t => {
   actual = engine.orders2Sell.sort(sortCurPairAscRateAscDatetimeAsc)
   expected = [
     {apiKey: 'others', currencyPair: 'BTC_ETH', 'dt': 1008, rate: 0.015, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1000, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1001, rate: 0.020, amount: 0.25},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1002, rate: 0.020, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.022, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1009, rate: 0.022, amount: 1.0}
+    {apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1001, rate: 0.020, amount: 0.25},
+    {apiKey: 'others', currencyPair, 'dt': 1002, rate: 0.020, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.022, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1009, rate: 0.022, amount: 1.0}
   ]
   t.deepEqual(actual, expected)
 
   // 3. buy consumes 1/4 of dt 1001 (the remainder) and 3/4 of dt 1002.
-  actual = engine.buy({apiKey: 'me', currencyPair: 'BTC_LTC', 'dt': 2000, rate: 0.023, amount: 1, fillOrKill: 1})
+  actual = engine.buy({apiKey: 'me', currencyPair, 'dt': 2000, rate: 0.023, amount: 1, fillOrKill: 1})
   expected = {
     orderNumber: '1',
     resultingTrades: [
-      {amount: 0.25, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.005, tradeID: '1', type: 'buy'},
-      {amount: 0.75, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.015, tradeID: '1', type: 'buy'}
+      {amount: 0.25, date, rate: 0.02, total: 0.005, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+      {amount: 0.75, date, rate: 0.02, total: 0.015, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency}
     ]
   }
   t.deepEqual(actual, expected)
@@ -114,10 +119,10 @@ test.serial(t => {
   // 3.1 Verify trades
   actual = engine.trades
   expected = [
-    {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-    {amount: 0.75, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.015, tradeID: '1', type: 'buy'},
-    {amount: 0.25, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.005, tradeID: '1', type: 'buy'},
-    {amount: 0.75, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.015, tradeID: '1', type: 'buy'}
+    {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.75, date, rate: 0.02, total: 0.015, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.25, date, rate: 0.02, total: 0.005, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.75, date, rate: 0.02, total: 0.015, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency}
   ]
   t.deepEqual(actual, expected)
 
@@ -128,25 +133,25 @@ test.serial(t => {
   actual = engine.orders2Sell.sort(sortCurPairAscRateAscDatetimeAsc)
   expected = [
     {apiKey: 'others', currencyPair: 'BTC_ETH', 'dt': 1008, rate: 0.015, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1000, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1001, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1002, rate: 0.020, amount: 0.25},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.022, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1009, rate: 0.022, amount: 1.0}
+    {apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1001, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1002, rate: 0.020, amount: 0.25},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.022, amount: 1.0},
+    {apiKey: 'others', currencyPair, 'dt': 1009, rate: 0.022, amount: 1.0}
   ]
   t.deepEqual(actual, expected)
 
   // 4. consume all open orders <= 0.22 and 1/2 of 1003,0.022
-  actual = engine.buy({apiKey: 'me', currencyPair: 'BTC_LTC', 'dt': 2000, rate: 0.022, amount: 2.75, fillOrKill: 1})
+  actual = engine.buy({apiKey: 'me', currencyPair, 'dt': 2000, rate: 0.022, amount: 2.75, fillOrKill: 1})
   expected = {
     orderNumber: '1',
     resultingTrades: [
-      {amount: 0.25, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.005, tradeID: '1', type: 'buy'},
-      {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-      {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-      {amount: 0.5, date: '2017-10-07 11:55:18', rate: 0.022, total: 0.011, tradeID: '1', type: 'buy'}
+      {amount: 0.25, date, rate: 0.02, total: 0.005, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+      {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+      {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+      {amount: 0.5, date, rate: 0.022, total: 0.011, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency}
     ]
   }
   t.deepEqual(actual, expected)
@@ -154,14 +159,14 @@ test.serial(t => {
   // 4.1 Verify trades
   actual = engine.trades
   expected = [
-    {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-    {amount: 0.75, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.015, tradeID: '1', type: 'buy'},
-    {amount: 0.25, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.005, tradeID: '1', type: 'buy'},
-    {amount: 0.75, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.015, tradeID: '1', type: 'buy'},
-    {amount: 0.25, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.005, tradeID: '1', type: 'buy'},
-    {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-    {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-    {amount: 0.5, date: '2017-10-07 11:55:18', rate: 0.022, total: 0.011, tradeID: '1', type: 'buy'}
+    {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.75, date, rate: 0.02, total: 0.015, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.25, date, rate: 0.02, total: 0.005, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.75, date, rate: 0.02, total: 0.015, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.25, date, rate: 0.02, total: 0.005, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.5, date, rate: 0.022, total: 0.011, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency}
   ]
   t.deepEqual(actual, expected)
 
@@ -172,32 +177,32 @@ test.serial(t => {
   actual = engine.orders2Sell.sort(sortCurPairAscRateAscDatetimeAsc)
   expected = [
     {apiKey: 'others', currencyPair: 'BTC_ETH', 'dt': 1008, rate: 0.015, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1000, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1001, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1002, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.022, amount: 0.5},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1009, rate: 0.022, amount: 1.0}
+    {apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1001, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1002, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.022, amount: 0.5},
+    {apiKey: 'others', currencyPair, 'dt': 1009, rate: 0.022, amount: 1.0}
   ]
   t.deepEqual(actual, expected)
 
   // 5. buy tries to consume more than is available at 0.26 and gets nothing.
-  actual = engine.buy({apiKey: 'me', currencyPair: 'BTC_LTC', 'dt': 2000, rate: 0.026, amount: 3, fillOrKill: 1})
+  actual = engine.buy({apiKey: 'me', currencyPair, 'dt': 2000, rate: 0.026, amount: 3, fillOrKill: 1})
   expected = {error: poloConstants.UNABLE_TO_FILL_ORDER_COMPLETELY}
   t.deepEqual(actual, expected)
 
   // 5.1 Verify trades
   actual = engine.trades
   expected = [
-    {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-    {amount: 0.75, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.015, tradeID: '1', type: 'buy'},
-    {amount: 0.25, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.005, tradeID: '1', type: 'buy'},
-    {amount: 0.75, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.015, tradeID: '1', type: 'buy'},
-    {amount: 0.25, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.005, tradeID: '1', type: 'buy'},
-    {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-    {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-    {amount: 0.5, date: '2017-10-07 11:55:18', rate: 0.022, total: 0.011, tradeID: '1', type: 'buy'}
+    {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.75, date, rate: 0.02, total: 0.015, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.25, date, rate: 0.02, total: 0.005, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.75, date, rate: 0.02, total: 0.015, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.25, date, rate: 0.02, total: 0.005, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.5, date, rate: 0.022, total: 0.011, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency}
   ]
   t.deepEqual(actual, expected)
 
@@ -208,22 +213,22 @@ test.serial(t => {
   actual = engine.orders2Sell.sort(sortCurPairAscRateAscDatetimeAsc)
   expected = [
     {apiKey: 'others', currencyPair: 'BTC_ETH', 'dt': 1008, rate: 0.015, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1000, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1001, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1002, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.022, amount: 0.5},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1009, rate: 0.022, amount: 1.0}
+    {apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1001, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1002, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.022, amount: 0.5},
+    {apiKey: 'others', currencyPair, 'dt': 1009, rate: 0.022, amount: 1.0}
   ]
   t.deepEqual(actual, expected)
 
   // 6. buy exactly the remaining quantity of 1003, 0.22.
-  actual = engine.buy({apiKey: 'me', currencyPair: 'BTC_LTC', 'dt': 2000, rate: 0.022, amount: 0.5, fillOrKill: 1})
+  actual = engine.buy({apiKey: 'me', currencyPair, 'dt': 2000, rate: 0.022, amount: 0.5, fillOrKill: 1})
   expected = {
     orderNumber: '1',
     resultingTrades: [
-      {amount: 0.5, date: '2017-10-07 11:55:18', rate: 0.022, total: 0.011, tradeID: '1', type: 'buy'}
+      {amount: 0.5, date, rate: 0.022, total: 0.011, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency}
     ]
   }
   t.deepEqual(actual, expected)
@@ -231,15 +236,15 @@ test.serial(t => {
   // 6.1 Verify trades
   actual = engine.trades
   expected = [
-    {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-    {amount: 0.75, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.015, tradeID: '1', type: 'buy'},
-    {amount: 0.25, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.005, tradeID: '1', type: 'buy'},
-    {amount: 0.75, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.015, tradeID: '1', type: 'buy'},
-    {amount: 0.25, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.005, tradeID: '1', type: 'buy'},
-    {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-    {amount: 1, date: '2017-10-07 11:55:18', rate: 0.02, total: 0.02, tradeID: '1', type: 'buy'},
-    {amount: 0.5, date: '2017-10-07 11:55:18', rate: 0.022, total: 0.011, tradeID: '1', type: 'buy'},
-    {amount: 0.5, date: '2017-10-07 11:55:18', rate: 0.022, total: 0.011, tradeID: '1', type: 'buy'}
+    {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.75, date, rate: 0.02, total: 0.015, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.25, date, rate: 0.02, total: 0.005, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.75, date, rate: 0.02, total: 0.015, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.25, date, rate: 0.02, total: 0.005, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 1, date, rate: 0.02, total: 0.02, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.5, date, rate: 0.022, total: 0.011, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency},
+    {amount: 0.5, date, rate: 0.022, total: 0.011, tradeID: '1', type: 'buy', baseCurrency, quoteCurrency}
   ]
   t.deepEqual(actual, expected)
 
@@ -250,13 +255,13 @@ test.serial(t => {
   actual = engine.orders2Sell.sort(sortCurPairAscRateAscDatetimeAsc)
   expected = [
     {apiKey: 'others', currencyPair: 'BTC_ETH', 'dt': 1008, rate: 0.015, amount: 1.0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1000, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1001, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1002, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.020, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1003, rate: 0.022, amount: 0},
-    {apiKey: 'others', currencyPair: 'BTC_LTC', 'dt': 1009, rate: 0.022, amount: 1.0}
+    {apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1001, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1002, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.020, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1003, rate: 0.022, amount: 0},
+    {apiKey: 'others', currencyPair, 'dt': 1009, rate: 0.022, amount: 1.0}
   ]
   t.deepEqual(actual, expected)
 })

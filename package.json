@@ -51,5 +51,5 @@
     "test": "nyc ava './app/engine/returnTicker/test.js'",
     "start": "node startServer.js"
   },
-  "version": "0.2.6"
+  "version": "0.2.7"
 }

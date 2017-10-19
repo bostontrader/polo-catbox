@@ -16,6 +16,7 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
 
   // This is an 'ordinary' order if none of the 3 special flags are set.
   const fOrdinary = !(newOrder.fillOrKill || newOrder.immediateOrCancel || newOrder.postOnly)
+  const orderCurrencies = newOrder.currencyPair.split('_')
 
   if (newOrder.fillOrKill) {
     // 1. First find all candidate buy orders, if any, for the given currencyPair where the bid rate >= the newOrder rate
@@ -50,7 +51,9 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
               rate: candidateOrder.rate,
               total: quanRemaining * candidateOrder.rate,
               tradeID: '1',
-              type: 'sell'
+              type: 'sell',
+              baseCurrency: orderCurrencies[0],
+              quoteCurrency: orderCurrencies[1]
             }
           )
           candidateOrder.amount -= quanRemaining
@@ -65,7 +68,9 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
               rate: candidateOrder.rate,
               total: candidateOrder.amount * candidateOrder.rate,
               tradeID: '1',
-              type: 'sell'
+              type: 'sell',
+              baseCurrency: orderCurrencies[0],
+              quoteCurrency: orderCurrencies[1]
             }
           )
           quanRemaining -= candidateOrder.amount
@@ -107,7 +112,9 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
             rate: candidateOrder.rate,
             total: quanRemaining * candidateOrder.rate,
             tradeID: '1',
-            type: 'sell'
+            type: 'sell',
+            baseCurrency: orderCurrencies[0],
+            quoteCurrency: orderCurrencies[1]
           }
         )
         candidateOrder.amount -= quanRemaining
@@ -123,7 +130,9 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
             rate: candidateOrder.rate,
             total: candidateOrder.amount * candidateOrder.rate,
             tradeID: '1',
-            type: 'sell'
+            type: 'sell',
+            baseCurrency: orderCurrencies[0],
+            quoteCurrency: orderCurrencies[1]
           }
         )
         quanRemaining -= candidateOrder.amount
