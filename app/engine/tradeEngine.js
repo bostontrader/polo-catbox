@@ -13,6 +13,8 @@ Engine.prototype.returnTicker =
 
 Engine.prototype.return24Volume = function () { return require('./return24Volume/return24Volume')(this.trades) }
 
+Engine.prototype.returnOrderBook = function () { return require('./returnOrderBook/returnOrderBook')(this.orders2Buy, this.orders2Sell) }
+
 Engine.prototype.buy = function (newOrder) {
   const result = require('./buy/buy')(newOrder, this.orders2Buy, this.orders2Sell)
   if ('resultingTrades' in result) { this.trades = this.trades.concat(result.resultingTrades) }
