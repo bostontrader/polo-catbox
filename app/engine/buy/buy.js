@@ -1,26 +1,14 @@
 const poloConstants = require('../../poloConstants')
+const sorters = require('../sorters')
 
-module.exports = (newOrder, orders2Buy, orders2Sell) => {
-  // Sort an array by rate ASC, Dt ASC. This is intended to sort an array of sell orders.
-  const sortRateAscDatetimeAsc = function (a, b) {
-    if (a.rate < b.rate) return -1
-    if (a.rate > b.rate) return 1
-
-    // a.rate must be equal to b.rate. Now sort by dt
-    if (a.dt < b.dt) return -1
-    if (a.dt > b.dt) return 1
-
-    // a.dt must be equal to b.dt.
-    return 0
-  }
-
+module.exports = (newOrder, engine) => {
   // This is an 'ordinary' order if none of the 3 special flags are set.
   const fOrdinary = !(newOrder.fillOrKill || newOrder.immediateOrCancel || newOrder.postOnly)
   const orderCurrencies = newOrder.currencyPair.split('_')
 
   if (newOrder.fillOrKill) {
     // 1. First find all candidate sell orders, if any, for the given currencyPair where the ask rate <= the newOrder bid rate
-    const n1 = orders2Sell
+    const n1 = engine.orders2Sell
       .filter(existingOrder => existingOrder.currencyPair === newOrder.currencyPair)
       .filter(existingOrder => existingOrder.rate <= newOrder.rate)
       .filter(existingOrder => existingOrder.amount > 0)
@@ -31,7 +19,7 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
     if (availableQuantity >= newOrder.amount) {
       // This order can be filled in its entirety.
       // Now sort the candidate orders in the order of consumption (by ask ASC, dt ASC).
-      let n2 = n1.sort(sortRateAscDatetimeAsc)
+      let n2 = n1.sort(sorters.sortRateAscDatetimeAsc)
 
       // 2.1. Now consume these orders in order until the buy order is filled.
       let quanRemaining = newOrder.amount
@@ -47,7 +35,7 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
           newTrades.push(
             {
               amount: quanRemaining,
-              date: '2017-10-07 11:55:18',
+              date: engine.desiredTradeDate ? engine.desiredTradeDate : Date.now(),
               rate: candidateOrder.rate,
               total: quanRemaining * candidateOrder.rate,
               tradeID: '1',
@@ -64,7 +52,7 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
           newTrades.push(
             {
               amount: candidateOrder.amount,
-              date: '2017-10-07 11:55:18',
+              date: engine.desiredTradeDate ? engine.desiredTradeDate : Date.now(),
               rate: candidateOrder.rate,
               total: candidateOrder.amount * candidateOrder.rate,
               tradeID: '1',
@@ -79,12 +67,7 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
         }
       }
 
-      return (
-        {
-          orderNumber: '1',
-          resultingTrades: newTrades
-        }
-      )
+      return ({orderNumber: '1', resultingTrades: newTrades})
     } else {
       // This order cannot be filled in its entirety. Error.
       return { error: poloConstants.UNABLE_TO_FILL_ORDER_COMPLETELY }
@@ -92,13 +75,13 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
   } else if (newOrder.immediateOrCancel || fOrdinary) {
     // ordinary and immediateOrCancel orders are handled the exact same way _except_ for a minor difference.
     // 1. First find all candidate sell orders, if any, for the given currencyPair where the ask rate <= the newOrder rate
-    const n1 = orders2Sell
+    const n1 = engine.orders2Sell
       .filter(existingOrder => existingOrder.currencyPair === newOrder.currencyPair)
       .filter(existingOrder => existingOrder.rate <= newOrder.rate)
       .filter(existingOrder => existingOrder.amount > 0)
 
     // 2. Now sort the candidate orders in the order of consumption (by ask ASC, dt ASC).
-    let n2 = n1.sort(sortRateAscDatetimeAsc)
+    let n2 = n1.sort(sorters.sortRateAscDatetimeAsc)
 
     // 3. Now consume these orders, in order, until either the buy order is filled or the sell orders are consumed.
     let quanRemaining = newOrder.amount
@@ -113,7 +96,7 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
         newTrades.push(
           {
             amount: quanRemaining,
-            date: '2017-10-07 11:55:18',
+            date: engine.desiredTradeDate ? engine.desiredTradeDate : Date.now(),
             rate: candidateOrder.rate,
             total: quanRemaining * candidateOrder.rate,
             tradeID: '1',
@@ -131,7 +114,7 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
         newTrades.push(
           {
             amount: candidateOrder.amount,
-            date: '2017-10-07 11:55:18',
+            date: engine.desiredTradeDate ? engine.desiredTradeDate : Date.now(),
             rate: candidateOrder.rate,
             total: candidateOrder.amount * candidateOrder.rate,
             tradeID: '1',
@@ -146,23 +129,20 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
       }
     }
 
-    const retVal = {
-      orderNumber: '1',
-      resultingTrades: newTrades
-    }
+    const retVal = {orderNumber: '1', resultingTrades: newTrades}
 
     if (newOrder.immediateOrCancel) { retVal.amountUnfilled = quanRemaining }
 
     if (quanRemaining > 0 && fOrdinary) {
       // Add a new buy order for the remainder
       newOrder.amount = quanRemaining
-      orders2Buy.push(newOrder)
+      engine.orders2Buy.push(newOrder)
     }
 
     return retVal
   } else if (newOrder.postOnly) {
     // 1. First find all candidate sell orders, if any, for the given currencyPair where the ask rate <= the newOrder rate
-    const n1 = orders2Sell
+    const n1 = engine.orders2Sell
       .filter(existingOrder => existingOrder.currencyPair === newOrder.currencyPair)
       .filter(existingOrder => existingOrder.rate <= newOrder.rate)
       .filter(existingOrder => existingOrder.amount > 0)
@@ -172,7 +152,7 @@ module.exports = (newOrder, orders2Buy, orders2Sell) => {
     if (n1.length > 0) { return { error: poloConstants.UNABLE_TO_PLACE_POSTONLY_ORDER_AT_THIS_PRICE } }
 
     // This buy order cannot be fulfilled at all at this time.  Therefore accept the order.
-    orders2Buy.push(newOrder)
+    engine.orders2Buy.push(newOrder)
     return {orderNumber: '1', resultingTrades: []}
   }
 }

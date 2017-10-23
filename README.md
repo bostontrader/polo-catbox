@@ -159,9 +159,11 @@ It's tempting to configure this app to send the queries to the real Polo server,
 
 # devDependencies
 
-* deep-diff - A convenience for testing.
+* ava - Testing
 
-* deep-equal - A convenience for testing.
+* eslint - Linter
+
+* nyc - Code coverage
 
 * request - Testing needs a client to make HTTP requests.
 

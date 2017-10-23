@@ -6,6 +6,7 @@ Engine.prototype.brainWipe = function () {
   this.orders2Buy = []
   this.orders2Sell = []
   this.trades = []
+  this.desiredTradeDate = undefined
 }
 
 Engine.prototype.returnTicker =
@@ -17,14 +18,16 @@ Engine.prototype.returnOrderBook = function () { return require('./returnOrderBo
 
 Engine.prototype.returnTradeHistory = function (market) { return require('./returnTradeHistory/returnTradeHistory')(market, this.trades) }
 
+Engine.prototype.returnChartData = function (market) { return require('./returnChartData/returnChartData')(market, this.trades) }
+
 Engine.prototype.buy = function (newOrder) {
-  const result = require('./buy/buy')(newOrder, this.orders2Buy, this.orders2Sell)
+  const result = require('./buy/buy')(newOrder, this)
   if ('resultingTrades' in result) { this.trades = this.trades.concat(result.resultingTrades) }
   return result
 }
 
 Engine.prototype.sell = function (newOrder) {
-  const result = require('./sell/sell')(newOrder, this.orders2Buy, this.orders2Sell)
+  const result = require('./sell/sell')(newOrder, this)
   if ('resultingTrades' in result) { this.trades = this.trades.concat(result.resultingTrades) }
   return result
 }
