@@ -18,7 +18,7 @@ Engine.prototype.returnOrderBook = function () { return require('./returnOrderBo
 
 Engine.prototype.returnTradeHistory = function (market) { return require('./returnTradeHistory/returnTradeHistory')(market, this.trades) }
 
-Engine.prototype.returnChartData = function (market) { return require('./returnChartData/returnChartData')(market, this.trades) }
+Engine.prototype.returnChartData = function (market, start, end, period) { return require('./returnChartData/returnChartData')(market, start, end, period, this) }
 
 Engine.prototype.buy = function (newOrder) {
   const result = require('./buy/buy')(newOrder, this)
