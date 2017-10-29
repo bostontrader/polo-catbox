@@ -1,6 +1,6 @@
 # Introduction
 
-Given an array of trades, return a basic candle stick.
+Given an array of trades, sorted in chronological order, return a candle stick summary.
 
 Said candle stick contains the basic information that summarizes the collection of trades, but does not contain any datetime information.
 
