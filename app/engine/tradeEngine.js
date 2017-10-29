@@ -34,4 +34,16 @@ Engine.prototype.sell = function (newOrder) {
 
 Engine.prototype.createLoanOffer = function (currency, amount, duration, autoRenew, lendingRate) { return require('./createLoanOffer/impl')(currency, amount, duration, autoRenew, lendingRate, this) }
 
+Engine.prototype.emptyCandleStick = {
+  high: undefined,
+  low: undefined,
+  open: undefined,
+  close: undefined,
+  volume: 0,
+  quoteVolume: 0,
+  weightedAverage: undefined
+}
+
+Engine.prototype.returnCandleStick = function (trades) { return require('./returnCandleStick/impl')(trades) }
+
 module.exports = new Engine()
