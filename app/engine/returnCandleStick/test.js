@@ -7,7 +7,7 @@ const engine = require('../tradeEngine')
 test.serial(t => {
   engine.brainWipe()
   const actual = engine.returnCandleStick([])
-  const expected = engine.emptyCandleStick
+  const expected = engine.undefinedCandleStick
   t.deepEqual(actual, expected)
 })
 

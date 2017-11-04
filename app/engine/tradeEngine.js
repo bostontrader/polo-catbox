@@ -34,7 +34,10 @@ Engine.prototype.sell = function (newOrder) {
 
 Engine.prototype.createLoanOffer = function (currency, amount, duration, autoRenew, lendingRate) { return require('./createLoanOffer/impl')(currency, amount, duration, autoRenew, lendingRate, this) }
 
-Engine.prototype.emptyCandleStick = {
+// undefinedCandleStick and emptyCandleStick look pretty similar.  But there are some subtle differences that justify their existences.  Any attempt to unify these will probably founder on nettlesome code irritants.  Better to just accept this beautiful diversity.
+
+// Use this to begin collecting the summary info
+Engine.prototype.undefinedCandleStick = {
   high: undefined,
   low: undefined,
   open: undefined,
@@ -42,6 +45,18 @@ Engine.prototype.emptyCandleStick = {
   volume: 0,
   quoteVolume: 0,
   weightedAverage: undefined
+}
+
+// Use this as the API response.
+Engine.prototype.emptyCandleStick = {
+  date: 0,
+  high: 0,
+  low: 0,
+  open: 0,
+  close: 0,
+  volume: 0,
+  quoteVolume: 0,
+  weightedAverage: 0
 }
 
 Engine.prototype.returnCandleStick = function (trades) { return require('./returnCandleStick/impl')(trades) }

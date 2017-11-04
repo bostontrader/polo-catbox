@@ -4,7 +4,7 @@ const engine = require('../tradeEngine')
 Given an array of trades, sorted in chronological order, return a candlestick summary.
  */
 module.exports = (trades) => {
-  let retVal = Object.assign({}, engine.emptyCandleStick)
+  let retVal = Object.assign({}, engine.undefinedCandleStick)
   let amountRateSum = 0 // use this to calculate the weighted average price
 
   let firstTrade = true
