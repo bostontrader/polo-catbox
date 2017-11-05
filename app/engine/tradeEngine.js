@@ -20,6 +20,8 @@ Engine.prototype.returnTradeHistory = function (market) { return require('./retu
 
 Engine.prototype.returnChartData = function (market, start, end, period) { return require('./returnChartData/impl')(market, start, end, period, this) }
 
+Engine.prototype.returnCurrencies = function () { return require('./returnCurrencies/impl')() }
+
 Engine.prototype.buy = function (newOrder) {
   const result = require('./buy/impl')(newOrder, this)
   if ('resultingTrades' in result) { this.trades = this.trades.concat(result.resultingTrades) }
