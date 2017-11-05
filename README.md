@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/bostontrader/polo-catbox.svg?branch=master)](https://travis-ci.org/bostontrader/polo-catbox)
+[![Coverage Status](https://coveralls.io/repos/github/bostontrader/polo-catbox/badge.svg?branch=master)](https://coveralls.io/github/bostontrader/polo-catbox?branch=master)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![Dependency Status](https://david-dm.org/bostontrader/polo-catbox.svg)](https://david-dm.org/bostontrader/polo-catbox)
 [![devDependency Status](https://david-dm.org/bostontrader/polo-catbox/dev-status.svg)](https://david-dm.org/bostontrader/polo-catbox#info=devDependencies)
