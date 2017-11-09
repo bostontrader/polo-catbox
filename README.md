@@ -54,7 +54,7 @@ The first problem is to decide where to implement the various elements of functi
 
 A related nettle is the question of testing.  The server and the trade engine are inherently going to have similar interfaces.  But how exactly the same should they be? And how much overlap in functionality and testing should we have/tolerate?
 
-After much wringing of hands and general agonization, I have answered these puzzles as follows:
+After much wringing of hands, gnashing of teeth, and general agonization, I have answered these puzzles as follows:
 
 * The server generally handles parameter checking.  Any requests that pass the server's initial scrutiny get sent to the trade engine.
 
