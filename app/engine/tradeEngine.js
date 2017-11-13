@@ -4,6 +4,8 @@ function Engine () {
 
 Engine.prototype.brainWipe = function () {
   this.deposits = []
+  this.loanOffers = []
+  this.loanDemands = []
   this.orders2Buy = []
   this.orders2Sell = []
   this.trades = []
@@ -47,6 +49,7 @@ Engine.prototype.returnChartData = function (market, start, end, period) { retur
 Engine.prototype.returnCurrencies = function () { return require('./returnCurrencies/impl')() }
 
 // 7. returnLoanOrders
+Engine.prototype.returnLoanOrders = function () { return {offers: this.loanOffers, demands: this.loanDemands} }
 
 // Trading API
 // 8.
@@ -88,10 +91,13 @@ Engine.prototype.sell = function (newOrder) {
 // 29. closeMarginPosition
 
 // 30.
-Engine.prototype.createLoanOffer = function (currency, amount, duration, autoRenew, lendingRate) { return require('./createLoanOffer/impl')(currency, amount, duration, autoRenew, lendingRate, this) }
+Engine.prototype.createLoanOffer = function (user, currency, amount, duration, autoRenew, lendingRate, date) { return require('./createLoanOffer/impl')(user, currency, amount, duration, autoRenew, lendingRate, date, this.loanOffers) }
 
 // 31. cancelLoanOffer
-// 32. returnOpenLoanOffers
+
+// 32.
+Engine.prototype.returnOpenLoanOffers = function (user) { return require('./returnOpenLoanOffers/impl')(user, this.loanOffers) }
+
 // 33. returnActiveLoans
 // 34. returnLendingHistory
 // 35. toggleAutoRenew

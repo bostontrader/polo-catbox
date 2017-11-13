@@ -1,14 +1,13 @@
-module.exports = (function() {
-
+module.exports = (function () {
   // Module dependencies
-  const crypto  = require('crypto')
-  const request = require('request')
-  const rp      = require('request-promise-native')
+  const crypto = require('crypto')
+  // const request = require('request')
+  const rp = require('request-promise-native')
   // nonce   = require('nonce')();
 
   // Constants
-  var version         = '0.0.8',
-    USER_AGENT      = 'poloniex.js ' + version;
+  const version = '0.0.8'
+  const USER_AGENT = 'poloniex.js ' + version
 
   // Constructor
   function PoloAdapter(key, secret, base_nonce, baseURL) {
@@ -21,7 +20,7 @@ module.exports = (function() {
       var paramString, signature;
 
       if (!key || !secret)
-        throw 'PoloAdapter: Error. API key and secret required';
+        throw 'PoloAdapter: Error. API key and secret required'
 
       // Convert to `arg1=foo&arg2=bar`
       paramString = Object.keys(parameters).map(function(param) {
@@ -51,83 +50,85 @@ module.exports = (function() {
 
     // Make an API request
     _request: async options => {
-      //if (!('headers' in options))
-        //options.headers = {};
+      // if (!('headers' in options))
+      // options.headers = {};
 
-      //options.json = true;
-      //options.headers['User-Agent'] = PoloAdapter.USER_AGENT;
-      //options.strictSSL = PoloAdapter.STRICT_SSL;
-      //request(options, function(err, response, body) {
-        // Empty response
-        //if (!err && (typeof body === 'undefined' || body === null))
-          //err = 'Empty response';
-
-        //callback(err, body);
-      //});
+      // options.json = true;
+      // options.headers['User-Agent'] = PoloAdapter.USER_AGENT;
+      // options.strictSSL = PoloAdapter.STRICT_SSL;
+      // request(options, function(err, response, body) {
+      // Empty response
+      // if (!err && (typeof body === 'undefined' || body === null))
+      // err = 'Empty response';
+      // callback(err, body);
+      // })
 
       return JSON.parse(await rp(options))
-      //return this;
+      // return this;
     },
 
     // Make a public API request
     _public: async function(command, parameters = {}) {
 
-      //parameters || (parameters = {});
+      // parameters || (parameters = {});
       parameters.command = command
       const options = {
         method: 'GET',
-        url: this.baseURL + "/public",
+        url: this.baseURL + '/public',
         qs: parameters
       }
 
-      //options.qs.command = command;
-      //return this._request(options, callback);
-      return await this._request(options)
-
+      // options.qs.command = command;
+      // return this._request(options, callback);
+      return this._request(options)
     },
 
     // Make a private API request
     _private: async function(command, parameters) {
 
-      //parameters || (parameters = {});
+      // parameters || (parameters = {});
       parameters.command = command;
-      //parameters.nonce = this.base_nonce + Date.now() * 1000;
+      // parameters.nonce = this.base_nonce + Date.now() * 1000;
       parameters.nonce = Date.now() * 1000;
 
       const options = {
         method: 'POST',
-        url: this.baseURL + "/tradingApi",
+        url: this.baseURL + '/tradingApi',
         form: parameters,
         headers: this._getPrivateHeaders(parameters)
       }
-      //var self = this
-      return await this._request(options)
+      // var self = this
+      return this._request(options)
 
-      //this._request(options, function(err, body) {
-        //if(err || body.error) {
-          //console.log(err || body.error)
-          // if(body.error.match(/^Nonce must be greater than ([0-9]+)\. You provided ([0-9]+)\./)) {
-          //   self._private(command, parameters, callback, false)
-          // } else {
-          //   self._private(command, parameters, callback, false)
-          // }
-          //if(retry) {
-            //setTimeout(function() {
-              //self._private(command, parameters, callback, false)
-            //}, 500)
-          //}
-        //} else {
-          //callback(err, body)
-        //}
-      //});
+      // this._request(options, function(err, body) {
+      // if(err || body.error) {
+      // console.log(err || body.error)
+      // if(body.error.match(/^Nonce must be greater than ([0-9]+)\. You provided ([0-9]+)\./)) {
+      //   self._private(command, parameters, callback, false)
+      // } else {
+      //   self._private(command, parameters, callback, false)
+      // }
+      // if(retry) {
+      // setTimeout(function() {
+      // self._private(command, parameters, callback, false)
+      // }, 500)
+      // }
+      // } else {
+      // callback(err, body)
+      // }
+      // });
     },
 
-    /////
+    //
     // PUBLIC METHODS
-    returnTicker: async function () {return await this._public('returnTicker')},
-    return24Volume: async function () {return await this._public('return24Volume')},
+    // 1.
+    returnTicker: async function () { return this._public('returnTicker') },
+
+    // 2.
+    return24Volume: async function () { return this._public('return24Volume') },
 
     /*
+    // 3.
     returnOrderBook: function(currencyA, currencyB, callback) {
       var parameters = {
         currencyPair: joinCurrencies(currencyA, currencyB)
@@ -136,6 +137,9 @@ module.exports = (function() {
       return this._public('returnOrderBook', parameters, callback);
     },
 
+    // 4. returnTradeHistory
+
+    // 5.
     returnChartData: function(currencyA, currencyB, period, start, end, callback) {
       var parameters = {
         currencyPair: joinCurrencies(currencyA, currencyB),
@@ -145,43 +149,45 @@ module.exports = (function() {
       };
 
       return this._public('returnChartData', parameters, callback);
-    },*/
+    }, */
 
-    returnCurrencies: async function () {return await this._public('returnCurrencies')},
+    // 6.
+    returnCurrencies: async function () { return this._public('returnCurrencies') },
 
-    /*returnLoanOrders: function(currency, callback) {
+    // 7.
+    /* returnLoanOrders: function(currency, callback) {
       return this._public('returnLoanOrders', {currency: currency}, callback);
-    },*/
+    }, */
 
-    /////
+    //
     // PRIVATE METHODS
+    // 8.
+    returnBalances: async function () { return this._private('returnBalances', {}) },
 
-    /*returnBalances: function(callback) {
-      return this._private('returnBalances', {}, callback);
-    },
-
+    /*
+    // 9.
     returnCompleteBalances: function(callback) {
       return this._private('returnCompleteBalances', {}, callback);
     },
 
+    // 10.
     returnDepositAddresses: function(callback) {
       return this._private('returnDepositAddresses', {}, callback);
     },
 
+    // 11.
     generateNewAddress: function(currency, callback) {
       return this._private('returnDepositsWithdrawals', {currency: currency}, callback);
-    },*/
+    }, */
 
-    returnDepositsWithdrawals: async function (start, end) {
-      return await this._private('returnDepositsWithdrawals', {start, end})
-    },
+    // 12.
+    returnDepositsWithdrawals: async function (start, end) { return this._private('returnDepositsWithdrawals', {start, end}) },
 
-    returnOpenOrders: async function (currencyPair) {
-      return await this._private('returnOpenOrders', {currencyPair})
-    },
+    // 13.
+    returnOpenOrders: async function (currencyPair) { return this._private('returnOpenOrders', {currencyPair}) },
 
     /*
-
+    // 14.
     returnTradeHistory: function(currencyA, currencyB, callback) {
       var parameters = {
         currencyPair: joinCurrencies(currencyA, currencyB)
@@ -190,20 +196,23 @@ module.exports = (function() {
       return this._private('returnTradeHistory', parameters, callback);
     },
 
+    // 15.
     returnOrderTrades: function(orderNumber, callback) {
       var parameters = {
         orderNumber: orderNumber
       };
 
       return this._private('returnOrderTrades', parameters, callback);
-    },*/
+    }, */
 
-    buy:  async function (parameters) {return await this._private('buy', parameters)},
-    sell: async function (parameters) {return await this._private('sell', parameters)},
+    // 16.
+    buy: async function (parameters) { return this._private('buy', parameters) },
+
+    // 17.
+    sell: async function (parameters) { return this._private('sell', parameters) },
 
     /*
-e a
-
+    // 18.
     cancelOrder: function(currencyA, currencyB, orderNumber, callback) {
       var parameters = {
         currencyPair: joinCurrencies(currencyA, currencyB),
@@ -213,6 +222,7 @@ e a
       return this._private('cancelOrder', parameters, callback);
     },
 
+    // 19.
     moveOrder: function(orderNumber, rate, amount, callback) {
       var parameters = {
         orderNumber: orderNumber,
@@ -223,6 +233,7 @@ e a
       return this._private('moveOrder', parameters, callback);
     },
 
+    // 20.
     withdraw: function(currency, amount, address, callback) {
       var parameters = {
         currency: currency,
@@ -233,10 +244,12 @@ e a
       return this._private('withdraw', parameters, callback);
     },
 
+    // 21.
     returnFeeInfo: function(callback) {
       return this._private('returnFeeInfo', {}, callback);
     },
 
+    // 22.
     returnAvailableAccountBalances: function(account, callback) {
       var options = {};
       if (account)
@@ -244,10 +257,12 @@ e a
       return this._private('returnAvailableAccountBalances', options, callback);
     },
 
+    // 23.
     returnTradableBalances: function(callback) {
       return this._private('returnTradableBalances', {}, callback);
     },
 
+    // 24.
     transferBalance: function(currency, amount, fromAccount, toAccount, callback) {
       var parameters = {
         currency: currency,
@@ -259,10 +274,12 @@ e a
       return this._private('transferBalance', parameters, callback);
     },
 
+    // 25.
     returnMarginAccountSummary: function(callback) {
       return this._private('returnMarginAccountSummary', {}, callback);
     },
 
+    // 26.
     marginBuy: function(currencyA, currencyB, rate, amount, lendingRate, callback) {
       var parameters = {
         currencyPair: joinCurrencies(currencyA, currencyB),
@@ -272,20 +289,19 @@ e a
       };
 
       return this._private('marginBuy', parameters, callback);
-    },*/
+    }, */
 
-    //marginSell: function(currencyA, currencyB, rate, amount, lendingRate, callback) {
-      //var parameters = {
-        //currencyPair: joinCurrencies(currencyA, currencyB),
-        //rate: rate,
-        //amount: amount,
-        //lendingRate: lendingRate ? lendingRate : null
-      //};
+    // 27. marginSell: function(currencyA, currencyB, rate, amount, lendingRate, callback) {
+    // var parameters = {
+    // currencyPair: joinCurrencies(currencyA, currencyB),
+    // rate: rate,
+    // amount: amount,
+    // lendingRate: lendingRate ? lendingRate : null
+    // };
+    // return this._private('marginSell', parameters, callback);
+    // },
 
-      //return this._private('marginSell', parameters, callback);
-    //},
-
-    /*getMarginPosition: function(currencyA, currencyB, callback) {
+    /* 28. getMarginPosition: function(currencyA, currencyB, callback) {
       var parameters = {
         currencyPair: joinCurrencies(currencyA, currencyB)
       };
@@ -293,15 +309,16 @@ e a
       return this._private('getMarginPosition', parameters, callback);
     },
 
+    // 29.
     closeMarginPosition: function(currencyA, currencyB, callback) {
       var parameters = {
         currencyPair: joinCurrencies(currencyA, currencyB)
       };
 
       return this._private('closeMarginPosition', parameters, callback);
-    },
+    }, */
 
-    createLoanOffer: function(currency, amount, duration, autoRenew, lendingRate, callback) {
+    /* 30. createLoanOffer: function(currency, amount, duration, autoRenew, lendingRate, callback) {
       var parameters = {
         currency: currency,
         amount: amount,
@@ -311,37 +328,49 @@ e a
       };
 
       return this._private('createLoanOffer', parameters, callback);
-    },
+    }, */
 
-    cancelLoanOffer: function(orderNumber, callback) {
+    // 30.
+    createLoanOffer: async function (parameters) { return this._private('createLoanOffer', parameters) },
+
+    // 31.
+    /* cancelLoanOffer: function(orderNumber, callback) {
       var parameters = {
         orderNumber: orderNumber
       };
 
       return this._private('cancelLoanOffer', parameters, callback);
-    },*/
+    }, */
 
-    //returnOpenLoanOffers: function(callback) {
-      //return this._private('returnOpenLoanOffers', {}, callback);
-    //},
+    // 32.
+    // returnOpenLoanOffers: function(callback) {
+    // return this._private('returnOpenLoanOffers', {}, callback);
+    // },
+    returnOpenLoanOffers: async function () { return this._private('returnOpenLoanOffers', {}) },
 
-    //returnActiveLoans: function(callback) {
-      //return this._private('returnActiveLoans', {}, callback);
-    //},
+    // 33.
+    // returnActiveLoans: function(callback) {
+    // return this._private('returnActiveLoans', {}, callback);
+    // },
 
-    //returnLendingHistory: function(start, end, limit, callback) {
-      //var parameters = {
-        //start: start,
-        //end: end,
-        //limit: limit
-      //};
+    // 34.
+    // returnLendingHistory: function(start, end, limit, callback) {
+    // var parameters = {
+    // start: start,
+    // end: end,
+    // limit: limit
+    // };
 
-      //return this._private('returnLendingHistory', parameters, callback);
-    //},
+    // return this._private('returnLendingHistory', parameters, callback);
+    // },
 
-    //toggleAutoRenew: function(orderNumber, callback) {
-      //return this._private('toggleAutoRenew', {orderNumber: orderNumber}, callback);
-    //}
+    // 35.
+    // toggleAutoRenew: function(orderNumber, callback) {
+    // return this._private('toggleAutoRenew', {orderNumber: orderNumber}, callback);
+    // }
+
+    // Undocumented
+    returnLendingPrivateInfo: async function () { return this._private('returnLendingPrivateInfo', {}) }
 
   }
 
