@@ -1,4 +1,4 @@
-// This is a test of returnTradeHistory when talking directly to the tradeEngine.
+// This is a test of returnTradeHistoryPublic when talking directly to the tradeEngine.
 const test = require('ava')
 const config = require('config')
 
@@ -7,9 +7,8 @@ const engine = require('../tradeEngine')
 // 1. A market with zero trades is something we'll never likely see in the wild.  Nevertheless, for purposes of completeness, I will venture a guess as to a reasonable reply.
 test.serial(t => {
   engine.brainWipe()
-  const actual = engine.returnTradeHistory(config.get('testData.markets')[0])
+  const actual = engine.returnTradeHistoryPublic(config.get('testData.markets')[0])
   const expected = []
-
   t.deepEqual(actual, expected)
 })
 
@@ -22,7 +21,7 @@ test.serial(t => {
   engine.desiredTradeDate = Date.parse('2017-10-15 12:00:00')
   engine.buy({apiKey: 'others', currencyPair, dt: engine.desiredTradeDate, rate: 0.015, amount: 1.5})
 
-  const actual = engine.returnTradeHistory(currencyPair)
+  const actual = engine.returnTradeHistoryPublic(currencyPair)
   const expected = [
     {globalTradeID: 240000000, tradeID: '1', date: engine.desiredTradeDate, type: 'buy', rate: 0.015, amount: 1.5, total: 0.0225}
   ]
@@ -45,7 +44,7 @@ test.serial(t => {
   engine.desiredTradeDate = desiredTradeDate2
   engine.buy({apiKey: 'others', currencyPair, dt: desiredTradeDate2, rate: 0.015, amount: 0.25})
 
-  const actual = engine.returnTradeHistory(currencyPair)
+  const actual = engine.returnTradeHistoryPublic(currencyPair)
   const expected = [
     {globalTradeID: 240000000, tradeID: '1', date: desiredTradeDate1, type: 'buy', rate: 0.015, amount: 1.5, total: 0.0225},
     {globalTradeID: 240000000, tradeID: '1', date: desiredTradeDate2, type: 'buy', rate: 0.015, amount: 0.25, total: 0.00375}
@@ -73,7 +72,7 @@ test.serial(t => {
   engine.desiredTradeDate = desiredTradeDate2
   engine.buy({apiKey: 'others', currencyPair, dt: desiredTradeDate2, rate: 0.15, amount: 0.4})
 
-  const actual = engine.returnTradeHistory(currencyPair)
+  const actual = engine.returnTradeHistoryPublic(currencyPair)
   const expected = [
     {globalTradeID: 240000000, tradeID: '1', date: desiredTradeDate1, type: 'buy', rate: 0.15, amount: 2.5, total: 0.375},
     {globalTradeID: 240000000, tradeID: '1', date: desiredTradeDate2, type: 'buy', rate: 0.15, amount: 0.4, total: 0.06}

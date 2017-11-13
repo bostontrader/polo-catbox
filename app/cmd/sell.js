@@ -2,7 +2,7 @@ const config = require('config')
 
 const poloConstants = require('../poloConstants')
 
-module.exports = (req) => {
+module.exports = (req, orders, tickers) => {
 
   const currencyPair = ('currencyPair' in req.body) ? req.body.currencyPair : undefined
   const rate         = ('rate'         in req.body) ? req.body.rate : 0
@@ -35,6 +35,8 @@ module.exports = (req) => {
   if (fillOrKill ? 1 : 0 + immediateOrCancel ? 1 : 0 + postOnly ? 1 : 0 > 1)
     return {"error":poloConstants.NO_MORE_THAN_ONE}
 
+  //tickers[currencyPair] = {"id":"n/a"}
+  orders.push({"new":"sell order"})
   return 'nonsense sell results'
 
 }

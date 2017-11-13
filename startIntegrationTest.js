@@ -9,7 +9,7 @@ const server = require('./app/server')
 
 
 // These are the seven known public API endpoints.
-//returnTicker
+const returnTickerTest     = require('./test/returnTicker.test')
 //return24Volume
 //returnOrderBook
 //returnTradeHistory
@@ -61,10 +61,11 @@ const startIntegrationTest = async () => {
     // Test the public API endpoints
 
     // There are no input parameters for this endpoint.  EZ.
-    console.log('testing returnTicker')
-    result = await poloAdapter.returnTicker(0,  Date.now())
-    if(!deepEqual(result, config.get('testData.returnTicker')))
-      throw new Error('returnTicker failed its test')
+    //console.log('testing returnTicker')
+    //result = await poloAdapter.returnTicker(0,  Date.now())
+    //if(!deepEqual(result, config.get('testData.returnTicker')))
+      //throw new Error('returnTicker failed its test')
+    await returnTickerTest(poloAdapter)
 
     // There are no input parameters for this endpoint.  EZ.
     console.log('testing return24Volume')
