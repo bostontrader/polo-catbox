@@ -334,18 +334,9 @@ module.exports = (function () {
     createLoanOffer: async function (parameters) { return this._private('createLoanOffer', parameters) },
 
     // 31.
-    /* cancelLoanOffer: function(orderNumber, callback) {
-      var parameters = {
-        orderNumber: orderNumber
-      };
-
-      return this._private('cancelLoanOffer', parameters, callback);
-    }, */
+    cancelLoanOffer: async function (parameters) { return this._private('cancelLoanOffer', parameters) },
 
     // 32.
-    // returnOpenLoanOffers: function(callback) {
-    // return this._private('returnOpenLoanOffers', {}, callback);
-    // },
     returnOpenLoanOffers: async function () { return this._private('returnOpenLoanOffers', {}) },
 
     // 33.

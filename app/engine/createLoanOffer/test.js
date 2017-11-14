@@ -14,9 +14,10 @@ test.serial(t => {
   const duration = 90
   const autoRenew = 0
   const lendingRate = 1
+  const orderID = 5000
 
-  const actual = engine.createLoanOffer('me', currency, amount, duration, autoRenew, lendingRate, '2017-08-01 01:15:00')
-  const expected = {success: 1, message: 'Loan order placed.', orderID: 666}
+  const actual = engine.createLoanOffer('me', currency, amount, duration, autoRenew, lendingRate, '2017-08-01 01:15:00', orderID)
+  const expected = {success: 1, message: 'Loan order placed.', orderID}
 
   t.deepEqual(actual, expected)
 })
