@@ -26,7 +26,7 @@ const testLoanOrdersShape = (t, loanOrders) => {
     t.is(orderShape.matches(entry[1]), true)
 
     // 2b. do they have any extra keys?
-    t.deepEqual(Object.keys(entry[1]), ['user', 'currency', 'rate', 'amount', 'rangeMin', 'rangeMax', 'autoRenew', 'date'])
+    t.deepEqual(Object.keys(entry[1]), ['rate', 'amount', 'rangeMin', 'rangeMax'])
   })
 
   Object.entries(loanOrders.demands).forEach(entry => {
@@ -50,13 +50,7 @@ test.serial(t => {
   engine.makeDeposit('me', 'BTC', 5000)
 
   // 2b. Now create the loan offer
-  const currency = 'BTC'
-  const amount = 100
-  const duration = 90
-  const autoRenew = 0
-  const lendingRate = 1
-
-  const actual = engine.createLoanOffer('me', currency, amount, duration, autoRenew, lendingRate)
+  engine.createLoanOffer('me', 'BTC', 100, 90, 0, 1)
 
   // 2c. Verify the shape
   loanOrders = engine.returnLoanOrders()

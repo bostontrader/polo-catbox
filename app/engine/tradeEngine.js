@@ -49,7 +49,7 @@ Engine.prototype.returnChartData = function (market, start, end, period) { retur
 Engine.prototype.returnCurrencies = function () { return require('./returnCurrencies/impl')() }
 
 // 7. returnLoanOrders
-Engine.prototype.returnLoanOrders = function () { return {offers: this.loanOffers, demands: this.loanDemands} }
+Engine.prototype.returnLoanOrders = function () { return require('./returnLoanOrders/impl')(this.loanOffers, this.loanDemands) }
 
 // Trading API
 // 8.
