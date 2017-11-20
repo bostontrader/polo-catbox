@@ -63,8 +63,8 @@ test.serial(t => {
   expected = {
     orderNumber: '1',
     resultingTrades: [
-      {amount: 1, date: engine.desiredTradeDate, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
-      {amount: 0.75, date: engine.desiredTradeDate, rate: 0.022, total: 0.0165, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency}
+      {amount: 1, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
+      {amount: 0.75, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.0165, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency}
     ]
   }
   t.deepEqual(actual, expected)
@@ -72,8 +72,8 @@ test.serial(t => {
   // 2.1 Verify trades
   actual = engine.trades
   expected = [
-    {amount: 1, date: engine.desiredTradeDate, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
-    {amount: 0.75, date: engine.desiredTradeDate, rate: 0.022, total: 0.0165, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency}
+    {amount: 1, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
+    {amount: 0.75, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.0165, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency}
   ]
   t.deepEqual(actual, expected)
 
@@ -101,10 +101,10 @@ test.serial(t => {
   expected = {
     orderNumber: '1',
     resultingTrades: [
-      {amount: 0.25, date: engine.desiredTradeDate, rate: 0.022, total: 0.0055, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
-      {amount: 1, date: engine.desiredTradeDate, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
-      {amount: 1, date: engine.desiredTradeDate, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
-      {amount: 1, date: engine.desiredTradeDate, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency}
+      {amount: 0.25, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.0055, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
+      {amount: 1, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
+      {amount: 1, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
+      {amount: 1, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency}
     ]
   }
   t.deepEqual(actual, expected)
@@ -112,12 +112,12 @@ test.serial(t => {
   // 3.1 Verify trades
   actual = engine.trades
   expected = [
-    {amount: 1, date: engine.desiredTradeDate, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
-    {amount: 0.75, date: engine.desiredTradeDate, rate: 0.022, total: 0.0165, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
-    {amount: 0.25, date: engine.desiredTradeDate, rate: 0.022, total: 0.0055, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
-    {amount: 1, date: engine.desiredTradeDate, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
-    {amount: 1, date: engine.desiredTradeDate, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
-    {amount: 1, date: engine.desiredTradeDate, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency}
+    {amount: 1, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
+    {amount: 0.75, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.0165, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
+    {amount: 0.25, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.0055, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
+    {amount: 1, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
+    {amount: 1, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency},
+    {amount: 1, date: engine.desiredTradeDate, orderNumber: undefined, rate: 0.022, total: 0.022, tradeID: '1', type: 'sell', baseCurrency, quoteCurrency}
   ]
   t.deepEqual(actual, expected)
 

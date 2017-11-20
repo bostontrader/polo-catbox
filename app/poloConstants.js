@@ -11,5 +11,8 @@ module.exports = {
   cancelLoanOffer: {
     CANCELED: 'Loan offer canceled.',
     ERROR_OR_NOT_YOU: 'Error canceling loan order, or you are not the person who placed it.'
+  },
+  cancelOrder: {
+    INVALID_OR_NOT_YOU: 'Invalid order number, or you are not the person who placed the order.'
   }
 }

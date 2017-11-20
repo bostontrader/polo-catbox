@@ -36,6 +36,7 @@ module.exports = (newOrder, engine) => {
             {
               amount: quanRemaining,
               date: engine.desiredTradeDate ? engine.desiredTradeDate : Date.now(),
+              orderNumber: candidateOrder.orderNumber,
               rate: candidateOrder.rate,
               total: quanRemaining * candidateOrder.rate,
               tradeID: '1',
@@ -53,6 +54,7 @@ module.exports = (newOrder, engine) => {
             {
               amount: candidateOrder.amount,
               date: engine.desiredTradeDate ? engine.desiredTradeDate : Date.now(),
+              orderNumber: candidateOrder.orderNumber,
               rate: candidateOrder.rate,
               total: candidateOrder.amount * candidateOrder.rate,
               tradeID: '1',
@@ -97,6 +99,7 @@ module.exports = (newOrder, engine) => {
           {
             amount: quanRemaining,
             date: engine.desiredTradeDate ? engine.desiredTradeDate : Date.now(),
+            orderNumber: candidateOrder.orderNumber,
             rate: candidateOrder.rate,
             total: quanRemaining * candidateOrder.rate,
             tradeID: '1',
@@ -115,6 +118,7 @@ module.exports = (newOrder, engine) => {
           {
             amount: candidateOrder.amount,
             date: engine.desiredTradeDate ? engine.desiredTradeDate : Date.now(),
+            orderNumber: candidateOrder.orderNumber,
             rate: candidateOrder.rate,
             total: candidateOrder.amount * candidateOrder.rate,
             tradeID: '1',

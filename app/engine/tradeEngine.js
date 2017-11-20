@@ -9,6 +9,7 @@ Engine.prototype.brainWipe = function () {
   this.orders2Buy = []
   this.orders2Sell = []
   this.trades = []
+  this.withdrawals = []
   this.desiredTradeDate = undefined
 }
 
@@ -53,7 +54,7 @@ Engine.prototype.returnLoanOrders = function () { return require('./returnLoanOr
 
 // Trading API
 // 8.
-Engine.prototype.returnBalances = function (user) { return require('./returnBalances/impl')(user, this.deposits) }
+Engine.prototype.returnBalances = function (user) { return require('./returnBalances/impl')(user, this.deposits, this.withdrawals) }
 
 // 9. returnCompleteBalances
 Engine.prototype.returnCompleteBalances = function (user) { return require('./returnCompleteBalances/impl')(user) }
@@ -65,7 +66,7 @@ Engine.prototype.returnDepositAddresses = function (user) { return require('./re
 Engine.prototype.generateNewAddress = function (user) { return require('./generateNewAddress/impl')(user) }
 
 // 12. returnDepositsWithdrawals
-Engine.prototype.returnDepositsWithdrawals = function (user) { return require('./returnDepositsWithdrawals/impl')(user) }
+Engine.prototype.returnDepositsWithdrawals = function (user, start, end) { return require('./returnDepositsWithdrawals/impl')(user, start, end, this.deposits, this.withdrawals) }
 
 // 13. returnOpenOrders
 Engine.prototype.returnOpenOrders = function (user) { return require('./returnOpenOrders/impl')(user) }
@@ -91,13 +92,13 @@ Engine.prototype.sell = function (newOrder) {
 }
 
 // 18. cancelOrder
-Engine.prototype.cancelOrder = function (user) { return require('./cancelOrder/impl')(user) }
+Engine.prototype.cancelOrder = function (user, orderNumber) { return require('./cancelOrder/impl')(user, orderNumber, this.orders2Buy, this.orders2Sell) }
 
 // 19. moveOrder
 Engine.prototype.moveOrder = function (user) { return require('./moveOrder/impl')(user) }
 
 // 20. withdraw
-Engine.prototype.withdraw = function (user) { return require('./withdraw/impl')(user) }
+Engine.prototype.withdraw = function (user, currency, amount, address, datetime) { return require('./withdraw/impl')(user, currency, amount, address, datetime, this.withdrawals) }
 
 // 21. returnFeeInfo
 Engine.prototype.returnFeeInfo = function (user) { return require('./returnFeeInfo/impl')(user) }
@@ -145,7 +146,7 @@ Engine.prototype.returnLendingHistory = function (user) { return require('./retu
 Engine.prototype.toggleAutoRenew = function () { return {'success': 1, 'message': 0} }
 
 // These methods are not in the Polo API, but they are useful for this engine.
-Engine.prototype.makeDeposit = function (user, currency, amount) { return require('./makeDeposit/impl')(user, currency, amount, this.deposits) }
+Engine.prototype.makeDeposit = function (user, currency, amount, datetime) { return require('./makeDeposit/impl')(user, currency, amount, datetime, this.deposits) }
 
 Engine.prototype.returnCandleStick = function (trades) { return require('./returnCandleStick/impl')(trades) }
 

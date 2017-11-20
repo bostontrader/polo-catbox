@@ -1,20 +1,15 @@
+const crypto = require('crypto')
+const rp = require('request-promise-native')
+
+const version = '0.9.0'
+const USER_AGENT = 'github.com/bostontrader/polo-adapter ' + version
+
 module.exports = (function () {
-  // Module dependencies
-  const crypto = require('crypto')
-  // const request = require('request')
-  const rp = require('request-promise-native')
-  // nonce   = require('nonce')();
-
-  // Constants
-  const version = '0.0.8'
-  const USER_AGENT = 'poloniex.js ' + version
-
-  // Constructor
-  function PoloAdapter(key, secret, base_nonce, baseURL) {
+  function PoloAdapter (key, secret, baseNonce, baseURL) {
 
     // Generate headers signed by this user's key and secret.
     // The secret is encapsulated and never exposed
-    this.base_nonce = base_nonce || 0
+    this.baseNonce = baseNonce || 0
     this.baseURL = baseURL
     this._getPrivateHeaders = function(parameters) {
       var paramString, signature;
@@ -85,10 +80,10 @@ module.exports = (function () {
 
     // Make a private API request
     _private: async function(command, parameters) {
-
+console.log(88, parameters)
       // parameters || (parameters = {});
       parameters.command = command;
-      // parameters.nonce = this.base_nonce + Date.now() * 1000;
+      // parameters.nonce = this.baseNonce + Date.now() * 1000;
       parameters.nonce = Date.now() * 1000;
 
       const options = {
