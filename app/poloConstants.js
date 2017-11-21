@@ -14,5 +14,10 @@ module.exports = {
   },
   cancelOrder: {
     INVALID_OR_NOT_YOU: 'Invalid order number, or you are not the person who placed the order.'
+  },
+  returnDepositsWithdrawals: {
+    INVALID_API_KEY_SECRET_PAIR: 'Invalid API key/secret pair.',
+    INVALID_START_PARAMETER: 'Invalid start parameter.',
+    INVALID_END_PARAMETER: 'Invalid end parameter.'
   }
 }

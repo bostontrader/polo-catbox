@@ -20,4 +20,9 @@ test.serial(t => {
   const expected = {success: 1, message: 'Loan order placed.', orderID}
 
   t.deepEqual(actual, expected)
+
+  // Create loan offer for currency not on loan list
+  // Create loan offer w/o enough funds
+  // { error: 'Not enough BTC available to offer.', success: 0 }
+
 })

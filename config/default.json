@@ -9,14 +9,9 @@
 
   "testData": {
 
-    "balances": {
-      "BTC":2000,
-      "LTC":500
-    },
-
     "credentials": {
-      "thing1": {"secret":"any random string is fine, A"},
-      "thing2": {"secret":"any random string is fine, B"}
+      "me": {"secret":"my secret"},
+      "others": {"secret":"their secret"}
     },
 
     "currencies": {
@@ -32,37 +27,14 @@
 
     // Public API
 
-    "return24Volume":{
-      "BTC_LTC":{"BTC":"2.23248854","LTC":"87.10381314"},
-      "BTC_NXT":{"BTC":"0.981616","NXT":"14145"},
-      "totalBTC":"81.89657704","totalLTC":"78.52083806"
-    },
+
 
     // Private API
 
-    "returnDepositsWithdrawals": {
-      "deposits": [
-        {"currency":"BTC","address":"...","amount":"0.01006132","confirmations":10,
-          "txid":"17f819a91369a9ff6c4a34216d434597cfc1b4a3d0489b46bd6f924137a47701","timestamp":1399305798,"status":"COMPLETE"},
-        {"currency":"BTC","address":"...","amount":"0.00404104","confirmations":10,
-          "txid":"7acb90965b252e55a894b535ef0b0b65f45821f2899e4a379d3e43799604695c","timestamp":1399245916,"status":"COMPLETE"}         ],
-      "withdrawals":[
-        {"withdrawalNumber":134933,"currency":"BTC","address":"1N2i5n8DwTGzUq2Vmn9TUL8J1vdr1XBDFg","amount":"5.00010000",
-        "timestamp":1399267904,"status":"COMPLETE: 36e483efa6aff9fd53a235177579d98451c4eb237c210e66cd2b9a2d4a988f8e","ipAddress":"..."}
-      ]
-    },
 
-    "returnOpenOrders_SingleMarket": [
-      {"orderNumber":"120466","type":"sell","rate":"0.025","amount":"100","total":"2.5"},
-      {"orderNumber":"120467","type":"sell","rate":"0.04","amount":"100","total":"4"}
-    ],
 
-    "returnOpenOrders_AllMarkets": {
-      "BTC_1CR":[],
-      "BTC_AC":[
-        {"orderNumber":"120466","type":"sell","rate":"0.025","amount":"100","total":"2.5"},
-        {"orderNumber":"120467","type":"sell","rate":"0.04","amount":"100","total":"4"}
-      ]
-    }
+
+
+
   }
 }

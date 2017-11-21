@@ -1,6 +1,7 @@
-const config  = require('config')
-const crypto  = require('crypto')
+const config = require('config')
+const crypto = require('crypto')
 const restify = require('restify')
+const engine = require('tradeEngine')
 
 const listeningPort = config.get('listeningPort')
 
@@ -12,19 +13,18 @@ restifyCore.use(restify.plugins.queryParser())
 // The private API params are x-www-form-urlencoded.  We need bodyParser to get them.
 restifyCore.use(restify.plugins.bodyParser())
 
-module.exports = server = {
+// module.exports = server = {
+module.exports = {
 
   start: async () => {
-
-    const orders = []
-    const tickers = {}
+    engine.brainWipe()
 
     // This is the route for the public API.  No signature gyrations here.
     restifyCore.get('/' + 'public', (req, res, next) => {
-      switch(req.query.command) {
-        case 'returnTicker':    {res.json(require('./cmd/returnTicker')(req, tickers));  break}
-        case 'return24Volume':   res.json(config.get('testData.return24Volume'));   break
-        case 'returnCurrencies': res.json(config.get('testData.currencies')); break
+      switch (req.query.command) {
+        // case 'returnTicker': {res.json(require('./cmd/returnTicker')(req, tickers)); break}
+        // case 'return24Volume': res.json(config.get('testData.return24Volume')); break
+        // case 'returnCurrencies': res.json(config.get('testData.currencies')); break
       }
       next()
     })
@@ -43,18 +43,15 @@ module.exports = server = {
 
       if (expectedSig === actualSig) {
         // The request is good.  How shall we reply?
-        switch(req.body.command) {
-          case 'returnDepositsWithdrawals':
-            res.json(config.get('testData.returnDepositsWithdrawals'))
-            break
-          case 'returnOpenOrders':
-            if(req.body.currencyPair === 'all')
-              res.json(config.get('testData.returnOpenOrders_AllMarkets'))
-            else
-              res.json(config.get('testData.returnOpenOrders_SingleMarket'))
-            break
-          case 'buy':  {res.json(require('./cmd/buy')(req, orders, tickers));  break}
-          case 'sell': {res.json(require('./cmd/sell')(req, orders, tickers)); break}
+        switch (req.body.command) {
+          case 'returnDepositsWithdrawals': { res.json(require('./cmd/returnDepositsWithdrawals/impl')(req, engine)); break }
+          // case 'returnOpenOrders':
+          // if (req.body.currencyPair === 'all') {
+          // res.json(config.get('testData.returnOpenOrders_AllMarkets'))
+          // } else { res.json(config.get('testData.returnOpenOrders_SingleMarket')) }
+          // break
+          // case 'buy': { res.json(require('./cmd/buy')(req, orders, tickers)); break }
+          // case 'sell': { res.json(require('./cmd/sell')(req, orders, tickers)); break }
         }
         next()
       } else {
@@ -62,7 +59,7 @@ module.exports = server = {
       }
     })
 
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       restifyCore.listen(listeningPort, () => {
         console.log('The CatBox is listening at %s', restifyCore.url)
         resolve(true)

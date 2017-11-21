@@ -8,7 +8,6 @@
     "url": "https://github.com/bostontrader/polo-catbox/issues"
   },
   "dependencies": {
-    "colors": "^1.1.2",
     "config": "^1.28.1",
     "restify": "^6.3.2"
   },
@@ -22,9 +21,7 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "matches-shape": "^2.0.1",
-    "nyc": "^11.3.0",
-    "request": "^2.83.0",
-    "request-promise-native": "^1.0.5"
+    "nyc": "^11.3.0"
   },
   "description": "A simulated Poloniex server. Developers need a sandbox to develop with.",
   "homepage": "https://github.com/bostontrader/polo-catbox#readme",
@@ -46,7 +43,7 @@
     "url": "https://github.com/bostontrader/polo-catbox.git"
   },
   "scripts": {
-    "test": "nyc ava './app/engine/**/*test.js'",
+    "test": "nyc ava './app/**/*test.js'",
     "start": "node startServer.js"
   },
   "version": "0.3.2"
