@@ -45,6 +45,8 @@ module.exports = {
         // The request is good.  How shall we reply?
         switch (req.body.command) {
           case 'returnDepositsWithdrawals': { res.json(require('./cmd/returnDepositsWithdrawals/impl')(req, engine)); break }
+          case 'returnLendingHistory': { res.json(require('./cmd/returnLendingHistory/impl')(req, engine)); break }
+
           // case 'returnOpenOrders':
           // if (req.body.currencyPair === 'all') {
           // res.json(config.get('testData.returnOpenOrders_AllMarkets'))

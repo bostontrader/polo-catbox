@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "config": "^1.28.1",
+    "date-format": "^1.2.0",
+    "dateformat": "^3.0.2",
     "restify": "^6.3.2"
   },
   "devDependencies": {
@@ -46,5 +48,5 @@
     "test": "nyc ava './app/**/*test.js'",
     "start": "node startServer.js"
   },
-  "version": "0.3.2"
+  "version": "0.3.3"
 }

@@ -19,5 +19,12 @@ module.exports = {
     INVALID_API_KEY_SECRET_PAIR: 'Invalid API key/secret pair.',
     INVALID_START_PARAMETER: 'Invalid start parameter.',
     INVALID_END_PARAMETER: 'Invalid end parameter.'
+  },
+
+  returnLendingHistory: {
+    INVALID_START_PARAMETER: 'Invalid start parameter.',
+    INVALID_END_PARAMETER: 'Invalid end parameter.',
+    INVALID_LIMIT_PARAMETER: 'Invalid limit parameter.'
+
   }
 }

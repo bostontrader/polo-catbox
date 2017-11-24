@@ -140,13 +140,17 @@ Engine.prototype.returnOpenLoanOffers = function (user) { return require('./retu
 Engine.prototype.returnActiveLoans = function (user) { return require('./returnActiveLoans/impl')(user) }
 
 // 34. returnLendingHistory
-Engine.prototype.returnLendingHistory = function (user) { return require('./returnLendingHistory/impl')(user, this.loanOffers) }
+Engine.prototype.returnLendingHistory = function (user, start, end, limit) { return require('./returnLendingHistory/impl')(user, start, end, limit, this.loanOffers) }
 
 // 35. toggleAutoRenew
 Engine.prototype.toggleAutoRenew = function () { return {'success': 1, 'message': 0} }
 
 // These methods are not in the Polo API, but they are useful for this engine.
+Engine.prototype.acceptLoan = function (borrower, loanID, startDate) { return require('./acceptLoan/impl')(borrower, loanID, startDate, this.loanOffers) }
+
 Engine.prototype.makeDeposit = function (user, currency, amount, datetime) { return require('./makeDeposit/impl')(user, currency, amount, datetime, this.deposits) }
+
+Engine.prototype.repayLoan = function (loanID, endDate) { return require('./repayLoan/impl')(loanID, endDate, this.loanOffers) }
 
 Engine.prototype.returnCandleStick = function (trades) { return require('./returnCandleStick/impl')(trades) }
 
