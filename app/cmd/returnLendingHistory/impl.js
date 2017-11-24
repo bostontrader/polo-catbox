@@ -2,7 +2,7 @@ const c = require('../../poloConstants')
 
 module.exports = (req, engine) => {
   // If there are no parameters set, just return an empty []
-  if (!('start' in req.body) && !('start' in req.body)) return []
+  if (!('start' in req.body) && !('end' in req.body) && !('limit' in req.body)) return []
 
   // Set missing parameters to defaults.
   const start = ('start' in req.body) ? parseInt(req.body.start) : 0
