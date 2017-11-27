@@ -23,7 +23,7 @@ module.exports = {
     restifyCore.get('/' + 'public', (req, res, next) => {
       switch (req.query.command) {
         // case 'returnTicker': {res.json(require('./cmd/returnTicker')(req, tickers)); break}
-        // case 'return24Volume': res.json(config.get('testData.return24Volume')); break
+        case 'return24Volume': { res.json(require('./cmd/return24Volume/impl')(engine)); break }
         // case 'returnCurrencies': res.json(config.get('testData.currencies')); break
       }
       next()
