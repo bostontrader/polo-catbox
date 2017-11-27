@@ -72,7 +72,7 @@ Engine.prototype.returnDepositsWithdrawals = function (user, start, end) { retur
 Engine.prototype.returnOpenOrders = function (user) { return require('./returnOpenOrders/impl')(user) }
 
 // 14. The public and private API have the identically named methods, which are conceptually simple, but substantially different.  Thus we really want two methods in the Engine.  See #4.
-Engine.prototype.returnTradeHistoryPrivate = function (user) { return require('./returnTradeHistoryPrivate/impl')(user) }
+Engine.prototype.returnTradeHistoryPrivate = function (user, currencyPair, start, end, limit) { return require('./returnTradeHistoryPrivate/impl')(user, currencyPair, start, end, limit, this.trades) }
 
 // 15. returnOrderTrades
 Engine.prototype.returnOrderTrades = function (user) { return require('./returnOrderTrades/impl')(user) }

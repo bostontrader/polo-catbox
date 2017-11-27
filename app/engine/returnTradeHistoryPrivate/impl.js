@@ -1,6 +1,6 @@
 var dateFormat = require('dateformat')
 
-module.exports = (user, start, end, limit, loanOffers) => {
+module.exports = (user, desiredCurrencyPair, start, end, limit, trades) => {
   let retVal = []
   const truncateOrPad2String = (n) => {
     const pad = '.00000000'
@@ -23,22 +23,29 @@ module.exports = (user, start, end, limit, loanOffers) => {
     return s + pad.substr(-padQ)
   }
 
-  const n1 = loanOffers.filter(offer => 'endDate' in offer && start <= offer.endDate && offer.endDate <= end)
+  const n1 = (desiredCurrencyPair === 'all')
+    ? trades.filter(trade => start <= trade.date && trade.date <= end)
+    : trades.filter(trade => start <= trade.date && trade.date <= end && (trade.baseCurrency + '_' + trade.quoteCurrency) === desiredCurrencyPair)
 
-  n1.forEach(offer => {
-    const xformOffer = {
-      id: offer.loanID,
-      currency: offer.currency,
-      rate: truncateOrPad2String(offer.rate),
-      amount: truncateOrPad2String(offer.amount),
-      duration: truncateOrPad2String(offer.duration),
-      interest: truncateOrPad2String(offer.interest),
-      fee: truncateOrPad2String(offer.fee),
-      earned: truncateOrPad2String(offer.earned),
-      open: dateFormat(offer.startDate * 1000, 'yyyy-mm-dd HH:MM:ss', true),
-      close: dateFormat(offer.endDate * 1000, 'yyyy-mm-dd HH:MM:ss', true)
+  if (n1.length > 0) retVal = {}
+
+  n1.forEach(trade => {
+    const currencyPair = trade.baseCurrency + '_' + trade.quoteCurrency
+    if (!(currencyPair in retVal)) { retVal[currencyPair] = [] }
+    const xformOrder = {
+      globalTradeID: 123,
+      tradeID: trade.tradeID,
+      date: dateFormat(trade.date * 1000, 'yyyy-mm-dd HH:MM:ss', true),
+      rate: truncateOrPad2String(trade.rate),
+      amount: truncateOrPad2String(trade.amount),
+      total: truncateOrPad2String(trade.total),
+      // fee: truncateOrPad2String(trade.fee),
+      fee: truncateOrPad2String(0.0015),
+      orderNumber: trade.orderID,
+      type: trade.type,
+      category: 'exchange'
     }
-    retVal.push(xformOffer)
+    retVal[currencyPair].push(xformOrder)
   })
   return retVal
 }
