@@ -4,7 +4,6 @@ const returnDepositsWithdrawals = require('./impl')
 const c = require('../../poloConstants')
 
 test.serial(t => {
-
   let actual, expected
 
   engine.brainWipe()

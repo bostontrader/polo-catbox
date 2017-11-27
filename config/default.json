@@ -23,18 +23,6 @@
       "AEON":{"id":6,"name":"AEON Coin","txFee":"0.01000000","minConf":10,"depositAddress":"WmrzAb4yy6i4otzaTZznsmaeBn8UKoBqS14XdW2DDzXr3DQnwz4o1XPJAJuo7QTqSoD9WVrdEQfn15udzhsJWmNR1jAEETQ2N","disabled":0,"delisted":1,"frozen":0}
     },
 
-    "markets": ["BTC_LTC", "BTC_ETH", "ETC_CLAM"],
-
-    // Public API
-
-
-
-    // Private API
-
-
-
-
-
-
+    "markets": ["BTC_LTC", "BTC_ETH", "ETC_CLAM"]
   }
 }

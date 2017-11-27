@@ -1,7 +1,7 @@
 const config = require('config')
 const crypto = require('crypto')
 const restify = require('restify')
-const engine = require('tradeEngine')
+const engine = require('./engine/tradeEngine')
 
 const listeningPort = config.get('listeningPort')
 
@@ -15,14 +15,13 @@ restifyCore.use(restify.plugins.bodyParser())
 
 // module.exports = server = {
 module.exports = {
-
   start: async () => {
     engine.brainWipe()
 
     // This is the route for the public API.  No signature gyrations here.
     restifyCore.get('/' + 'public', (req, res, next) => {
       switch (req.query.command) {
-        // case 'returnTicker': {res.json(require('./cmd/returnTicker')(req, tickers)); break}
+        case 'returnTicker': { res.json(require('./cmd/returnTicker/impl')(engine)); break }
         case 'return24Volume': { res.json(require('./cmd/return24Volume/impl')(engine)); break }
         // case 'returnCurrencies': res.json(config.get('testData.currencies')); break
       }
@@ -67,5 +66,9 @@ module.exports = {
         resolve(true)
       })
     })
+  },
+
+  stop: async () => {
+    restifyCore.close()
   }
 }
