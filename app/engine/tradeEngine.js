@@ -10,7 +10,10 @@ Engine.prototype.brainWipe = function () {
   this.orders2Sell = []
   this.trades = []
   this.withdrawals = []
+
+  // For testing, we need to be able to compare what we expect to what we get.  Certain things such as API assigned dates and transaction numbers cannot be known in advance, unless we play some trickery.  Here we can set various values as we expect them to be, beforehand, and the trade engine will use these values.
   this.desiredTradeDate = undefined
+  this.desiredOrderBookSeq = undefined
 }
 
 // undefinedCandleStick and emptyCandleStick look pretty similar.  But there are some subtle differences that justify their existences.  Any attempt to unify these will probably founder on nettlesome code irritants.  Better to just accept this beautiful diversity.
@@ -38,7 +41,7 @@ Engine.prototype.returnTicker =
 Engine.prototype.return24Volume = function () { return require('./return24Volume/impl')(this.trades) }
 
 // 3.
-Engine.prototype.returnOrderBook = function () { return require('./returnOrderBook/impl')(this.orders2Buy, this.orders2Sell) }
+Engine.prototype.returnOrderBook = function (currencyPair, depth) { return require('./returnOrderBook/impl')(currencyPair, depth, this) }
 
 // 4. The public and private API have the identically named methods, which are conceptually simple, but substantially different.  Thus we really want two methods in the Engine.  See #14.
 Engine.prototype.returnTradeHistoryPublic = function (market) { return require('./returnTradeHistoryPublic/impl')(market, this.trades) }

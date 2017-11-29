@@ -1,41 +1,40 @@
-module.exports = (orders2Buy, orders2Sell) => {
+const config = require('config')
+const sorters = require('../sorters')
+
+module.exports = (currencyPair, depth, engine) => {
+
   let retVal = {}
+  config.get('testData.markets').forEach(market => {
+    retVal[market] = {'asks': [], 'bids': [], 'isFrozen': '0', 'seq': engine.desiredOrderBookSeq}
+  })
+
   let depthElement
 
-  // We don't really need to sort by dt, but doing so is harmless and this function is identical to other functions of the same name, in other places.  This is a good candidate to factor out.
-  const sortCurPairAscRateDescDatetimeAsc = function (a, b) {
-    if (a.currencyPair < b.currencyPair) return -1
-    if (a.currencyPair > b.currencyPair) return 1
+  const truncateOrPad2String = (n) => {
+    const pad = '.00000000'
+    const s = n.toString()
+    const idx = s.indexOf('.')
 
-    if (a.rate > b.rate) return -1
-    if (a.rate < b.rate) return 1
+    // 1. If no . assume integer value and simply append pad
+    if (idx < 0) { return s + pad }
 
-    // a.rate must be equal to b.rate. Now sort by dt
-    if (a.dt < b.dt) return -1
-    if (a.dt > b.dt) return 1
+    // 2. Quantity of pad to append
+    const padQ = 8 - (s.length - (idx + 1))
 
-    // a.dt must be equal to b.dt.
-    return 0
+    // 3. If the quantity === 0 then the number is already exactly 8 decimal places long.
+    if (padQ === 0) { return s }
+
+    // 4. If the quantity < 0 this means that the number is more than 8 decimal places.  Truncate.
+    if (padQ < 0) { return s.substring(0, s.length + padQ) }
+
+    // 5. The number has < 8 decimal places, so pad it.
+    return s + pad.substr(-padQ)
   }
 
-  // We don't really need to sort by dt, but doing so is harmless and this function is identical to other functions of the same name, in other places.  This is a good candidate to factor out.
-  const sortCurPairAscRateAscDatetimeAsc = function (a, b) {
-    if (a.currencyPair < b.currencyPair) return -1
-    if (a.currencyPair > b.currencyPair) return 1
-
-    if (a.rate < b.rate) return -1
-    if (a.rate > b.rate) return 1
-
-    // a.rate must be equal to b.rate. Now sort by dt
-    if (a.dt < b.dt) return -1
-    if (a.dt > b.dt) return 1
-
-    // a.dt must be equal to b.dt.
-    return 0
-  }
+  const rounder = (number, precision) => Number(Math.round(number + 'e' + precision) + 'e-' + precision)
 
   // Given an array of buy or sell orders, a suitable sort function, the orderBook that we are building, and the key within the orderBook for new order depth elements, analyze the orders and incorporate the suitable order depth elements into the orderBook
-  const analyzeOrders = (orders, sorter, orderBook, orderBookKey) => {
+  const analyzeOrders = (orders, sorter, orderBook, orderBookKey, maxDepth) => {
     let priorMarket
     let priorRate
     let market // market aka currencyPair
@@ -51,13 +50,16 @@ module.exports = (orders2Buy, orders2Sell) => {
           // Another order for the same rate
           depthElement[1] += order.amount
         } else {
-          // The first order for a new rate
-          retVal[market][orderBookKey].push(depthElement)
-          priorRate = order.rate
-          depthElement = [order.rate, order.amount]
+          // The first order for a new rate.
+          if (retVal[market][orderBookKey].length < maxDepth) {
+            // Then it's ok to push another depthElement
+            retVal[market][orderBookKey].push([truncateOrPad2String(depthElement[0]), rounder(depthElement[1], 8)])
+            priorRate = order.rate
+            depthElement = [order.rate, order.amount]
+          }
         }
       } else {
-        // The first order for a new market
+        // The first order for a new market. maxDepth should always be >= 1 so it's ok to do this.
         priorMarket = market
         priorRate = undefined
 
@@ -70,14 +72,18 @@ module.exports = (orders2Buy, orders2Sell) => {
       }
     })
 
-    // If we saw any orders then we have a final depthElement to append
-    if (orders.length > 0) { retVal[market][orderBookKey].push(depthElement) }
+    // If we saw any orders then we have a final depthElement to append, but only if we would not otherwise exceed maxDepth
+    if (orders.length > 0 && retVal[market][orderBookKey].length < maxDepth) {
+      retVal[market][orderBookKey].push([truncateOrPad2String(depthElement[0]), rounder(depthElement[1], 8)])
+    }
 
     return orderBook
   }
 
-  retVal = analyzeOrders(orders2Buy, sortCurPairAscRateDescDatetimeAsc, retVal, 'bids')
-  retVal = analyzeOrders(orders2Sell, sortCurPairAscRateAscDatetimeAsc, retVal, 'asks')
+  if (depth > 0) {
+    retVal = analyzeOrders(engine.orders2Buy, sorters.sortCurPairAscRateDescDatetimeAsc, retVal, 'bids', depth)
+    retVal = analyzeOrders(engine.orders2Sell, sorters.sortCurPairAscRateAscDatetimeAsc, retVal, 'asks', depth)
+  }
 
-  return retVal
+  return currencyPair === 'all' ? retVal : retVal[currencyPair]
 }

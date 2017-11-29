@@ -13,5 +13,9 @@ server.start()
   })
   .then((html) => {
     console.log('return24Volume: ', html)
+    return rp('http://localhost:3003/public?command=returnOrderBook&currencyPair=all')
+  })
+  .then((html) => {
+    console.log('returnOrderBook: ', html)
     server.stop()
   })

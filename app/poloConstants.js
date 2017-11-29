@@ -1,9 +1,12 @@
 module.exports = {
   'INVALID_AMOUNT_PARAMETER': 'Invalid amount parameter.',
+  'INVALID_CURRENCY_PAIR': 'Invalid currency pair.',
   'INVALID_CURRENCY_PAIR_PARAMETER': 'Invalid currencyPair parameter.',
+  'INVALID_DEPTH': 'Invalid depth.',
   'INVALID_RATE_PARAMETER': 'Invalid rate parameter.',
   'NO_MORE_THAN_ONE': 'No more than one of the post-only, fill-or-kill, and immediate-or-cancel flags should be set at the same time.',
   'NOT_ENOUGH': 'Not enough',
+  'PLEASE_SPECIFY_A_CURRENCY_PAIR': 'Please specify a currency pair.',
   'REQUIRED_PARAMETER_MISSING': 'Required parameter missing.',
   'TOTAL_MUST_BE_AT_LEAST_0_0001': 'Total must be at least 0.0001.',
   'UNABLE_TO_FILL_ORDER_COMPLETELY': 'Unable to fill order completely.',
@@ -29,6 +32,10 @@ module.exports = {
     INVALID_START_PARAMETER: 'Invalid start parameter.',
     INVALID_END_PARAMETER: 'Invalid end parameter.',
     INVALID_LIMIT_PARAMETER: 'Invalid limit parameter.'
+  },
+
+  returnOrderBook: {
+    defaultDepth: 50
   },
 
   returnTradeHistoryPrivate: {

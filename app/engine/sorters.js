@@ -1,5 +1,6 @@
 // We need to use the same sort functions in many places.
 module.exports = {
+
   sortCurPairAscRateAscDatetimeAsc: (a, b) => {
     if (a.currencyPair < b.currencyPair) return -1
     if (a.currencyPair > b.currencyPair) return 1
