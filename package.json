@@ -11,19 +11,19 @@
     "config": "^1.28.1",
     "date-format": "^1.2.0",
     "dateformat": "^3.0.2",
-    "restify": "^6.3.2"
+    "restify": "^6.3.4"
   },
   "devDependencies": {
     "ava": "^0.23.0",
     "coveralls": "^3.0.0",
-    "eslint": "^4.10.0",
+    "eslint": "^4.12.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "matches-shape": "^2.0.1",
-    "nyc": "^11.3.0",
+    "nyc": "^11.4.0",
     "request-promise-native": "^1.0.5"
   },
   "description": "A simulated Poloniex server. Developers need a sandbox to develop with.",
@@ -49,5 +49,5 @@
     "test": "nyc ava './app/**/*test.js' && node integration.test.js",
     "start": "node startServer.js"
   },
-  "version": "0.3.8"
+  "version": "0.3.9"
 }

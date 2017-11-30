@@ -22,5 +22,9 @@ server.start()
   })
   .then((html) => {
     console.log('returnTradeHistoryPublic: ', html)
+    return rp('http://localhost:3003/public?command=returnChartData&currencyPair=' + config.get('testData.markets')[0] + '&period=86400&start=0')
+  })
+  .then((html) => {
+    console.log('returnChartData: ', html)
     server.stop()
   })

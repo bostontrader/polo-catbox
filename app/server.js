@@ -21,10 +21,11 @@ module.exports = {
     // This is the route for the public API.  No signature gyrations here.
     restifyCore.get('/' + 'public', (req, res, next) => {
       switch (req.query.command) {
-        case 'returnTicker': { res.json(require('./cmd/returnTicker/impl')(engine)); break }
-        case 'return24Volume': { res.json(require('./cmd/return24Volume/impl')(engine)); break }
-        case 'returnOrderBook': { res.json(require('./cmd/returnOrderBook/impl')(req.query, engine)); break }
-        case 'returnTradeHistoryPublic': { res.json(require('./cmd/returnTradeHistoryPublic/impl')(req.query, engine)); break }
+        /* 01 */ case 'returnTicker': { res.json(require('./cmd/returnTicker/impl')(engine)); break }
+        /* 02 */ case 'return24Volume': { res.json(require('./cmd/return24Volume/impl')(engine)); break }
+        /* 03 */ case 'returnOrderBook': { res.json(require('./cmd/returnOrderBook/impl')(req.query, engine)); break }
+        /* 04 */ case 'returnTradeHistoryPublic': { res.json(require('./cmd/returnTradeHistoryPublic/impl')(req.query, engine)); break }
+        /* 05 */ case 'returnChartData': { res.json(require('./cmd/returnChartData/impl')(req.query, engine)); break }
 
         // case 'returnCurrencies': res.json(config.get('testData.currencies')); break
       }
