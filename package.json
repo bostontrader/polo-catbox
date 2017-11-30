@@ -49,5 +49,5 @@
     "test": "nyc ava './app/**/*test.js' && node integration.test.js",
     "start": "node startServer.js"
   },
-  "version": "0.3.7"
+  "version": "0.3.8"
 }

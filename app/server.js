@@ -23,7 +23,9 @@ module.exports = {
       switch (req.query.command) {
         case 'returnTicker': { res.json(require('./cmd/returnTicker/impl')(engine)); break }
         case 'return24Volume': { res.json(require('./cmd/return24Volume/impl')(engine)); break }
-        case 'returnOrderBook': {res.json(require('./cmd/returnOrderBook/impl')(req.query, engine)); break}
+        case 'returnOrderBook': { res.json(require('./cmd/returnOrderBook/impl')(req.query, engine)); break }
+        case 'returnTradeHistoryPublic': { res.json(require('./cmd/returnTradeHistoryPublic/impl')(req.query, engine)); break }
+
         // case 'returnCurrencies': res.json(config.get('testData.currencies')); break
       }
       next()

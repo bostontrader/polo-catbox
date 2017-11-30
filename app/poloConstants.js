@@ -42,6 +42,11 @@ module.exports = {
     INVALID_START_PARAMETER: 'Invalid start parameter.',
     INVALID_END_PARAMETER: 'Invalid end parameter.',
     INVALID_LIMIT_PARAMETER: 'Invalid limit parameter.'
+  },
+
+  returnTradeHistoryPublic: {
+    INVALID_START_TIME: 'Invalid start time.',
+    INVALID_END_TIME: 'Invalid end time.'
   }
 
 }
