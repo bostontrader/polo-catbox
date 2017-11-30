@@ -6,25 +6,29 @@ const server = require('./app/server')
 
 server.start()
   .then(() => {
-    return rp('http://localhost:3003/public?command=returnTicker')
+    /* 01 */ return rp('http://localhost:3003/public?command=returnTicker')
   })
   .then((html) => {
     console.log('returnTicker: ', html)
-    return rp('http://localhost:3003/public?command=return24Volume')
+    /* 02 */ return rp('http://localhost:3003/public?command=return24Volume')
   })
   .then((html) => {
     console.log('return24Volume: ', html)
-    return rp('http://localhost:3003/public?command=returnOrderBook&currencyPair=all')
+    /* 03 */ return rp('http://localhost:3003/public?command=returnOrderBook&currencyPair=all')
   })
   .then((html) => {
     console.log('returnOrderBook: ', html)
-    return rp('http://localhost:3003/public?command=returnTradeHistoryPublic&currencyPair=' + config.get('testData.markets')[0])
+    /* 04 */ return rp('http://localhost:3003/public?command=returnTradeHistoryPublic&currencyPair=' + config.get('testData.markets')[0])
   })
   .then((html) => {
     console.log('returnTradeHistoryPublic: ', html)
-    return rp('http://localhost:3003/public?command=returnChartData&currencyPair=' + config.get('testData.markets')[0] + '&period=86400&start=0')
+    /* 05 */ return rp('http://localhost:3003/public?command=returnChartData&currencyPair=' + config.get('testData.markets')[0] + '&period=86400&start=0')
   })
   .then((html) => {
     console.log('returnChartData: ', html)
+    /* 06 */ return rp('http://localhost:3003/public?command=returnCurrencies')
+  })
+  .then((html) => {
+    console.log('returnCurrencies: ', html)
     server.stop()
   })

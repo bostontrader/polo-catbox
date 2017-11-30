@@ -26,6 +26,7 @@ module.exports = {
         /* 03 */ case 'returnOrderBook': { res.json(require('./cmd/returnOrderBook/impl')(req.query, engine)); break }
         /* 04 */ case 'returnTradeHistoryPublic': { res.json(require('./cmd/returnTradeHistoryPublic/impl')(req.query, engine)); break }
         /* 05 */ case 'returnChartData': { res.json(require('./cmd/returnChartData/impl')(req.query, engine)); break }
+        /* 06 */ case 'returnCurrencies': { res.json(require('./cmd/returnCurrencies/impl')(engine)); break }
 
         // case 'returnCurrencies': res.json(config.get('testData.currencies')); break
       }
