@@ -30,5 +30,9 @@ server.start()
   })
   .then((html) => {
     console.log('returnCurrencies: ', html)
+    /* 07 */ return rp('http://localhost:3003/public?command=returnLoanOrders')
+  })
+  .then((html) => {
+    console.log('returnLoanOrders ', html)
     server.stop()
   })
