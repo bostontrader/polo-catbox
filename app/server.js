@@ -13,7 +13,6 @@ restifyCore.use(restify.plugins.queryParser())
 // The private API params are x-www-form-urlencoded.  We need bodyParser to get them.
 restifyCore.use(restify.plugins.bodyParser())
 
-// module.exports = server = {
 module.exports = {
   start: async () => {
     engine.brainWipe()
@@ -49,8 +48,10 @@ module.exports = {
       if (expectedSig === actualSig) {
         // The request is good.  How shall we reply?
         switch (req.body.command) {
-          case 'returnDepositsWithdrawals': { res.json(require('./cmd/returnDepositsWithdrawals/impl')(req, engine)); break }
-          case 'returnLendingHistory': { res.json(require('./cmd/returnLendingHistory/impl')(req, engine)); break }
+          case 'returnBalances': { res.json(require('./cmd/returnBalances/impl')(engine)); break }
+
+          // case 'returnDepositsWithdrawals': { res.json(require('./cmd/returnDepositsWithdrawals/impl')(req, engine)); break }
+          // case 'returnLendingHistory': { res.json(require('./cmd/returnLendingHistory/impl')(req, engine)); break }
 
           // case 'returnOpenOrders':
           // if (req.body.currencyPair === 'all') {

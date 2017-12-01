@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "config": "^1.28.1",
+    "crypto": "^1.0.1",
     "date-format": "^1.2.0",
     "dateformat": "^3.0.2",
     "restify": "^6.3.4"
@@ -46,8 +47,8 @@
     "url": "https://github.com/bostontrader/polo-catbox.git"
   },
   "scripts": {
-    "test": "nyc ava './app/**/*test.js' && node integration.test.js",
+    "test": "nyc ava './app/engine/returnBalances/*test.js'",
     "start": "node startServer.js"
   },
-  "version": "0.3.11"
+  "version": "0.3.12"
 }

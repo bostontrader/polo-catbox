@@ -1,8 +1,27 @@
 // Start the server and send requests.  Only enough to verify that the server really will respond.
 const config = require('config')
+const crypto = require('crypto')
+
 const rp = require('request-promise-native')
 
 const server = require('./app/server')
+
+const tradingAPIOptions = {
+  method: 'POST',
+  url: 'http://localhost:3003/tradingApi'
+}
+
+const getPrivateHeaders = function (parameters) {
+  let paramString, signature
+
+  // if (!key || !secret) { throw new Error('PoloAdapter: Error. API key and secret required') }
+  const key = 'me'
+  const secret = 'my secret'
+  // Convert to `arg1=foo&arg2=bar`
+  paramString = Object.keys(parameters).map(param => encodeURIComponent(param) + '=' + encodeURIComponent(parameters[param])).join('&')
+  signature = crypto.createHmac('sha512', secret).update(paramString).digest('hex')
+  return {Key: key, Sign: signature}
+}
 
 server.start()
   .then(() => {
@@ -34,5 +53,12 @@ server.start()
   })
   .then((html) => {
     console.log('returnLoanOrders ', html)
+    const parameters = {command: 'returnBalances', nonce: Date.now() * 1000}
+    tradingAPIOptions.form = parameters
+    tradingAPIOptions.headers = getPrivateHeaders(parameters)
+    /* 01 */ return rp(tradingAPIOptions)
+  })
+  .then((html) => {
+    console.log('returnBalances ', html)
     server.stop()
   })
