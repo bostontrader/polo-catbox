@@ -2,6 +2,7 @@ const config = require('config')
 const crypto = require('crypto')
 const restify = require('restify')
 const engine = require('./engine/tradeEngine')
+const c = require('./poloConstants')
 
 const listeningPort = config.get('listeningPort')
 
@@ -27,8 +28,8 @@ module.exports = {
         /* 05 */ case 'returnChartData': { res.json(require('./cmd/returnChartData/impl')(req.query, engine)); break }
         /* 06 */ case 'returnCurrencies': { res.json(require('./cmd/returnCurrencies/impl')(engine)); break }
         /* 07 */ case 'returnLoanOrders': { res.json(require('./cmd/returnLoanOrders/impl')(engine)); break }
-
-        // case 'returnCurrencies': res.json(config.get('testData.currencies')); break
+        default:
+          res.json({'error': c.INVALID_COMMAND})
       }
       next()
     })
@@ -48,10 +49,16 @@ module.exports = {
       if (expectedSig === actualSig) {
         // The request is good.  How shall we reply?
         switch (req.body.command) {
-          case 'returnBalances': { res.json(require('./cmd/returnBalances/impl')(engine)); break }
-          case 'returnCompleteBalances': { res.json(require('./cmd/returnCompleteBalances/impl')(engine)); break }
-
+          /* 01 */ case 'returnBalances': { res.json(require('./cmd/returnBalances/impl')(engine)); break }
+          /* 02 */ case 'returnCompleteBalances': { res.json(require('./cmd/returnCompleteBalances/impl')(engine)); break }
+          /* 03 */ case 'returnDepositAddresses': { res.json(require('./cmd/returnDepositAddresses/impl')(engine)); break }
+          /* 04 */ case 'generateNewAddress': { res.json(require('./cmd/generateNewAddress/impl')(engine)); break }
+          /* 05 */ case 'returnDepositsWithdrawals': { res.json(require('./cmd/returnDepositsWithdrawals/impl')(req, engine)); break }
           // case 'returnDepositsWithdrawals': { res.json(require('./cmd/returnDepositsWithdrawals/impl')(req, engine)); break }
+
+          /* 06 */ case 'returnOpenOrders': { res.json(require('./cmd/returnOpenOrders/impl')(req, engine)); break }
+          /* 07 */ case 'returnTradeHistory': { res.json(require('./cmd/returnTradeHistoryPrivate/impl')(req, engine)); break }
+
           // case 'returnLendingHistory': { res.json(require('./cmd/returnLendingHistory/impl')(req, engine)); break }
 
           // case 'returnOpenOrders':
@@ -61,6 +68,8 @@ module.exports = {
           // break
           // case 'buy': { res.json(require('./cmd/buy')(req, orders, tickers)); break }
           // case 'sell': { res.json(require('./cmd/sell')(req, orders, tickers)); break }
+          default:
+            res.json({'error': c.INVALID_COMMAND})
         }
         next()
       } else {
@@ -70,6 +79,7 @@ module.exports = {
 
     return new Promise((resolve, reject) => {
       restifyCore.listen(listeningPort, () => {
+        console.log('Using config:', config.get('name'))
         console.log('The CatBox is listening at %s', restifyCore.url)
         resolve(true)
       })

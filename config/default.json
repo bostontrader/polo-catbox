@@ -1,4 +1,5 @@
 {
+  "name": "default",
   "listeningPort": 3003,
 
   "url": {

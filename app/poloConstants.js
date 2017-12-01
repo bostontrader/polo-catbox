@@ -1,5 +1,6 @@
 module.exports = {
   'INVALID_AMOUNT_PARAMETER': 'Invalid amount parameter.',
+  'INVALID_COMMAND': 'Invalid command.',
   'INVALID_CURRENCY_PAIR': 'Invalid currency pair.',
   'INVALID_CURRENCY_PAIR_PARAMETER': 'Invalid currencyPair parameter.',
   'INVALID_DEPTH': 'Invalid depth.',

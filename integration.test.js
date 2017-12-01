@@ -6,11 +6,6 @@ const rp = require('request-promise-native')
 
 const server = require('./app/server')
 
-const tradingAPIOptions = {
-  method: 'POST',
-  url: 'http://localhost:3003/tradingApi'
-}
-
 const getPrivateHeaders = function (parameters) {
   let paramString, signature
 
@@ -23,49 +18,123 @@ const getPrivateHeaders = function (parameters) {
   return {Key: key, Sign: signature}
 }
 
+const u = config.get('url')
+const baseURL = u.protocol + '://' + u.host + (u.port ? ':' + u.port : '')
+const publicURL = baseURL + '/public'
+
+const tradingAPIOptions = {
+  method: 'POST',
+  url: baseURL + '/tradingApi'
+}
+console.log(28, baseURL)
+
 server.start()
-  .then(() => {
-    /* 01 */ return rp('http://localhost:3003/public?command=returnTicker')
+
+  /* 01 */ .then(() => {
+    return rp(publicURL + '?command=returnTicker')
+      .then(html => { console.log('01 returnTicker: ', html); return Promise.resolve(true) })
   })
-  .then((html) => {
-    console.log('returnTicker: ', html)
-    /* 02 */ return rp('http://localhost:3003/public?command=return24Volume')
+
+  /* 02 */ .then((html) => {
+    return rp(publicURL + '?command=return24Volume')
+      .then(html => { console.log('02 return24Volume: ', html); return Promise.resolve(true) })
   })
-  .then((html) => {
-    console.log('return24Volume: ', html)
-    /* 03 */ return rp('http://localhost:3003/public?command=returnOrderBook&currencyPair=all')
+
+  /* 03 */ .then((html) => {
+    return rp(publicURL + '?command=returnOrderBook&currencyPair=all')
+      .then(html => { console.log('03 returnOrderBook: ', html); return Promise.resolve(true) })
   })
-  .then((html) => {
-    console.log('returnOrderBook: ', html)
-    /* 04 */ return rp('http://localhost:3003/public?command=returnTradeHistoryPublic&currencyPair=' + config.get('testData.markets')[0])
+
+  /* 04 */ .then((html) => {
+    return rp(publicURL + '?command=returnTradeHistoryPublic&currencyPair=' + config.get('testData.markets')[0])
+      .then(html => { console.log('04 returnTradeHistoryPublic: ', html); return Promise.resolve(true) })
   })
-  .then((html) => {
-    console.log('returnTradeHistoryPublic: ', html)
-    /* 05 */ return rp('http://localhost:3003/public?command=returnChartData&currencyPair=' + config.get('testData.markets')[0] + '&period=86400&start=0')
+
+  /* 05 */ .then((html) => {
+    return rp(publicURL + '?command=returnChartData&currencyPair=' + config.get('testData.markets')[0] + '&period=86400&start=0')
+      .then(html => { console.log('05 returnChartData: ', html); return Promise.resolve(true) })
   })
-  .then((html) => {
-    console.log('returnChartData: ', html)
-    /* 06 */ return rp('http://localhost:3003/public?command=returnCurrencies')
+
+  /* 06 */ .then((html) => {
+    return rp(publicURL + '?command=returnCurrencies')
+      .then(html => { console.log('06 returnCurrencies: ', html); return Promise.resolve(true) })
   })
-  .then((html) => {
-    console.log('returnCurrencies: ', html)
-    /* 07 */ return rp('http://localhost:3003/public?command=returnLoanOrders')
+
+  /* 07 */ .then((html) => {
+    return rp(publicURL + '?command=returnLoanOrders')
+      .then(html => { console.log('07 returnLoanOrders: ', html); return Promise.resolve(true) })
   })
+
   .then((html) => {
-    console.log('returnLoanOrders ', html)
+    return rp(publicURL + '?command=catfood')
+      .then(html => { console.log('Expected error: ', html); return Promise.resolve(true) })
+  })
+
+  /* 01 */ .then((html) => {
     const parameters = {command: 'returnBalances', nonce: Date.now() * 1000}
     tradingAPIOptions.form = parameters
     tradingAPIOptions.headers = getPrivateHeaders(parameters)
-    /* 01 */ return rp(tradingAPIOptions)
+    return rp(tradingAPIOptions)
+      .then(html => { console.log('01 returnBalances: ', html); return Promise.resolve(true) })
   })
-  .then((html) => {
-    console.log('returnBalances ', html)
+
+  /* 02 */ .then((html) => {
     const parameters = {command: 'returnCompleteBalances', nonce: Date.now() * 1000}
     tradingAPIOptions.form = parameters
     tradingAPIOptions.headers = getPrivateHeaders(parameters)
-    /* 02 */ return rp(tradingAPIOptions)
+    return rp(tradingAPIOptions)
+      .then(html => { console.log('02 returnCompleteBalances: ', html); return Promise.resolve(true) })
   })
+
+  /* 03 */ .then((html) => {
+    const parameters = {command: 'returnDepositAddresses', nonce: Date.now() * 1000}
+    tradingAPIOptions.form = parameters
+    tradingAPIOptions.headers = getPrivateHeaders(parameters)
+    return rp(tradingAPIOptions)
+      .then(html => { console.log('03 returnDepositAddresses: ', html); return Promise.resolve(true) })
+  })
+
+  /* 04 */ .then((html) => {
+    const parameters = {command: 'generateNewAddress', nonce: Date.now() * 1000}
+    tradingAPIOptions.form = parameters
+    tradingAPIOptions.headers = getPrivateHeaders(parameters)
+    return rp(tradingAPIOptions)
+      .then(html => { console.log('04 generateNewAddress: ', html); return Promise.resolve(true) })
+  })
+
+  /* 05 */ .then((html) => {
+    const parameters = {command: 'returnDepositsWithdrawals', nonce: Date.now() * 1000}
+    tradingAPIOptions.form = parameters
+    tradingAPIOptions.headers = getPrivateHeaders(parameters)
+    return rp(tradingAPIOptions)
+      .then(html => { console.log('05 returnDepositsWithdrawals: ', html); return Promise.resolve(true) })
+  })
+
+  /* 06 */ .then((html) => {
+    const parameters = {command: 'returnOpenOrders', nonce: Date.now() * 1000}
+    tradingAPIOptions.form = parameters
+    tradingAPIOptions.headers = getPrivateHeaders(parameters)
+    return rp(tradingAPIOptions)
+      .then(html => { console.log('06 returnOpenOrders: ', html); return Promise.resolve(true) })
+  })
+
+  /* 07 */ .then((html) => {
+    const parameters = {command: 'returnTradeHistory', nonce: Date.now() * 1000}
+    tradingAPIOptions.form = parameters
+    tradingAPIOptions.headers = getPrivateHeaders(parameters)
+    return rp(tradingAPIOptions)
+      .then(html => { console.log('07 returnTradeHistory: ', html); return Promise.resolve(true) })
+  })
+
   .then((html) => {
-    console.log('returnCompleteBalances ', html)
+    const parameters = {command: 'catfood'}
+    tradingAPIOptions.form = parameters
+    tradingAPIOptions.headers = getPrivateHeaders(parameters)
+    return rp(tradingAPIOptions)
+      .then(html => { console.log('Expected error: ', html); return Promise.resolve(true) })
+  })
+
+  .then((html) => {
+    console.log('server shutdown normally')
     server.stop()
   })
