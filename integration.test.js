@@ -60,5 +60,12 @@ server.start()
   })
   .then((html) => {
     console.log('returnBalances ', html)
+    const parameters = {command: 'returnCompleteBalances', nonce: Date.now() * 1000}
+    tradingAPIOptions.form = parameters
+    tradingAPIOptions.headers = getPrivateHeaders(parameters)
+    /* 02 */ return rp(tradingAPIOptions)
+  })
+  .then((html) => {
+    console.log('returnCompleteBalances ', html)
     server.stop()
   })

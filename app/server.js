@@ -49,6 +49,7 @@ module.exports = {
         // The request is good.  How shall we reply?
         switch (req.body.command) {
           case 'returnBalances': { res.json(require('./cmd/returnBalances/impl')(engine)); break }
+          case 'returnCompleteBalances': { res.json(require('./cmd/returnCompleteBalances/impl')(engine)); break }
 
           // case 'returnDepositsWithdrawals': { res.json(require('./cmd/returnDepositsWithdrawals/impl')(req, engine)); break }
           // case 'returnLendingHistory': { res.json(require('./cmd/returnLendingHistory/impl')(req, engine)); break }

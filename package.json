@@ -47,8 +47,8 @@
     "url": "https://github.com/bostontrader/polo-catbox.git"
   },
   "scripts": {
-    "test": "nyc ava './app/engine/returnBalances/*test.js'",
+    "test": "nyc ava './app/**/*test.js' && node integration.tests.js",
     "start": "node startServer.js"
   },
-  "version": "0.3.12"
+  "version": "0.3.13"
 }
