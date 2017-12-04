@@ -126,6 +126,24 @@ server.start()
       .then(html => { console.log('07 returnTradeHistory: ', html); return Promise.resolve(true) })
   })
 
+  /* 08 */
+
+  /* 09 */ .then((html) => {
+    const parameters = {command: 'buy', nonce: Date.now() * 1000}
+    tradingAPIOptions.form = parameters
+    tradingAPIOptions.headers = getPrivateHeaders(parameters)
+    return rp(tradingAPIOptions)
+      .then(html => { console.log('09 buy: ', html); return Promise.resolve(true) })
+  })
+
+  /* 10 */ .then((html) => {
+    const parameters = {command: 'sell', nonce: Date.now() * 1000}
+    tradingAPIOptions.form = parameters
+    tradingAPIOptions.headers = getPrivateHeaders(parameters)
+    return rp(tradingAPIOptions)
+      .then(html => { console.log('10 sell: ', html); return Promise.resolve(true) })
+  })
+
   .then((html) => {
     const parameters = {command: 'catfood'}
     tradingAPIOptions.form = parameters

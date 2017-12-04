@@ -81,15 +81,15 @@ Engine.prototype.returnTradeHistoryPrivate = function (user, currencyPair, start
 Engine.prototype.returnOrderTrades = function (user) { return require('./returnOrderTrades/impl')(user) }
 
 // 9.
-Engine.prototype.buy = function (newOrder) {
-  const result = require('./buy/impl')(newOrder, this)
+Engine.prototype.buy = function (buyOrder) {
+  const result = require('./buy/impl')(buyOrder, this)
   if ('resultingTrades' in result) { this.trades = this.trades.concat(result.resultingTrades) }
   return result
 }
 
 // 10.
-Engine.prototype.sell = function (newOrder) {
-  const result = require('./sell/impl')(newOrder, this)
+Engine.prototype.sell = function (sellOrder) {
+  const result = require('./sell/impl')(sellOrder, this)
   if ('resultingTrades' in result) { this.trades = this.trades.concat(result.resultingTrades) }
   return result
 }

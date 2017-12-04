@@ -36,10 +36,9 @@ module.exports = {
 
     // This is the route for the private API
     restifyCore.post('/' + 'tradingApi', (req, res, next) => {
-
       // Morph the urlencoded body of the request into a string suitable for subsequent HMAC signature
       const paramString = Object.keys(req.body).map(function (param) {
-        return encodeURIComponent(param) + '=' + encodeURIComponent(req.body[param]);
+        return encodeURIComponent(param) + '=' + encodeURIComponent(req.body[param])
       }).join('&')
 
       const expectedSig = req.headers.sign
@@ -54,20 +53,12 @@ module.exports = {
           /* 03 */ case 'returnDepositAddresses': { res.json(require('./cmd/returnDepositAddresses/impl')(engine)); break }
           /* 04 */ case 'generateNewAddress': { res.json(require('./cmd/generateNewAddress/impl')(engine)); break }
           /* 05 */ case 'returnDepositsWithdrawals': { res.json(require('./cmd/returnDepositsWithdrawals/impl')(req, engine)); break }
-          // case 'returnDepositsWithdrawals': { res.json(require('./cmd/returnDepositsWithdrawals/impl')(req, engine)); break }
-
           /* 06 */ case 'returnOpenOrders': { res.json(require('./cmd/returnOpenOrders/impl')(req, engine)); break }
           /* 07 */ case 'returnTradeHistory': { res.json(require('./cmd/returnTradeHistoryPrivate/impl')(req, engine)); break }
+          /* 08 */
+          /* 09 */ case 'buy': { res.json(require('./cmd/buy/impl')(req, engine)); break }
+          /* 10 */ case 'sell': { res.json(require('./cmd/sell/impl')(req, engine)); break }
 
-          // case 'returnLendingHistory': { res.json(require('./cmd/returnLendingHistory/impl')(req, engine)); break }
-
-          // case 'returnOpenOrders':
-          // if (req.body.currencyPair === 'all') {
-          // res.json(config.get('testData.returnOpenOrders_AllMarkets'))
-          // } else { res.json(config.get('testData.returnOpenOrders_SingleMarket')) }
-          // break
-          // case 'buy': { res.json(require('./cmd/buy')(req, orders, tickers)); break }
-          // case 'sell': { res.json(require('./cmd/sell')(req, orders, tickers)); break }
           default:
             res.json({'error': c.INVALID_COMMAND})
         }
