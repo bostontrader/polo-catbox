@@ -13,16 +13,26 @@ test.serial(t => {
   t.deepEqual(actual, expected)
 })
 
-// 2. Volume for a market with a single trade.
+// 2. Volume for a market with trades.
 test.serial(t => {
+  let actual, expected
+  const currencyPair = config.get('testData.markets')[0]
+  const currencies = currencyPair.split('_')
+  const baseCurrency = currencies[0]
+  const quoteCurrency = currencies[1]
+
   engine.brainWipe()
 
-  const currencyPair = config.get('testData.markets')[0]
-  engine.buy({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.015, amount: 2.0})
+  // 1. In order to buy or sell anything we must first ensure sufficient funds.
+  engine.makeDeposit('others', baseCurrency, 100)
+  engine.makeDeposit('others', quoteCurrency, 100)
+
+  // 2. Setup a single trade
+  engine.buy({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.015, amount: 4.0})
   engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.014, amount: 2.0})
 
-  const actual = engine.return24Volume()
-  const expected = {
+  actual = engine.return24Volume()
+  expected = {
     BTC_LTC: { BTC: 0.03, LTC: 2 },
     totalBTC: 0.03,
     totalETH: 0,
@@ -31,19 +41,12 @@ test.serial(t => {
     totalXUSD: 0
   }
   t.deepEqual(actual, expected)
-})
 
-// 2. Volume for a market with two trades.
-test.serial(t => {
-  engine.brainWipe()
-
-  const currencyPair = config.get('testData.markets')[0]
-  engine.buy({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.015, amount: 4.0})
-  engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.014, amount: 2.0})
+  // 3. Setup a 2nd trade
   engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.013, amount: 1.5})
 
-  const actual = engine.return24Volume()
-  const expected = {
+  actual = engine.return24Volume()
+  expected = {
     BTC_LTC: { BTC: 0.0525, LTC: 3.5 },
     totalBTC: 0.0525,
     totalETH: 0,

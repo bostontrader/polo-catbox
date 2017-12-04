@@ -18,5 +18,5 @@ module.exports = (req, engine) => {
   if (isNaN(limit)) { return {'error': c.returnTradeHistoryPrivate.INVALID_LIMIT_PARAMETER} }
 
   // 2. Ready for the Engine
-  return engine.returnTradeHistoryPrivatePrivate(req.headers.key, req.body.currencyPair, start, end, limit)
+  return engine.returnTradeHistoryPrivate(req.headers.key, req.body.currencyPair, start, end, limit)
 }

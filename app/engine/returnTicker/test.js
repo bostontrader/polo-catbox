@@ -1,9 +1,15 @@
 // This is a test of returnTicker when talking directly to the tradeEngine.
+const test = require('ava')
 const config = require('config')
 
-const test = require('ava')
-
 const engine = require('../tradeEngine')
+
+let actual, expected
+
+const currencyPair = config.get('testData.markets')[0]
+const currencies = currencyPair.split('_')
+const baseCurrency = currencies[0]
+const quoteCurrency = currencies[1]
 
 // 1. A ticker for a market with zero trades is something we'll never likely see in the wild.  Nevertheless, for purposes of completeness, I will venture a guess as to a reasonable reply.
 test.serial(t => {
@@ -34,7 +40,10 @@ test.serial(t => {
 // 2. A ticker for a single market with only a single buy order.
 test.serial(t => {
   engine.brainWipe()
-  const currencyPair = config.get('testData.markets')[0]
+
+  // In order to buy or sell anything we must first ensure sufficient funds.
+  engine.makeDeposit('others', baseCurrency, 100)
+
   engine.buy({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.015, amount: 1.0})
 
   const actual = engine.returnTicker(config.get('testData.markets'))[currencyPair]
@@ -56,7 +65,10 @@ test.serial(t => {
 // 3. A ticker for a single market with two buy orders. Does the highest bid sort to the top?
 test.serial(t => {
   engine.brainWipe()
-  const currencyPair = config.get('testData.markets')[0]
+
+  // In order to buy or sell anything we must first ensure sufficient funds.
+  engine.makeDeposit('others', baseCurrency, 100)
+
   engine.buy({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.015, amount: 1.0})
   engine.buy({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.016, amount: 1.0})
   const actual = engine.returnTicker(config.get('testData.markets'))[currencyPair]
@@ -78,7 +90,10 @@ test.serial(t => {
 // 4. A ticker for a single market with only a single sell order.
 test.serial(t => {
   engine.brainWipe()
-  const currencyPair = config.get('testData.markets')[0]
+
+  // In order to buy or sell anything we must first ensure sufficient funds.
+  engine.makeDeposit('others', quoteCurrency, 100)
+
   engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.015, amount: 1.0})
 
   const actual = engine.returnTicker(config.get('testData.markets'))[currencyPair]
@@ -100,7 +115,10 @@ test.serial(t => {
 // 5. A ticker for a single market with two sell orders. Does the lowest bid sort to the top?
 test.serial(t => {
   engine.brainWipe()
-  const currencyPair = config.get('testData.markets')[0]
+
+  // In order to buy or sell anything we must first ensure sufficient funds.
+  engine.makeDeposit('others', quoteCurrency, 100)
+
   engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.015, amount: 1.0})
   engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.014, amount: 1.0})
 
@@ -123,7 +141,11 @@ test.serial(t => {
 // 6. A single trade for a single market.
 test.serial(t => {
   engine.brainWipe()
-  const currencyPair = config.get('testData.markets')[0]
+
+  // In order to buy or sell anything we must first ensure sufficient funds.
+  engine.makeDeposit('others', baseCurrency, 100)
+  engine.makeDeposit('others', quoteCurrency, 100)
+
   engine.buy({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.015, amount: 2.0})
   engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.014, amount: 2.0})
 
@@ -146,7 +168,11 @@ test.serial(t => {
 // 7. Two trades for a single market.
 test.serial(t => {
   engine.brainWipe()
-  const currencyPair = config.get('testData.markets')[0]
+
+  // In order to buy or sell anything we must first ensure sufficient funds.
+  engine.makeDeposit('others', baseCurrency, 100)
+  engine.makeDeposit('others', quoteCurrency, 100)
+
   engine.buy({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.015, amount: 2.0})
   engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.014, amount: 2.0})
   engine.sell({apiKey: 'others', currencyPair, 'dt': 1000, rate: 0.016, amount: 2.0})

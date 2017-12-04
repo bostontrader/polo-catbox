@@ -2,7 +2,7 @@ const config = require('config')
 
 // Return the collection of balances for each currency, for a given user.
 module.exports = (user, deposits, withdrawals) => {
-  // for each currency, compute total of deposits and withdrawals for the given user
+  // For each currency, compute total of all transactions for the given user.  At this time we only include deposits and withdrawals.  This is grossly incomplete.
   let retVal = {}
   Object.keys(config.get('testData.currencies')).forEach(currency => {
     const n1 = deposits.filter(deposit => deposit.user === user && deposit.currency === currency)

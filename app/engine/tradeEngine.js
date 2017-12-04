@@ -56,96 +56,96 @@ Engine.prototype.returnCurrencies = function () { return require('./returnCurren
 Engine.prototype.returnLoanOrders = function () { return require('./returnLoanOrders/impl')(this.loanOffers, this.loanDemands) }
 
 // Trading API
-// 8.
+// 1.
 Engine.prototype.returnBalances = function (user) { return require('./returnBalances/impl')(user, this.deposits, this.withdrawals) }
 
-// 9. returnCompleteBalances
+// 2. returnCompleteBalances
 Engine.prototype.returnCompleteBalances = function (user) { return require('./returnCompleteBalances/impl')(user) }
 
-// 10. returnDepositAddresses
+// 3. returnDepositAddresses
 Engine.prototype.returnDepositAddresses = function (user) { return require('./returnDepositAddresses/impl')(user) }
 
-// 11. generateNewAddress
+// 4. generateNewAddress
 Engine.prototype.generateNewAddress = function (user) { return require('./generateNewAddress/impl')(user) }
 
-// 12. returnDepositsWithdrawals
+// 5. returnDepositsWithdrawals
 Engine.prototype.returnDepositsWithdrawals = function (user, start, end) { return require('./returnDepositsWithdrawals/impl')(user, start, end, this.deposits, this.withdrawals) }
 
-// 13. returnOpenOrders
+// 6. returnOpenOrders
 Engine.prototype.returnOpenOrders = function (user) { return require('./returnOpenOrders/impl')(user) }
 
-// 14. The public and private API have the identically named methods, which are conceptually simple, but substantially different.  Thus we really want two methods in the Engine.  See #4.
+// 7. The public and private API have the identically named methods, which are conceptually simple, but substantially different.  Thus we really want two methods in the Engine.  See #4.
 Engine.prototype.returnTradeHistoryPrivate = function (user, currencyPair, start, end, limit) { return require('./returnTradeHistoryPrivate/impl')(user, currencyPair, start, end, limit, this.trades) }
 
-// 15. returnOrderTrades
+// 8. returnOrderTrades
 Engine.prototype.returnOrderTrades = function (user) { return require('./returnOrderTrades/impl')(user) }
 
-// 16.
+// 9.
 Engine.prototype.buy = function (newOrder) {
   const result = require('./buy/impl')(newOrder, this)
   if ('resultingTrades' in result) { this.trades = this.trades.concat(result.resultingTrades) }
   return result
 }
 
-// 17.
+// 10.
 Engine.prototype.sell = function (newOrder) {
   const result = require('./sell/impl')(newOrder, this)
   if ('resultingTrades' in result) { this.trades = this.trades.concat(result.resultingTrades) }
   return result
 }
 
-// 18. cancelOrder
+// 11. cancelOrder
 Engine.prototype.cancelOrder = function (user, orderNumber) { return require('./cancelOrder/impl')(user, orderNumber, this.orders2Buy, this.orders2Sell) }
 
-// 19. moveOrder
+// 12. moveOrder
 Engine.prototype.moveOrder = function (user) { return require('./moveOrder/impl')(user) }
 
-// 20. withdraw
+// 13. withdraw
 Engine.prototype.withdraw = function (user, currency, amount, address, datetime) { return require('./withdraw/impl')(user, currency, amount, address, datetime, this.withdrawals) }
 
-// 21. returnFeeInfo
+// 14. returnFeeInfo
 Engine.prototype.returnFeeInfo = function (user) { return require('./returnFeeInfo/impl')(user) }
 
-// 22. returnAvailableAccountBalances
+// 15. returnAvailableAccountBalances
 Engine.prototype.returnAvailableAccountBalances = function (user) { return require('./returnAvailableAccountBalances/impl')(user) }
 
-// 23. returnTradableBalances
+// 16. returnTradableBalances
 Engine.prototype.returnTradableBalances = function (user) { return require('./returnTradableBalances/impl')(user) }
 
-// 24. transferBalance
+// 17. transferBalance
 Engine.prototype.transferBalance = function (user) { return require('./transferBalance/impl')(user) }
 
-// 25. returnMarginAccountSummary
+// 18. returnMarginAccountSummary
 Engine.prototype.returnMarginAccountSummary = function (user) { return require('./returnMarginAccountSummary/impl')(user) }
 
-// 26. marginBuy
+// 19. marginBuy
 Engine.prototype.marginBuy = function (user) { return require('./marginBuy/impl')(user) }
 
-// 27. marginSell
+// 20. marginSell
 Engine.prototype.marginSell = function (user) { return require('./marginSell/impl')(user) }
 
-// 28. getMarginPosition
+// 21. getMarginPosition
 Engine.prototype.getMarginPosition = function (user) { return require('./getMarginPosition/impl')(user) }
 
-// 29. closeMarginPosition
+// 22. closeMarginPosition
 Engine.prototype.closeMarginPosition = function (user) { return require('./closeMarginPosition/impl')(user) }
 
-// 30.
+// 23.
 Engine.prototype.createLoanOffer = function (user, currency, amount, duration, autoRenew, lendingRate, date, orderID) { return require('./createLoanOffer/impl')(user, currency, amount, duration, autoRenew, lendingRate, date, orderID, this.loanOffers) }
 
-// 31. cancelLoanOffer
+// 24. cancelLoanOffer
 Engine.prototype.cancelLoanOffer = function (user, orderNumber) { return require('./cancelLoanOffer/impl')(user, orderNumber, this.loanOffers) }
 
-// 32.
+// 25.
 Engine.prototype.returnOpenLoanOffers = function (user) { return require('./returnOpenLoanOffers/impl')(user, this.loanOffers) }
 
-// 33. returnActiveLoans
+// 26. returnActiveLoans
 Engine.prototype.returnActiveLoans = function (user) { return require('./returnActiveLoans/impl')(user) }
 
-// 34. returnLendingHistory
+// 27. returnLendingHistory
 Engine.prototype.returnLendingHistory = function (user, start, end, limit) { return require('./returnLendingHistory/impl')(user, start, end, limit, this.loanOffers) }
 
-// 35. toggleAutoRenew
+// 28. toggleAutoRenew
 Engine.prototype.toggleAutoRenew = function () { return {'success': 1, 'message': 0} }
 
 // These methods are not in the Polo API, but they are useful for this engine.

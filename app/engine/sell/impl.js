@@ -1,7 +1,15 @@
-const poloConstants = require('../../poloConstants')
+const c = require('../../poloConstants')
 const sorters = require('../sorters')
 
 module.exports = (sellOrder, engine) => {
+  // Do we have enough quoteCurrency to make this purchase?
+  // tweak this to exclude encumbered balances
+  const quoteCurrency = sellOrder.currencyPair.split('_')[1]
+  const balances = engine.returnBalances(sellOrder.apiKey, engine.deposits, engine.withdrawals)
+  const balance = (quoteCurrency in balances) ? balances[quoteCurrency] : 0
+  const total = sellOrder.amount * sellOrder.rate
+  if (total > balance) { return {'error': c.NOT_ENOUGH + ' ' + quoteCurrency + '.'} }
+
   // This is an 'ordinary' order if none of the 3 special flags are set.
   const fOrdinary = !(sellOrder.fillOrKill || sellOrder.immediateOrCancel || sellOrder.postOnly)
   const orderCurrencies = sellOrder.currencyPair.split('_')
@@ -72,7 +80,7 @@ module.exports = (sellOrder, engine) => {
       return ({orderNumber: '1', resultingTrades: newTrades})
     } else {
       // This order cannot be filled in its entirety. Error.
-      return { error: poloConstants.UNABLE_TO_FILL_ORDER_COMPLETELY }
+      return { error: c.UNABLE_TO_FILL_ORDER_COMPLETELY }
     }
   } else if (sellOrder.immediateOrCancel || fOrdinary) {
     // ordinary and immediateOrCancel orders are handled the exact same way _except_ for a minor difference.
@@ -153,7 +161,7 @@ module.exports = (sellOrder, engine) => {
 
     // 2. If there are any such buy orders then this sell order could be partially or fully executed.
     // We don't want _any_ execution so therefore fail.
-    if (n1.length > 0) { return { error: poloConstants.UNABLE_TO_PLACE_POSTONLY_ORDER_AT_THIS_PRICE } }
+    if (n1.length > 0) { return { error: c.UNABLE_TO_PLACE_POSTONLY_ORDER_AT_THIS_PRICE } }
 
     // This sell order cannot be fulfilled at all at this time.  Therefore accept the order.
     engine.orders2Sell.push(sellOrder)

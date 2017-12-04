@@ -3,6 +3,17 @@ const config = require('config')
 
 const engine = require('../tradeEngine')
 
+const makeDeposits = () => {
+  const currencyPair = config.get('testData.markets')[0]
+  const currencies = currencyPair.split('_')
+  const baseCurrency = currencies[0]
+  const quoteCurrency = currencies[1]
+
+  // In order to buy or sell anything we must first ensure sufficient funds.
+  engine.makeDeposit('me', baseCurrency, 1000)
+  engine.makeDeposit('me', quoteCurrency, 1000)
+}
+
 // An empty array of trades.
 test.serial(t => {
   engine.brainWipe()
@@ -16,6 +27,7 @@ const currencyPair = config.get('testData.markets')[0]
 // A single trade.
 test.serial(t => {
   engine.brainWipe()
+  makeDeposits()
   engine.sell({apiKey: 'me', currencyPair, dt: 1000, rate: 0.015, amount: 1})
   engine.buy({apiKey: 'me', currencyPair, dt: 1000, rate: 0.015, amount: 1})
   const actual = engine.returnCandleStick(engine.trades)
@@ -26,6 +38,7 @@ test.serial(t => {
 // Two trades at the same rate.
 test.serial(t => {
   engine.brainWipe()
+  makeDeposits()
   engine.sell({apiKey: 'me', currencyPair, dt: 1000, rate: 0.015, amount: 2})
   engine.buy({apiKey: 'me', currencyPair, dt: 1000, rate: 0.015, amount: 1})
   engine.buy({apiKey: 'me', currencyPair, dt: 1000, rate: 0.015, amount: 1})
@@ -38,6 +51,7 @@ test.serial(t => {
 // Two trades at differ ent rates, low rate first.
 test.serial(t => {
   engine.brainWipe()
+  makeDeposits()
   engine.sell({apiKey: 'me', currencyPair, dt: 1000, rate: 0.012, amount: 1})
   engine.buy({apiKey: 'me', currencyPair, dt: 1000, rate: 0.012, amount: 1})
   engine.sell({apiKey: 'me', currencyPair, dt: 1000, rate: 0.015, amount: 1})
@@ -51,6 +65,7 @@ test.serial(t => {
 // Two trades at different rates, high rate first.
 test.serial(t => {
   engine.brainWipe()
+  makeDeposits()
   engine.sell({apiKey: 'me', currencyPair, dt: 1000, rate: 0.015, amount: 1})
   engine.buy({apiKey: 'me', currencyPair, dt: 1000, rate: 0.015, amount: 1})
   engine.sell({apiKey: 'me', currencyPair, dt: 1000, rate: 0.012, amount: 1})

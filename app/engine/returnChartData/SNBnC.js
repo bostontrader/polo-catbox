@@ -13,22 +13,31 @@ The diagrams were originally created for SNB.  They don't accurately describe SN
 module.exports = (firstTradeTiming, lastTradeTiming, period, quantity, fpOffset, lpOffset) => {
   // In order to ensure that all timing created by this function > 0, we can use this timing offset.  Let's start with a timing offset = 10 periods.
   const timingOffset = period * 10
-  const market = config.get('testData.markets')[0]
+  // const market = config.get('testData.markets')[0]
   const retVal = {}
 
+  const currencyPair = config.get('testData.markets')[0]
+  const currencies = currencyPair.split('_')
+  const baseCurrency = currencies[0]
+  const quoteCurrency = currencies[1]
+
+  // In order to buy or sell anything we must first ensure sufficient funds.
+  engine.makeDeposit('others', baseCurrency, 1000)
+  engine.makeDeposit('others', quoteCurrency, 1000)
+
   /*
-  Given some collection of trades filter on market and return the candlestick info for the single period (s) that dateTime (s) appears in.  The caller should merely send the dateTime and it's this function's responsibility to determine the actual starting dateTime of the relevant period.
+  Given some collection of trades filter on currencyPair and return the candlestick info for the single period (s) that dateTime (s) appears in.  The caller should merely send the dateTime and it's this function's responsibility to determine the actual starting dateTime of the relevant period.
 
   Datetime in in seconds but the trades record ms.  So beware.
    */
-  const getExpectedCandleStick = (dateTime, period, market, trades) => {
+  const getExpectedCandleStick = (dateTime, period, currencyPair, trades) => {
     const fpDateTime = (Math.floor(dateTime / period) * period) * 1000
     const npDateTime = fpDateTime + period * 1000
     // Get the expected candlestick for the single desired period
     const relevantTrades = trades
-    // all trades for the desired market within the given time period
+    // all trades for the desired currencyPair within the given time period
       .filter(trade => (
-        trade.baseCurrency + '_' + trade.quoteCurrency === market) &&
+        trade.baseCurrency + '_' + trade.quoteCurrency === currencyPair) &&
         fpDateTime <= trade.date &&
         trade.date < npDateTime
       )
@@ -44,20 +53,20 @@ module.exports = (firstTradeTiming, lastTradeTiming, period, quantity, fpOffset,
     let rate = 0.015
     for (let i = 0; i < quantity; i++) {
       engine.desiredTradeDate = ftDateTime * 1000
-      engine.sell({apiKey: 'others', currencyPair: market, dt: ftDateTime * 1000, rate, amount: 1})
-      engine.buy({apiKey: 'others', currencyPair: market, dt: ftDateTime * 1000, rate, amount: 1})
+      engine.sell({apiKey: 'others', currencyPair, dt: ftDateTime * 1000, rate, amount: 1})
+      engine.buy({apiKey: 'others', currencyPair, dt: ftDateTime * 1000, rate, amount: 1})
 
       if (ltDateTime) {
         engine.desiredTradeDate = ltDateTime * 1000
-        engine.sell({apiKey: 'others', currencyPair: market, dt: ltDateTime * 1000, rate, amount: 1})
-        engine.buy({apiKey: 'others', currencyPair: market, dt: ltDateTime * 1000, rate, amount: 1})
+        engine.sell({apiKey: 'others', currencyPair, dt: ltDateTime * 1000, rate, amount: 1})
+        engine.buy({apiKey: 'others', currencyPair, dt: ltDateTime * 1000, rate, amount: 1})
       }
       rate += 0.001
     }
 
     let retVal = {}
-    retVal.actual = engine.returnChartData(market, fpDateTime * 1000, lpDateTime * 1000, period * 1000)
-    retVal.expected = fExpectEmpty ? [ engine.emptyCandleStick ] : [ getExpectedCandleStick(fpDateTime, period, market, engine.trades) ]
+    retVal.actual = engine.returnChartData(currencyPair, fpDateTime * 1000, lpDateTime * 1000, period * 1000)
+    retVal.expected = fExpectEmpty ? [ engine.emptyCandleStick ] : [ getExpectedCandleStick(fpDateTime, period, currencyPair, engine.trades) ]
     return retVal
   }
 
@@ -188,22 +197,22 @@ _________
     let rate = 0.015
     for (let i = 0; i < quantity; i++) {
       engine.desiredTradeDate = ftDateTime * 1000
-      engine.sell({apiKey: 'others', currencyPair: market, dt: ftDateTime * 1000, rate, amount: 1})
-      engine.buy({apiKey: 'others', currencyPair: market, dt: ftDateTime * 1000, rate, amount: 1})
+      engine.sell({apiKey: 'others', currencyPair, dt: ftDateTime * 1000, rate, amount: 1})
+      engine.buy({apiKey: 'others', currencyPair, dt: ftDateTime * 1000, rate, amount: 1})
 
       engine.desiredTradeDate = fpDateTime * 1000
-      engine.sell({apiKey: 'others', currencyPair: market, dt: fpDateTime * 1000, rate, amount: 1})
-      engine.buy({apiKey: 'others', currencyPair: market, dt: fpDateTime * 1000, rate, amount: 1})
+      engine.sell({apiKey: 'others', currencyPair, dt: fpDateTime * 1000, rate, amount: 1})
+      engine.buy({apiKey: 'others', currencyPair, dt: fpDateTime * 1000, rate, amount: 1})
 
       engine.desiredTradeDate = ltDateTime * 1000
-      engine.sell({apiKey: 'others', currencyPair: market, dt: ltDateTime * 1000, rate, amount: 1})
-      engine.buy({apiKey: 'others', currencyPair: market, dt: ltDateTime * 1000, rate, amount: 1})
+      engine.sell({apiKey: 'others', currencyPair, dt: ltDateTime * 1000, rate, amount: 1})
+      engine.buy({apiKey: 'others', currencyPair, dt: ltDateTime * 1000, rate, amount: 1})
 
       rate += 0.001
     }
 
-    retVal.actual = engine.returnChartData(market, fpDateTime * 1000, lpDateTime * 1000, period * 1000)
-    retVal.expected = [ getExpectedCandleStick(fpDateTime, period, market, engine.trades) ]
+    retVal.actual = engine.returnChartData(currencyPair, fpDateTime * 1000, lpDateTime * 1000, period * 1000)
+    retVal.expected = [ getExpectedCandleStick(fpDateTime, period, currencyPair, engine.trades) ]
     return retVal
   }
 
