@@ -1,4 +1,4 @@
 module.exports = (engine) => {
-  // Ready for the Engine
+  // This API endpoint does not have any parameters, so there's nothing to do here.  Ready for the Engine.
   return engine.returnCurrencies()
 }

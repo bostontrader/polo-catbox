@@ -1,5 +1,4 @@
 const test = require('ava')
 
-test.serial(t => {
-  t.pass()
-})
+// This API endpoint does not have any parameters, so there's nothing to test here.
+test(t => { t.pass() })

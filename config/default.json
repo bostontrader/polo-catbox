@@ -17,13 +17,11 @@
 
     "currencies": {
       "BTC":{"id":28,"name":"Bitcoin","txFee":"0.00010000","minConf":1,"depositAddress":null,"disabled":0,"delisted":0,"frozen":0},
-      "CLAM":{"id":43,"name":"CLAMS","txFee":"0.00100000","minConf":6,"depositAddress":null,"disabled":0,"delisted":0,"frozen":0},
       "ETH":{"id":267,"name":"Ethereum","txFee":"0.00500000","minConf":45,"depositAddress":null,"disabled":0,"delisted":0,"frozen":0},
       "LTC":{"id":125,"name":"Litecoin","txFee":"0.00100000","minConf":4,"depositAddress":null,"disabled":0,"delisted":0,"frozen":0},
-      "BTM":{"id":31,"name":"Bitmark","txFee":"0.01000000","minConf":12,"depositAddress":null,"disabled":1,"delisted":0,"frozen":0},
-      "AEON":{"id":6,"name":"AEON Coin","txFee":"0.01000000","minConf":10,"depositAddress":"WmrzAb4yy6i4otzaTZznsmaeBn8UKoBqS14XdW2DDzXr3DQnwz4o1XPJAJuo7QTqSoD9WVrdEQfn15udzhsJWmNR1jAEETQ2N","disabled":0,"delisted":1,"frozen":0}
+      "CLAM":{"id":43,"name":"CLAMS","txFee":"0.00100000","minConf":6,"depositAddress":null,"disabled":0,"delisted":0,"frozen":0}
     },
 
-    "markets": ["BTC_LTC", "BTC_ETH", "ETC_CLAM"]
+    "markets": ["BTC_LTC", "BTC_ETH", "ETH_CLAM"]
   }
 }
