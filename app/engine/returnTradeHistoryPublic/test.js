@@ -19,7 +19,7 @@ const tradeDate1 = 86400 // 1970-01-02 00:00:00
 const tradeDate2 = 108000 // 1970-01-02 06:00:00
 
 // 1. A market with zero trades is something we'll never likely see in the wild.  Nevertheless, for purposes of completeness, I will venture a guess as to a reasonable reply.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   actual = engine.returnTradeHistoryPublic(currencyPair, 0, 9999999999)
   expected = []
@@ -27,7 +27,7 @@ test.serial(t => {
 })
 
 // 2. A market with a single trade.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   // In order to buy or sell anything we must first ensure sufficient funds.
   engine.makeDeposit('others', baseCurrency, 100)
@@ -45,7 +45,7 @@ test.serial(t => {
 })
 
 // 3. A market with a two trades.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -71,7 +71,7 @@ test.serial(t => {
 })
 
 // 4. Two markets with two trades each.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -102,7 +102,7 @@ test.serial(t => {
 })
 
 // Make a trade and verify that it's in the history
-test.serial(t => {
+test(t => {
   // let actual, expected
   // const currencyPair = currencyPair
 

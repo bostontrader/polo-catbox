@@ -4,7 +4,7 @@ const engine = require('../../engine/tradeEngine')
 const returnTradeHistoryPublic = require('./impl')
 const c = require('../../poloConstants')
 
-test.serial(t => {
+test(t => {
   let actual, expected
   let mockRequestBody
 

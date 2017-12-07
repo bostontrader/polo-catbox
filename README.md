@@ -35,6 +35,7 @@ seq | name
 01 | returnTicker
 02 | return24Volume
 03 | returnOrderBook
+04 | returnTradeHistory
 
 The presently supported trading API endpoints are:
 

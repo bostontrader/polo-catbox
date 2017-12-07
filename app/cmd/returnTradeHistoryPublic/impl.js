@@ -21,5 +21,5 @@ module.exports = (reqQuery, engine) => {
   if (end < 0) { return {'error': c.returnTradeHistoryPublic.INVALID_END_TIME} }
 
   // Ready for the Engine
-  return engine.returnTradeHistoryPrivate(reqQuery.currencyPair, start, end)
+  return engine.returnTradeHistoryPublic(reqQuery.currencyPair, start, end)
 }

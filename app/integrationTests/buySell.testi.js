@@ -19,6 +19,7 @@ const getPrivateHeaders = function (parameters) {
 
 const u = config.get('url')
 const baseURL = u.protocol + '://' + u.host + (u.port ? ':' + u.port : '')
+const publicURL = baseURL + '/public'
 
 const tradingAPIOptions = {
   method: 'POST',
@@ -62,6 +63,15 @@ test.serial(async t => {
     .then((html) => {
       const actual = JSON.parse(html)
       const expected = {orderNumber: '1', resultingTrades: []}
+      t.deepEqual(actual, expected)
+      return Promise.resolve(true)
+    })
+    .then((html) => {
+      return rp(publicURL + '?command=returnTradeHistoryPublic&currencyPair=' + config.get('testData.markets')[0])
+    })
+    .then((html) => {
+      const actual = JSON.parse(html)
+      const expected = []
       t.deepEqual(actual, expected)
       return Promise.resolve(true)
     })
