@@ -9,7 +9,7 @@ const config = require('config')
 const engine = require('../tradeEngine')
 const sorters = require('../sorters')
 
-test.serial(t => {
+test(t => {
   let actual, expected
   const currencyPair = config.get('testData.markets')[0]
   const currencies = currencyPair.split('_')

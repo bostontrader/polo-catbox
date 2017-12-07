@@ -4,15 +4,13 @@ const config = require('config')
 
 const engine = require('../tradeEngine')
 
-let actual, expected
-
 const currencyPair = config.get('testData.markets')[0]
 const currencies = currencyPair.split('_')
 const baseCurrency = currencies[0]
 const quoteCurrency = currencies[1]
 
 // 1. A ticker for a market with zero trades is something we'll never likely see in the wild.  Nevertheless, for purposes of completeness, I will venture a guess as to a reasonable reply.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   const n = engine.returnTicker(config.get('testData.markets'))
 
@@ -38,7 +36,7 @@ test.serial(t => {
 })
 
 // 2. A ticker for a single market with only a single buy order.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -63,7 +61,7 @@ test.serial(t => {
 })
 
 // 3. A ticker for a single market with two buy orders. Does the highest bid sort to the top?
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -88,7 +86,7 @@ test.serial(t => {
 })
 
 // 4. A ticker for a single market with only a single sell order.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -113,7 +111,7 @@ test.serial(t => {
 })
 
 // 5. A ticker for a single market with two sell orders. Does the lowest bid sort to the top?
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -139,7 +137,7 @@ test.serial(t => {
 })
 
 // 6. A single trade for a single market.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -166,7 +164,7 @@ test.serial(t => {
 })
 
 // 7. Two trades for a single market.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.

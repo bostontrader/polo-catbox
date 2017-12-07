@@ -5,7 +5,7 @@ const config = require('config')
 const engine = require('../tradeEngine')
 
 // 1. Volume for a market with zero trades is something we'll never likely see in the wild.  Nevertheless, for purposes of completeness, I will venture a guess as to a reasonable reply.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   const actual = engine.return24Volume()
   const expected = { totalBTC: 0, totalETH: 0, totalXMR: 0, totalUSDT: 0, totalXUSD: 0 }
@@ -14,7 +14,7 @@ test.serial(t => {
 })
 
 // 2. Volume for a market with trades.
-test.serial(t => {
+test(t => {
   let actual, expected
   const currencyPair = config.get('testData.markets')[0]
   const currencies = currencyPair.split('_')

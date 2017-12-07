@@ -16,8 +16,6 @@ restifyCore.use(restify.plugins.bodyParser())
 
 module.exports = {
   start: async () => {
-    engine.brainWipe()
-
     // This is the route for the public API.  No signature gyrations here.
     restifyCore.get('/' + 'public', (req, res, next) => {
       switch (req.query.command) {
@@ -56,8 +54,8 @@ module.exports = {
           /* 06 */ case 'returnOpenOrders': { res.json(require('./cmd/returnOpenOrders/impl')(req, engine)); break }
           /* 07 */ case 'returnTradeHistory': { res.json(require('./cmd/returnTradeHistoryPrivate/impl')(req, engine)); break }
           /* 08 */
-          /* 09 */ case 'buy': { res.json(require('./cmd/buy/impl')(req, engine)); break }
-          /* 10 */ case 'sell': { res.json(require('./cmd/sell/impl')(req, engine)); break }
+          /* 09 */ case 'buy': { res.json(require('./cmd/buy/impl')(key, req.body, engine)); break }
+          /* 10 */ case 'sell': { res.json(require('./cmd/sell/impl')(key, req.body, engine)); break }
 
           default:
             res.json({'error': c.INVALID_COMMAND})
@@ -79,5 +77,13 @@ module.exports = {
 
   stop: async () => {
     restifyCore.close()
+  },
+
+  brainWipe: async () => {
+    engine.brainWipe()
+  },
+
+  getEngine: () => {
+    return engine
   }
 }

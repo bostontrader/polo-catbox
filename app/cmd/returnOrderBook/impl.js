@@ -18,5 +18,5 @@ module.exports = (reqQuery, engine) => {
   }
 
   // Ready for the Engine
-  return engine.returnOrderBook(reqQuery.currencyPair, depth, engine)
+  return engine.returnOrderBook(reqQuery.currencyPair, depth)
 }

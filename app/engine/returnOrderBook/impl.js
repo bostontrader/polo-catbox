@@ -1,11 +1,11 @@
 const config = require('config')
 const sorters = require('../sorters')
 
-module.exports = (currencyPair, depth, engine) => {
+module.exports = (currencyPair, depth, orders2Buy, orders2Sell, desiredOrderBookSeq) => {
 
   let retVal = {}
   config.get('testData.markets').forEach(market => {
-    retVal[market] = {'asks': [], 'bids': [], 'isFrozen': '0', 'seq': engine.desiredOrderBookSeq}
+    retVal[market] = {'asks': [], 'bids': [], 'isFrozen': '0', 'seq': desiredOrderBookSeq}
   })
 
   let depthElement
@@ -81,8 +81,8 @@ module.exports = (currencyPair, depth, engine) => {
   }
 
   if (depth > 0) {
-    retVal = analyzeOrders(engine.orders2Buy, sorters.sortCurPairAscRateDescDatetimeAsc, retVal, 'bids', depth)
-    retVal = analyzeOrders(engine.orders2Sell, sorters.sortCurPairAscRateAscDatetimeAsc, retVal, 'asks', depth)
+    retVal = analyzeOrders(orders2Buy, sorters.sortCurPairAscRateDescDatetimeAsc, retVal, 'bids', depth)
+    retVal = analyzeOrders(orders2Sell, sorters.sortCurPairAscRateAscDatetimeAsc, retVal, 'asks', depth)
   }
 
   return currencyPair === 'all' ? retVal : retVal[currencyPair]

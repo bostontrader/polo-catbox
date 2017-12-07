@@ -11,7 +11,7 @@ const baseCurrency = currencies[0]
 const quoteCurrency = currencies[1]
 
 // 1. The order book for a market with zero orders is something we'll never likely see in the wild.  Nevertheless, for purposes of completeness, I will venture a guess as to a reasonable reply.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   engine.desiredOrderBookSeq = 888
   actual = engine.returnOrderBook(config.get('testData.markets')[0], 0)
@@ -20,7 +20,7 @@ test.serial(t => {
 })
 
 // 2. A market with a single buy order.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -41,7 +41,7 @@ test.serial(t => {
 })
 
 // 3. A market with a two buy orders at the same price.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -63,7 +63,7 @@ test.serial(t => {
 })
 
 // 4. A market with a two buy orders at different prices.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -84,7 +84,7 @@ test.serial(t => {
 })
 
 // 5. A market with a single sell order.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -104,7 +104,7 @@ test.serial(t => {
 })
 
 // 6. A market with a two sell orders at the same price.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -125,7 +125,7 @@ test.serial(t => {
 })
 
 // 7. A market with a two sell orders at different prices.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.
@@ -146,7 +146,7 @@ test.serial(t => {
 })
 
 // 8. Depth testing.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // In order to buy or sell anything we must first ensure sufficient funds.

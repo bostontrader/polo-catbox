@@ -1,3 +1,5 @@
+const config = require('config')
+
 function Engine () {
   this.brainWipe()
 }
@@ -6,6 +8,7 @@ Engine.prototype.brainWipe = function () {
   this.deposits = []
   this.loanOffers = []
   this.loanDemands = []
+  this.markets = config.get('testData.markets')
   this.orders2Buy = []
   this.orders2Sell = []
   this.trades = []
@@ -35,13 +38,13 @@ Engine.prototype.emptyCandleStick = {date: 0, high: 0, low: 0, open: 0, close: 0
 // PUBLIC API
 // 1.
 Engine.prototype.returnTicker =
-  function (markets) { return require('./returnTicker/impl')(markets, this.orders2Buy, this.orders2Sell, this.trades) }
+  function () { return require('./returnTicker/impl')(this.markets, this.orders2Buy, this.orders2Sell, this.trades) }
 
 // 2.
 Engine.prototype.return24Volume = function () { return require('./return24Volume/impl')(this.trades) }
 
 // 3.
-Engine.prototype.returnOrderBook = function (currencyPair, depth) { return require('./returnOrderBook/impl')(currencyPair, depth, this) }
+Engine.prototype.returnOrderBook = function (currencyPair, depth) { return require('./returnOrderBook/impl')(currencyPair, depth, this.orders2Buy, this.orders2Sell, this.desiredOrderBookSeq) }
 
 // 4. The public and private API have the identically named methods, which are conceptually simple, but substantially different.  Thus we really want two methods in the Engine.  See #14.
 Engine.prototype.returnTradeHistoryPublic = function (currencyPair, start, end) { return require('./returnTradeHistoryPublic/impl')(currencyPair, start, end, this.trades) }

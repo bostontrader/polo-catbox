@@ -7,7 +7,7 @@ const config = require('config')
 const engine = require('../tradeEngine')
 const c = require('../../poloConstants')
 
-test.serial(t => {
+test(t => {
   const currencyPair = config.get('testData.markets')[0]
   const currencies = currencyPair.split('_')
   const quoteCurrency = currencies[1]

@@ -143,7 +143,7 @@ let start, end
 
 test.serial(t => {
   Object.keys(c.startNend28).forEach(sne28 => {
-    console.log('cnt=', cnt, 'sne=', c.startNend28[sne28].p, 'sne28=', sne28)
+    // console.log('cnt=', cnt, 'sne=', c.startNend28[sne28].p, 'sne28=', sne28)
 
     // We only want to run this test one time.  Catch it here first.
     if (c.startNend28[sne28].p === c.startNend.SNA) {
@@ -162,7 +162,7 @@ test.serial(t => {
         Object.keys(c.lastTradeTiming).forEach(lastTradeTiming => {
           c.periods.forEach(period => {
             c.quanTrades.forEach(quantity => {
-              console.log('cnt=', cnt, firstTradeTiming, lastTradeTiming, 'p=', period, 'q=', quantity)
+              // console.log('cnt=', cnt, firstTradeTiming, lastTradeTiming, 'p=', period, 'q=', quantity)
               engine.brainWipe()
               results = {}
               if (quantity === 0) {

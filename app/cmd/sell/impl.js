@@ -1,15 +1,15 @@
 const config = require('config')
 const c = require('../../poloConstants')
 
-module.exports = (reqQuery, engine) => {
-  if (Object.keys(reqQuery).length === 0) { return {'error': c.TOTAL_MUST_BE_AT_LEAST_0_0001} }
+module.exports = (key, reqBody, engine) => {
+  if (Object.keys(reqBody).length === 0) { return {'error': c.TOTAL_MUST_BE_AT_LEAST_0_0001} }
 
-  const currencyPair = ('currencyPair' in reqQuery) ? reqQuery.currencyPair : undefined
-  const rate = ('rate' in reqQuery) ? reqQuery.rate : 0
-  const amount = ('amount' in reqQuery) ? reqQuery.amount : 0
-  const fillOrKill = ('fillOrKill' in reqQuery) ? reqQuery.fillOrKill : undefined
-  const immediateOrCancel = ('immediateOrCancel' in reqQuery) ? reqQuery.immediateOrCancel : undefined
-  const postOnly = ('postOnly' in reqQuery) ? reqQuery.postOnly : undefined
+  const currencyPair = ('currencyPair' in reqBody) ? reqBody.currencyPair : undefined
+  const rate = ('rate' in reqBody) ? reqBody.rate : 0
+  const amount = ('amount' in reqBody) ? reqBody.amount : 0
+  const fillOrKill = ('fillOrKill' in reqBody) ? reqBody.fillOrKill : undefined
+  const immediateOrCancel = ('immediateOrCancel' in reqBody) ? reqBody.immediateOrCancel : undefined
+  const postOnly = ('postOnly' in reqBody) ? reqBody.postOnly : undefined
 
   if (isNaN(parseFloat(rate))) return {'error': c.INVALID_RATE_PARAMETER}
   if (isNaN(parseFloat(amount))) return {'error': c.INVALID_AMOUNT_PARAMETER}
@@ -28,5 +28,5 @@ module.exports = (reqQuery, engine) => {
   if (fillOrKill ? 1 : 0 + immediateOrCancel ? 1 : 0 + postOnly ? 1 : 0 > 1) { return {'error': c.NO_MORE_THAN_ONE} }
 
   // Ready for the Engine
-  return engine.returnTradeHistoryPrivate(reqQuery.currencyPair)
+  return engine.sell({apiKey: key, currencyPair, rate, amount, fillOrKill, immediateOrCancel, postOnly}, engine)
 }

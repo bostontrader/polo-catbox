@@ -26,6 +26,23 @@ $ npm start
 
 ```npm start``` will start an HTTP server that does its best to mimic the Poloniex server.  Because **polo-catbox** is new and under development, it presently does not fully mimic all of the API endpoints.  At present, it also does not support the push API.
 
+More particularly:
+
+The presently supported public API endpoints are:
+
+seq | name
+---|---
+01 | returnTicker
+02 | return24Volume
+03 | returnOrderBook
+
+The presently supported trading API endpoints are:
+
+seq | name
+---|---
+09 | buy
+10 | sell
+
 **polo-catbox** uses [restify](https://github.com/restify/node-restify) to implement the server.  It uses [config](https://github.com/lorenwest/node-config) to manage run-time configuration.  Both of these are very malleable but their care and feeding is outside the scope of this document.  If you need fancy features in either of these departments, please consult the relevant documentation.
 
 When the server is started it will by default tell you that it's "listening at http://[::]:3003"  This means that HTTP requests to http://localhost:3003 or http://127.0.0.1:3003 should work.  You should also be able to access this sever over the network, given the IP of the machine it is running on.  The port is configurable.
@@ -43,14 +60,14 @@ Another issue is that we cannot actually perform all desired operations on the s
 
 Another issue is how carefully should we test API results.  Is an examination of the shape enough or shall we inspect the contents as well?  Should we count the elements in an array?  How do we know how many to expect?  Should we examine the shape of the array elements also?  Should we examine the actual content of each array element?  And in the case where results are aggregates such as sums of many trades, how do we know what the expected values should be?
 
-What about server assigned ids and dates? How shall we test that?
+What about server assigned ids and dates? How shall we test those?
 
 A final and related issue is where to draw the line with testing.  You obviously want to test your software, but you want to avoid testing Polo's software.  Or do you?  The API docs are rather sparse and have a variety of errors and blind spots in them.  We might want to do some characterization testing.  If you are sending queries but not receiving expected results, perhaps you're tripping over some of these issues.
 
 
 # And even further down the rabbit hole..
 
-The server accepts HTTP requests and creates appropriate replies.  It's not feasible to just use static data to mimic the real server.  So the Catbox has a rudimentary trading engine that can accept buy and sell orders, do trading, manage loans, etc.  This architecture presents some challenges.
+The server accepts HTTP requests and creates appropriate replies.  It's not feasible to just use static data to mimic the real server.  So the Catbox has a rudimentary trading engine that can accept buy and sell orders, do trading, manage loans, make war, levy peace, etc.  This architecture presents some challenges.
 
 The first problem is to decide where to implement the various elements of functionality.  For example, I think it's obvious that the trading engine ought to be in charge of accumulating trade orders and implementing trades.  But should it also deal with input parameter validation?
 
@@ -71,6 +88,14 @@ After much wringing of hands, gnashing of teeth, and general agonization, I have
 * The trade engine therefore omits most parameter checking (and testing of) and hopes that the server does its job.
 
 * The trade engine has a fairly elaborate set of tests for the basic functionality, minus parameter checking.
+
+# Few Additional Words on Testing
+
+For each of the API endpoints that the server supports, we need have two basic tests.  The unit test for the Engine's implementation and a Unit test for the Server's implementation.
+
+We also have a collection of integration tests that start the server, submit a variety of HTML requests to it, and validate the results.  The plumbing that connects the server to its implementation and thence to the Engine's implementation is not otherwise tested via unit testing, and thus we need this integration testing.
+
+I said that we "have a collection" of integration tests, not "an integration test for each endpoint."  Attempting to provide the latter would entail a signficant amount of over-testing, especially considering the gyrations required to push the server into the desired state.  In my opinion, it's better to have a smaller group of integration tests that work a cluster of related functions at the same time.
 
 
 # API Key and Secret
@@ -155,5 +180,7 @@ It's tempting to configure this app to send the queries to the real Polo server,
 
 # Tipjar
 BTC: 1NyKNEAiF5VfSivXi9C9sXbsThpYjz1RUE
+
 LTC: LQiT8imDmeQgErJsohA5DJhXYF2rMkcku8
+
 CLAM: xQs7jvwin9SPy3oBjQyrYTNCZp62pp1qzU

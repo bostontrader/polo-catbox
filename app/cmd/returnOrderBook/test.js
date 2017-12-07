@@ -4,7 +4,7 @@ const engine = require('../../engine/tradeEngine')
 const returnOrderBook = require('./impl')
 const c = require('../../poloConstants')
 
-test.serial(t => {
+test(t => {
   let actual, expected
 
   // The API parameters should be in the request object body.  Let's make a mockRequestBody.
