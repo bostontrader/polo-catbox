@@ -1,6 +1,8 @@
 module.exports = (user, start, end, deposits, withdrawals) => {
+  const relevantDeposits = deposits.filter(deposit => deposit.user === user && start <= deposit.datetime && deposit.datetime <= end)
+
   return {
-    deposits: deposits.filter(deposit => deposit.user === user && start <= deposit.datetime && deposit.datetime <= end)
+    deposits: relevantDeposits
       .map(deposit => {
         return {
           currency: deposit.currency,

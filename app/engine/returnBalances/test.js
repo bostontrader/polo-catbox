@@ -4,7 +4,7 @@ const test = require('ava')
 const engine = require('../tradeEngine')
 
 // This test only tests the shape of the returned balances.  Other methods that affect the balance will test that the balance is changed, when said method is invoked.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   const balances = engine.returnBalances('me')
 

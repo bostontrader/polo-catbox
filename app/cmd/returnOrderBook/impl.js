@@ -5,8 +5,10 @@ module.exports = (reqQuery, engine) => {
   // 1. Must have a currencyPair parameter
   if (!('currencyPair' in reqQuery)) { return {'error': c.PLEASE_SPECIFY_A_CURRENCY_PAIR} }
 
+  const currencyPair = reqQuery.currencyPair
+
   // 2. The currencyPair must be in the list of valid markets _or_ 'all'
-  if (config.get('testData.markets').indexOf(reqQuery.currencyPair) === -1 && reqQuery.currencyPair !== 'all') return {'error': c.INVALID_CURRENCY_PAIR}
+  if (config.get('testData.markets').indexOf(currencyPair) === -1 && currencyPair !== 'all') return {'error': c.INVALID_CURRENCY_PAIR}
 
   // 3. If depth is present it should be parseable to an integer.  If not, then set a default.
   let depth
@@ -18,5 +20,5 @@ module.exports = (reqQuery, engine) => {
   }
 
   // Ready for the Engine
-  return engine.returnOrderBook(reqQuery.currencyPair, depth)
+  return engine.returnOrderBook(currencyPair, depth)
 }

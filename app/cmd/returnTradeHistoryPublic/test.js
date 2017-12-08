@@ -17,7 +17,7 @@ test(t => {
   t.deepEqual(actual, expected)
 
   // 2. The currencyPair must be in the list of markets
-  mockRequestBody = {currenyPair: 'catfood'}
+  mockRequestBody = {currencyPair: 'catfood'}
   actual = returnTradeHistoryPublic(mockRequestBody, engine)
   expected = {'error': c.INVALID_CURRENCY_PAIR}
   t.deepEqual(actual, expected)
@@ -43,6 +43,13 @@ test(t => {
   actual = returnTradeHistoryPublic(mockRequestBody, engine)
   expected = {'error': c.returnTradeHistoryPublic.INVALID_END_TIME}
   t.deepEqual(actual, expected)
+
+  // 5. All other params are good, but no currencyPair.
+  mockRequestBody = {start: 0, end: 1000}
+  actual = returnTradeHistoryPublic(mockRequestBody, engine)
+  expected = {'error': c.INVALID_CURRENCY_PAIR}
+  t.deepEqual(actual, expected)
+  // {"error":"Please specify a currency pair."} <- sb this
 
   // {currencyPair: config.get('testData.markets')[0], start: '-1'}
   // {"error":"Please specify a time window of no more than 1 month."}

@@ -3,7 +3,7 @@ const test = require('ava')
 
 const engine = require('../tradeEngine')
 
-test.serial(t => {
+test(t => {
   const currencies = engine.returnCurrencies()
 
   // 1. is the main result an object?

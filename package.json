@@ -48,10 +48,10 @@
   },
   "scripts": {
     "test": "ava --serial './app/integrationTests/*testi.js' && nyc ava './app/**/*test.js' ",
-    "test2": "nyc ava './app/engine/returnTradeHistoryPublic/*test.js'",
-    "test3": "ava --serial './app/integrationTests/returnCurrencies.testi.js'  ",
+    "test2": "nyc ava './app/cmd/returnDepositsWithdrawals/*test.js'",
+    "test3": "ava --serial './app/integrationTests/buySell.testi.js'  ",
 
     "start": "node startServer.js"
   },
-  "version": "0.4.1"
+  "version": "0.4.2"
 }
