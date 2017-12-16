@@ -52,5 +52,5 @@
     "test3": "ava --serial './app/integrationTests/returnChartData.testi.js'  ",
     "start": "node app/startServer.js"
   },
-  "version": "0.4.3"
+  "version": "0.4.4"
 }
