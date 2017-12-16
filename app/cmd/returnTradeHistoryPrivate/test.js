@@ -3,7 +3,7 @@ const engine = require('../../engine/tradeEngine')
 const returnTradeHistoryPrivate = require('./impl')
 const c = require('../../poloConstants')
 
-test.serial(t => {
+test(t => {
   let actual, expected
   let mockRequest
 
@@ -21,23 +21,23 @@ test.serial(t => {
   // 2. Must have a currencyPair parameter.
   mockRequest = {body: {start: 'a'}}
   actual = returnTradeHistoryPrivate(mockRequest, engine)
-  expected = {'error': c.REQUIRED_PARAMETER_MISSING}
+  expected = {error: c.returnTradeHistoryPrivate.REQUIRED_PARAMETER_MISSING}
   t.deepEqual(actual, expected)
 
   // 3. Whichever numeric parameter is not an integer is bad.
   mockRequest = {body: {currencyPair: 'all', start: 'a'}}
   actual = returnTradeHistoryPrivate(mockRequest, engine)
-  expected = {'error': c.returnTradeHistoryPrivate.INVALID_START_PARAMETER}
+  expected = {error: c.returnTradeHistoryPrivate.INVALID_START_PARAMETER}
   t.deepEqual(actual, expected)
 
   mockRequest = {body: {currencyPair: 'all', end: 'a'}}
   actual = returnTradeHistoryPrivate(mockRequest, engine)
-  expected = {'error': c.returnTradeHistoryPrivate.INVALID_END_PARAMETER}
+  expected = {error: c.returnTradeHistoryPrivate.INVALID_END_PARAMETER}
   t.deepEqual(actual, expected)
 
   mockRequest = {body: {currencyPair: 'all', limit: 'a'}}
   actual = returnTradeHistoryPrivate(mockRequest, engine)
-  expected = {'error': c.returnTradeHistoryPrivate.INVALID_LIMIT_PARAMETER}
+  expected = {error: c.returnTradeHistoryPrivate.INVALID_LIMIT_PARAMETER}
   t.deepEqual(actual, expected)
 
   // If there are really any relevant trades in the history, and the parameters are properly set, then testing that is a job for the Engine's implementation of returnTradeHistoryPrivate

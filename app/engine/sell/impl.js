@@ -8,7 +8,7 @@ module.exports = (sellOrder, engine) => {
   const balances = engine.returnBalances(sellOrder.apiKey, engine.deposits, engine.withdrawals)
   const balance = (quoteCurrency in balances) ? balances[quoteCurrency] : 0
   const total = sellOrder.amount * sellOrder.rate
-  if (total > balance) { return {'error': c.NOT_ENOUGH + ' ' + quoteCurrency + '.'} }
+  if (total > balance) { return {error: c.NOT_ENOUGH + ' ' + quoteCurrency + '.'} }
 
   // This is an 'ordinary' order if none of the 3 special flags are set.
   const fOrdinary = !(sellOrder.fillOrKill || sellOrder.immediateOrCancel || sellOrder.postOnly)

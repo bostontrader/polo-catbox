@@ -2,7 +2,7 @@ const test = require('ava')
 const engine = require('../tradeEngine')
 const c = require('../../poloConstants')
 
-test.serial(t => {
+test(t => {
   let actual, expected
   engine.brainWipe()
 

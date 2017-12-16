@@ -5,7 +5,7 @@ module.exports = (req, engine) => {
   if (Object.keys(req.body).length === 0) return []
 
   // If there is no currencyPair parameters, error
-  if (!('currencyPair' in req.body)) { return {'error': c.REQUIRED_PARAMETER_MISSING} }
+  if (!('currencyPair' in req.body)) { return {error: c.returnTradeHistoryPrivate.REQUIRED_PARAMETER_MISSING} }
 
   // Set missing numeric parameters to defaults.
   const start = ('start' in req.body) ? parseInt(req.body.start) : 0
@@ -13,9 +13,9 @@ module.exports = (req, engine) => {
   const limit = ('limit' in req.body) ? parseInt(req.body.limit) : 9999999 // supposed to mean no limit
 
   // 1. The parameters must be integers
-  if (isNaN(start)) { return {'error': c.returnTradeHistoryPrivate.INVALID_START_PARAMETER} }
-  if (isNaN(end)) { return {'error': c.returnTradeHistoryPrivate.INVALID_END_PARAMETER} }
-  if (isNaN(limit)) { return {'error': c.returnTradeHistoryPrivate.INVALID_LIMIT_PARAMETER} }
+  if (isNaN(start)) { return {error: c.returnTradeHistoryPrivate.INVALID_START_PARAMETER} }
+  if (isNaN(end)) { return {error: c.returnTradeHistoryPrivate.INVALID_END_PARAMETER} }
+  if (isNaN(limit)) { return {error: c.returnTradeHistoryPrivate.INVALID_LIMIT_PARAMETER} }
 
   // 2. Ready for the Engine
   return engine.returnTradeHistoryPrivate(req.headers.key, req.body.currencyPair, start, end, limit)

@@ -23,11 +23,11 @@ module.exports = {
         /* 02 */ case 'return24Volume': { res.json(require('./cmd/return24Volume/impl')(engine)); break }
         /* 03 */ case 'returnOrderBook': { res.json(require('./cmd/returnOrderBook/impl')(req.query, engine)); break }
         /* 04 */ case 'returnTradeHistoryPublic': { res.json(require('./cmd/returnTradeHistoryPublic/impl')(req.query, engine)); break }
-        /* 05 */ // case 'returnChartData': { res.json(require('./cmd/returnChartData/impl')(req.query, engine)); break }
+        /* 05 */ case 'returnChartData': { res.json(require('./cmd/returnChartData/impl')(req.query, engine)); break }
         /* 06 */ case 'returnCurrencies': { res.json(require('./cmd/returnCurrencies/impl')(engine)); break }
         /* 07 */ // case 'returnLoanOrders': { res.json(require('./cmd/returnLoanOrders/impl')(engine)); break }
         default:
-          res.json({'error': c.INVALID_COMMAND})
+          res.json({error: c.INVALID_COMMAND})
       }
       next()
     })
@@ -57,8 +57,11 @@ module.exports = {
           /* 09 */ case 'buy': { res.json(require('./cmd/buy/impl')(apiKey, req.body, engine)); break }
           /* 10 */ case 'sell': { res.json(require('./cmd/sell/impl')(apiKey, req.body, engine)); break }
 
+          // Catbox Extra
+          /* 02 */ case 'makeDeposit': { res.json(require('./cmd/makeDeposit/impl')(apiKey, req.body, engine)); break }
+
           default:
-            res.json({'error': c.INVALID_COMMAND})
+            res.json({error: c.INVALID_COMMAND})
         }
         next()
       } else {

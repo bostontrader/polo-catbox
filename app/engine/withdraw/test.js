@@ -17,7 +17,7 @@ but only for the expected user and only for the expected currency.
 (c = change, nc = no change)
  */
 
-test.serial(t => {
+test(t => {
   const verifyBalances = () => {
     verifySingleBalance('me', meBalance1, currency1)
     verifySingleBalance('me', meBalance2, currency2)

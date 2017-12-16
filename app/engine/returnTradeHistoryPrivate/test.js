@@ -2,7 +2,7 @@ const test = require('ava')
 const config = require('config')
 const engine = require('../../engine/tradeEngine')
 
-test.serial(t => {
+test(t => {
   let actual, expected
 
   const currencyPair = config.get('testData.markets')[0]

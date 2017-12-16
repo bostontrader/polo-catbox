@@ -13,6 +13,6 @@ const test = require('ava')
 // offer element: {"rate":"0.00005800","amount":"131.68367848","rangeMin":2,"rangeMax":2}
 // demand element: the same
 
-test.serial(t => {
+test(t => {
   t.pass()
 })

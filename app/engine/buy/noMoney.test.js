@@ -14,6 +14,6 @@ test(t => {
 
   // 1. Try to buy anything.  There's not enough money in the account, so error.
   const actual = engine.buy({apiKey: 'me', currencyPair, dt: 2000, rate: 0.019, amount: 1.0})
-  const expected = {'error': c.NOT_ENOUGH + ' ' + baseCurrency + '.'}
+  const expected = {error: c.buy.NOT_ENOUGH + ' ' + baseCurrency + '.'}
   t.deepEqual(actual, expected)
 })

@@ -2,7 +2,7 @@ const test = require('ava')
 
 const engine = require('../tradeEngine')
 
-test.serial(t => {
+test(t => {
   engine.brainWipe()
 
   // 1. In order to make a loan offer we must first have some currency to loan.

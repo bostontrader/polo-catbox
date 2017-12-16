@@ -1,5 +1,5 @@
 const test = require('ava')
 
-test.serial(t => {
+test(t => {
   t.pass()
 })

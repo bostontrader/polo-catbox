@@ -2,7 +2,7 @@ const config = require('config')
 const c = require('../../poloConstants')
 
 module.exports = (key, reqBody, engine) => {
-  if (Object.keys(reqBody).length === 0) { return {'error': c.TOTAL_MUST_BE_AT_LEAST_0_0001} }
+  if (Object.keys(reqBody).length === 0) { return {error: c.buy.TOTAL_MUST_BE_AT_LEAST_0_0001} }
 
   const currencyPair = ('currencyPair' in reqBody) ? reqBody.currencyPair : undefined
   const rate = ('rate' in reqBody) ? reqBody.rate : 0
@@ -11,21 +11,21 @@ module.exports = (key, reqBody, engine) => {
   const immediateOrCancel = ('immediateOrCancel' in reqBody) ? reqBody.immediateOrCancel : undefined
   const postOnly = ('postOnly' in reqBody) ? reqBody.postOnly : undefined
 
-  if (isNaN(parseFloat(rate))) return {'error': c.INVALID_RATE_PARAMETER}
-  if (isNaN(parseFloat(amount))) return {'error': c.INVALID_AMOUNT_PARAMETER}
+  if (isNaN(parseFloat(rate))) return {error: c.buy.INVALID_RATE_PARAMETER}
+  if (isNaN(parseFloat(amount))) return {error: c.buy.INVALID_AMOUNT_PARAMETER}
 
-  if (rate < 0) return {'error': c.INVALID_RATE_PARAMETER}
-  if (amount < 0) return {'error': c.INVALID_AMOUNT_PARAMETER}
+  if (rate < 0) return {error: c.buy.INVALID_RATE_PARAMETER}
+  if (amount < 0) return {error: c.buy.INVALID_AMOUNT_PARAMETER}
 
   const total = rate * amount
-  if (total < 0.0001) return {'error': c.TOTAL_MUST_BE_AT_LEAST_0_0001}
+  if (total < 0.0001) return {error: c.buy.TOTAL_MUST_BE_AT_LEAST_0_0001}
 
-  if (!currencyPair) return {'error': c.REQUIRED_PARAMETER_MISSING}
+  if (!currencyPair) return {error: c.buy.REQUIRED_PARAMETER_MISSING}
 
-  if (config.get('testData.markets').indexOf(currencyPair) === -1) return {'error': c.INVALID_CURRENCY_PAIR_PARAMETER}
+  if (config.get('testData.markets').indexOf(currencyPair) === -1) return {error: c.buy.INVALID_CURRENCY_PAIR_PARAMETER}
 
   // No more than 1 of the following flags can be set at once
-  if (fillOrKill ? 1 : 0 + immediateOrCancel ? 1 : 0 + postOnly ? 1 : 0 > 1) { return {'error': c.NO_MORE_THAN_ONE} }
+  if (fillOrKill ? 1 : 0 + immediateOrCancel ? 1 : 0 + postOnly ? 1 : 0 > 1) { return {error: c.buy.NO_MORE_THAN_ONE} }
 
   // Ready for the Engine
   return engine.buy({apiKey: key, currencyPair, rate, amount, fillOrKill, immediateOrCancel, postOnly}, engine)

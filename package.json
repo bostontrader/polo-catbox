@@ -17,7 +17,7 @@
   "devDependencies": {
     "ava": "^0.23.0",
     "coveralls": "^3.0.0",
-    "eslint": "^4.12.0",
+    "eslint": "^4.13.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
@@ -48,10 +48,9 @@
   },
   "scripts": {
     "test": "ava --serial './app/integrationTests/*testi.js' && nyc ava './app/**/*test.js' ",
-    "test2": "nyc ava './app/cmd/returnDepositsWithdrawals/*test.js'",
-    "test3": "ava --serial './app/integrationTests/buySell.testi.js'  ",
-
-    "start": "node startServer.js"
+    "test2": "nyc ava './app/**/*test.js'",
+    "test3": "ava --serial './app/integrationTests/returnChartData.testi.js'  ",
+    "start": "node app/startServer.js"
   },
-  "version": "0.4.2"
+  "version": "0.4.3"
 }

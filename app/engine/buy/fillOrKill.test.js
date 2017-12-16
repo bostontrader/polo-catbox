@@ -37,7 +37,7 @@ test(t => {
 
   // 3. Attempt to buy at a price lower than dt 1000's ask price.  Should be no purchase.
   actual = engine.buy({apiKey: 'me', currencyPair, dt: 2000, rate: 0.019, amount: 1.0, fillOrKill: 1})
-  expected = {error: poloConstants.UNABLE_TO_FILL_ORDER_COMPLETELY}
+  expected = {error: poloConstants.buy.UNABLE_TO_FILL_ORDER_COMPLETELY}
   t.deepEqual(actual, expected)
 
   // 3.1 Verify trades
@@ -180,7 +180,7 @@ test(t => {
 
   // 7. buy tries to consume more than is available at 0.26 and gets nothing.
   actual = engine.buy({apiKey: 'me', currencyPair, dt: 2000, rate: 0.026, amount: 3, fillOrKill: 1})
-  expected = {error: poloConstants.UNABLE_TO_FILL_ORDER_COMPLETELY}
+  expected = {error: poloConstants.buy.UNABLE_TO_FILL_ORDER_COMPLETELY}
   t.deepEqual(actual, expected)
 
   // 7.1 Verify trades

@@ -29,7 +29,7 @@ test(t => {
 
   // 3. Set an order to buy at price > than dt 1000's ask price.  This would ordinarily result in a purchase, but in this case we don't want a purchase. Should be no purchase.
   actual = engine.buy({apiKey: 'me', currencyPair, dt: 2000, rate: 0.021, amount: 1.0, postOnly: 1})
-  expected = {error: poloConstants.UNABLE_TO_PLACE_POSTONLY_ORDER_AT_THIS_PRICE}
+  expected = {error: poloConstants.buy.UNABLE_TO_PLACE_POSTONLY_ORDER_AT_THIS_PRICE}
   t.deepEqual(actual, expected)
 
   // 3.1 Verify trades
@@ -48,7 +48,7 @@ test(t => {
 
   // 4. Set an order to buy at price = dt 1000's ask price.  This would ordinarily result in a purchase, but in this case we don't want a purchase. Should be no purchase.
   actual = engine.buy({apiKey: 'me', currencyPair, dt: 2000, rate: 0.020, amount: 1.0, postOnly: 1})
-  expected = {error: poloConstants.UNABLE_TO_PLACE_POSTONLY_ORDER_AT_THIS_PRICE}
+  expected = {error: poloConstants.buy.UNABLE_TO_PLACE_POSTONLY_ORDER_AT_THIS_PRICE}
   t.deepEqual(actual, expected)
 
   // 4.1 Verify trades

@@ -8,7 +8,7 @@ module.exports = (buyOrder, engine) => {
   const balances = engine.returnBalances(buyOrder.apiKey, engine.deposits, engine.withdrawals)
   const balance = (baseCurrency in balances) ? balances[baseCurrency] : 0
   const total = buyOrder.amount * buyOrder.rate
-  if (total > balance) { return {'error': c.NOT_ENOUGH + ' ' + baseCurrency + '.'} }
+  if (total > balance) { return {error: c.buy.NOT_ENOUGH + ' ' + baseCurrency + '.'} }
 
   // This is an 'ordinary' order if none of the 3 special flags are set.
   const fOrdinary = !(buyOrder.fillOrKill || buyOrder.immediateOrCancel || buyOrder.postOnly)
@@ -80,7 +80,7 @@ module.exports = (buyOrder, engine) => {
       return ({orderNumber: '1', resultingTrades: newTrades})
     } else {
       // This order cannot be filled in its entirety. Error.
-      return { error: c.UNABLE_TO_FILL_ORDER_COMPLETELY }
+      return { error: c.buy.UNABLE_TO_FILL_ORDER_COMPLETELY }
     }
   } else if (buyOrder.immediateOrCancel || fOrdinary) {
     // ordinary and immediateOrCancel orders are handled the exact same way _except_ for a minor difference.
@@ -161,7 +161,7 @@ module.exports = (buyOrder, engine) => {
 
     // 2. If there are any such sell orders then this buy order could be partially or fully executed.
     // We don't want _any_ execution so therefore fail.
-    if (n1.length > 0) { return { error: c.UNABLE_TO_PLACE_POSTONLY_ORDER_AT_THIS_PRICE } }
+    if (n1.length > 0) { return { error: c.buy.UNABLE_TO_PLACE_POSTONLY_ORDER_AT_THIS_PRICE } }
 
     // This buy order cannot be fulfilled at all at this time.  Therefore accept the order.
     engine.orders2Buy.push(buyOrder)

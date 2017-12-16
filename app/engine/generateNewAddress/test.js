@@ -2,7 +2,7 @@ const test = require('ava')
 
 const engine = require('../tradeEngine')
 
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   const actual = engine.generateNewAddress('me')
   const expected = {'success': 1}

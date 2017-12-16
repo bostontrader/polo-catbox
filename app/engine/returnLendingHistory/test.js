@@ -1,7 +1,7 @@
 const test = require('ava')
 const engine = require('../../engine/tradeEngine')
 
-test.serial(t => {
+test(t => {
   let actual, expected
 
   const offer1 = {apiKey: 'me', currency: 'BTC', amount: 10, duration: 2, autoRenew: 0, rate: 0.10, offerDatetime: 1000, loanID: 666}

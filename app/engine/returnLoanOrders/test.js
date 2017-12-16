@@ -38,7 +38,7 @@ const testLoanOrdersShape = (t, loanOrders) => {
   })
 }
 
-test.serial(t => {
+test(t => {
   // 1. Test the empty server
   engine.brainWipe()
   let loanOrders = engine.returnLoanOrders()

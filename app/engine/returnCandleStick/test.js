@@ -15,7 +15,7 @@ const makeDeposits = () => {
 }
 
 // An empty array of trades.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   const actual = engine.returnCandleStick([])
   const expected = engine.undefinedCandleStick
@@ -25,7 +25,7 @@ test.serial(t => {
 const currencyPair = config.get('testData.markets')[0]
 
 // A single trade.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   makeDeposits()
   engine.sell({apiKey: 'me', currencyPair, dt: 1000, rate: 0.015, amount: 1})
@@ -36,7 +36,7 @@ test.serial(t => {
 })
 
 // Two trades at the same rate.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   makeDeposits()
   engine.sell({apiKey: 'me', currencyPair, dt: 1000, rate: 0.015, amount: 2})
@@ -49,7 +49,7 @@ test.serial(t => {
 })
 
 // Two trades at differ ent rates, low rate first.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   makeDeposits()
   engine.sell({apiKey: 'me', currencyPair, dt: 1000, rate: 0.012, amount: 1})
@@ -63,7 +63,7 @@ test.serial(t => {
 })
 
 // Two trades at different rates, high rate first.
-test.serial(t => {
+test(t => {
   engine.brainWipe()
   makeDeposits()
   engine.sell({apiKey: 'me', currencyPair, dt: 1000, rate: 0.015, amount: 1})

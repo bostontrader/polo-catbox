@@ -141,7 +141,7 @@ let results
 const market = config.get('testData.markets')[0]
 let start, end
 
-test.serial(t => {
+test(t => {
   Object.keys(c.startNend28).forEach(sne28 => {
     // console.log('cnt=', cnt, 'sne=', c.startNend28[sne28].p, 'sne28=', sne28)
 

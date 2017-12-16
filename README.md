@@ -41,6 +41,8 @@ The presently supported trading API endpoints are:
 
 seq | name
 ---|---
+01 | returnBalances
+05 | returnDepositsWithdrawals
 09 | buy
 10 | sell
 

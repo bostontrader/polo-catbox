@@ -1,10 +1,10 @@
 // Start the server and send requests.  Only enough to verify that the server really will respond.
-const config = require('config')
+// const config = require('config')
 const crypto = require('crypto')
 
 const rp = require('request-promise-native')
 
-const server = require('./app/server')
+const server = require('../server')
 
 const getPrivateHeaders = function (parameters) {
   let paramString, signature
@@ -30,34 +30,9 @@ console.log(28, baseURL)
 
 server.start()
 
-  /* 01 */ .then(() => {
-    return rp(publicURL + '?command=returnTicker')
-      .then(html => { console.log('01 returnTicker: ', html); return Promise.resolve(true) })
-  })
-
-  /* 02 */ .then((html) => {
-    return rp(publicURL + '?command=return24Volume')
-      .then(html => { console.log('02 return24Volume: ', html); return Promise.resolve(true) })
-  })
-
-  /* 03 */ .then((html) => {
-    return rp(publicURL + '?command=returnOrderBook&currencyPair=all')
-      .then(html => { console.log('03 returnOrderBook: ', html); return Promise.resolve(true) })
-  })
-
-  /* 04 */ .then((html) => {
-    return rp(publicURL + '?command=returnTradeHistoryPublic&currencyPair=' + config.get('testData.markets')[0])
-      .then(html => { console.log('04 returnTradeHistoryPublic: ', html); return Promise.resolve(true) })
-  })
-
   /* 05 */ .then((html) => {
     return rp(publicURL + '?command=returnChartData&currencyPair=' + config.get('testData.markets')[0] + '&period=86400&start=0')
       .then(html => { console.log('05 returnChartData: ', html); return Promise.resolve(true) })
-  })
-
-  /* 06 */ .then((html) => {
-    return rp(publicURL + '?command=returnCurrencies')
-      .then(html => { console.log('06 returnCurrencies: ', html); return Promise.resolve(true) })
   })
 
   /* 07 */ .then((html) => {
@@ -126,33 +101,10 @@ server.start()
       .then(html => { console.log('07 returnTradeHistory: ', html); return Promise.resolve(true) })
   })
 
-  /* 08 */
-
-  /* 09 */ .then((html) => {
-    const parameters = {command: 'buy', nonce: Date.now() * 1000}
-    tradingAPIOptions.form = parameters
-    tradingAPIOptions.headers = getPrivateHeaders(parameters)
-    return rp(tradingAPIOptions)
-      .then(html => { console.log('09 buy: ', html); return Promise.resolve(true) })
-  })
-
-  /* 10 */ .then((html) => {
-    const parameters = {command: 'sell', nonce: Date.now() * 1000}
-    tradingAPIOptions.form = parameters
-    tradingAPIOptions.headers = getPrivateHeaders(parameters)
-    return rp(tradingAPIOptions)
-      .then(html => { console.log('10 sell: ', html); return Promise.resolve(true) })
-  })
-
   .then((html) => {
     const parameters = {command: 'catfood'}
     tradingAPIOptions.form = parameters
     tradingAPIOptions.headers = getPrivateHeaders(parameters)
     return rp(tradingAPIOptions)
       .then(html => { console.log('Expected error: ', html); return Promise.resolve(true) })
-  })
-
-  .then((html) => {
-    console.log('server shutdown normally')
-    server.stop()
   })

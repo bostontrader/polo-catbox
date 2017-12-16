@@ -10,9 +10,9 @@ module.exports = (req, engine) => {
   const limit = ('limit' in req.body) ? parseInt(req.body.limit) : 999999 // supposed to mean no limit
 
   // 1. The parameters must be integers
-  if (isNaN(start)) { return {'error': c.returnLendingHistory.INVALID_START_PARAMETER} }
-  if (isNaN(end)) { return {'error': c.returnLendingHistory.INVALID_END_PARAMETER} }
-  if (isNaN(limit)) { return {'error': c.returnLendingHistory.INVALID_LIMIT_PARAMETER} }
+  if (isNaN(start)) { return {error: c.returnLendingHistory.INVALID_START_PARAMETER} }
+  if (isNaN(end)) { return {error: c.returnLendingHistory.INVALID_END_PARAMETER} }
+  if (isNaN(limit)) { return {error: c.returnLendingHistory.INVALID_LIMIT_PARAMETER} }
 
   // 2. Ready for the Engine
   return engine.returnLendingHistory(req.headers.key, start, end)

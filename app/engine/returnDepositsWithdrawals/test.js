@@ -1,7 +1,7 @@
 const test = require('ava')
 const engine = require('../tradeEngine')
 
-test.serial(t => {
+test(t => {
   let depositsWithdrawals, expected
   const END_OF_TIME = 9999999999
   const firstDatetime = 5000
